@@ -21,6 +21,10 @@ public:
     m4w::UUIDMap<Light> m_Lights;
     m4w::UUIDMap<class GameObject*> m_Objects;
 
+    Texture* m_BlankTexture;
+
+    Context() {}
+
     static Context* Get() {
         return m_Context;
     }

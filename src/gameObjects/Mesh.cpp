@@ -60,6 +60,7 @@ Mesh::Mesh(m4w::Pointer<Shader> shader, const char* gltfPath)
 }
 
 void Mesh::AddTexture(unsigned int position, m4w::Pointer<Texture> texture) {
+    if ( position == 0 ) std::cout << "[WARNING] Overriding Texture Slot 0!\n";
     m_Textures.emplace(position, texture);
 }
 
@@ -75,15 +76,16 @@ void Mesh::Render() {
         }
 
 
-        texture->Bind(slot);
-        m_Shader->SetUniform1i("u_Texture", slot);
+        texture->Use(m_Shader.GetCPointer(), slot);
     }
+
 
     m_Shader->SetUniformMat4("u_Model", m_ModelMatrix);
 
     glDrawElements(GL_TRIANGLES, m_VAO->m_IB->m_IndexCount, m_VAO->m_IB->m_DataType, 0);
 //    std::cout << "Rendering " << m_VAO->m_IB->GetIndexCount() << " indices of Type " << m_VAO->m_IB->m_DataType << "\n";
 
+    Context::Get()->m_BlankTexture->Use(m_Shader.GetCPointer(), 0);
     //for ( auto& [slot, texture] : m_Textures ) {
     //    texture->Unbind();
     //}

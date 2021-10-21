@@ -22,7 +22,7 @@ private:
     m4w::Pointer<RenderBuffer> m_RenderBuffer;
 
     FrameBuffer(unsigned int width, unsigned int height, unsigned int id)
-    : m_Width(width), m_Height(height), m_ID(id), m_ClearColor{ 0.f, 0.f, 0.f, 0.f }
+    : m_Width(width), m_Height(height), m_ID(id), m_ClearColor{ 0.f, 0.f, 0.f, 1.f }
     { }
 
 public:

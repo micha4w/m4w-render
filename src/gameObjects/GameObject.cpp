@@ -12,7 +12,7 @@
 
 GameObject::GameObject(const glm::vec3& position)
     : m_Position(position), m_Velocity({ 0.f, 0.f, 0.f }),
-      m_MeshID(-1), m_CameraID(-1), m_LightID(-1), m_RecalculateView(false)
+      m_MeshID(-1), m_CameraID(-1), m_LightID(-1), m_RecalculateView(false), m_Scale(1.f)
 {
     this->SetRotation(m4w::Angle(), m4w::Angle());
     m_ID = Context::Get()->m_Objects.Add(this);
@@ -48,9 +48,9 @@ void GameObject::Update(unsigned int microSeconds) {
         if ( this->HasMesh() ) {
             m_Mesh->m_ModelMatrix = glm::mat4(1.f);
             m_Mesh->m_ModelMatrix = glm::translate(m_Mesh->m_ModelMatrix, m_Position);
-            m_Mesh->m_ModelMatrix = glm::rotate(m_Mesh->m_ModelMatrix, m_Rotation.x, {1, 0, 0});
-            m_Mesh->m_ModelMatrix = glm::rotate(m_Mesh->m_ModelMatrix, m_Rotation.y, {0, 1, 0});
-            m_Mesh->m_ModelMatrix = glm::rotate(m_Mesh->m_ModelMatrix, m_Rotation.z, {0, 0, 1});
+            m_Mesh->m_ModelMatrix = glm::rotate(m_Mesh->m_ModelMatrix, m_Pitch.GetRadians(), {1, 0, 0});
+            m_Mesh->m_ModelMatrix = glm::rotate(m_Mesh->m_ModelMatrix, m_Yaw.GetRadians(), {0, 1, 0});
+            //m_Mesh->m_ModelMatrix = glm::rotate(m_Mesh->m_ModelMatrix, m_Roll, {0, 0, 1});
 
         }
         m_RecalculateView = false;
@@ -97,8 +97,19 @@ void GameObject::Accelerate(const glm::vec3& acceleration) {
     m_Velocity += acceleration;
 }
 
+void GameObject::Scale(float factor) {
+    this->SetScale(m_Scale * factor);
+}
+
+void GameObject::SetScale(float scale) {
+    m_Scale = scale;
+    m_RecalculateView = true;
+}
+
+
 glm::vec3 GameObject::GetPosition() { return m_Position; }
 std::pair<m4w::Angle, m4w::Angle> GameObject::GetRotation() { return { m_Yaw, m_Pitch }; }
+float GameObject::GetScale() { return m_Scale; }
 
 void GameObject::SetMesh(Mesh* mesh) {
     if ( this->HasMesh() ) {

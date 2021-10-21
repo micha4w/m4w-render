@@ -18,6 +18,7 @@ private:
     unsigned int m_ID;
 
     bool m_RecalculateView;
+    float m_Scale;
     m4w::Angle m_Yaw, m_Pitch;
 
     glm::vec3 m_Rotation;
@@ -48,8 +49,12 @@ public:
     void Teleport(const glm::vec3& position);
     void Accelerate(const glm::vec3& acceleration);
 
+    void Scale(float factor);
+    void SetScale(float scale);
+
     glm::vec3 GetPosition();
     std::pair<m4w::Angle, m4w::Angle> GetRotation();
+    float GetScale();
 
     void SetMesh(Mesh* mesh);
     void SetLight(Light* light);

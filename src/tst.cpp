@@ -42,6 +42,9 @@ int main() {
     window->Display();
     m4w::Pointer<Shader> shader(new Shader("PosColor"));
     
+    Context::Get()->m_BlankTexture = new Texture(0, 0);
+    Context::Get()->m_BlankTexture->Bind(0);
+
     GameObject head;
     head.CreateMesh(shader, "/media/sf_share/hed.gltf");
 
@@ -57,12 +60,13 @@ int main() {
 
     GameObject camera({0.f, 0.f, -5.f});
     camera.SetRotation(m4w::Angle::Degrees(180.f), m4w::Angle());
+    camera.SetScale(0.25f);
     camera.CreateCamera(
         window->GetWidth(), window->GetHeight(),
         new PerspectiveProjection(90.f, window->GetWidth() / window->GetHeight(), 0.001f, 10000.f)
     );
     camera.GetCamera()->GetFrameBuffer()->AddTexture();
-    camera.GetCamera()->GetFrameBuffer()->SetClearColor(.5f, 0.f, 0.f, .5f);
+    camera.GetCamera()->GetFrameBuffer()->SetClearColor(0.f, 0.f, 0.f, 1.f);
     
     camera.CreateMesh(shader, "/media/sf_share/camera.gltf");
     camera.AddComponent((Component*) new PlayerControllerComponent(3.f, 0.f, GLFW_KEY_UP, GLFW_KEY_LEFT, GLFW_KEY_DOWN, GLFW_KEY_RIGHT, 0, 0));
@@ -78,10 +82,10 @@ int main() {
     vbl->AddElement(3, 2, GL_FLOAT); // TexCoord
     
     float verts[] = {
-        -1.f, -1.f, 5.f, 0.f, 0.f, -1.f, 1.f, 0.f, 0.f, 1.f, 0.f, 0.f,
-         1.f, -1.f, 5.f, 0.f, 0.f, -1.f, 1.f, 0.f, 0.f, 1.f, 1.f, 0.f,
-        -1.f,  1.f, 5.f, 0.f, 0.f, -1.f, 1.f, 0.f, 0.f, 1.f, 0.f, 1.f,
-         1.f,  1.f, 5.f, 0.f, 0.f, -1.f, 1.f, 0.f, 0.f, 1.f, 1.f, 1.f
+        -1.f, -1.f, 5.f,   0.f, 0.f, -1.f,   1.f, 0.f, 0.f, 1.f,   0.f, 0.f,
+         1.f, -1.f, 5.f,   0.f, 0.f, -1.f,   1.f, 0.f, 0.f, 1.f,   1.f, 0.f,
+        -1.f,  1.f, 5.f,   0.f, 0.f, -1.f,   1.f, 0.f, 0.f, 1.f,   0.f, 1.f,
+         1.f,  1.f, 5.f,   0.f, 0.f, -1.f,   1.f, 0.f, 0.f, 1.f,   1.f, 1.f
     };
     unsigned int indis[] = {
         0,1,2, 1,2,3
@@ -91,7 +95,8 @@ int main() {
     vao->SetVertexBuffer(new VertexBuffer(sizeof(verts), verts));
     screen.GetMesh()->SetVertexArray(vao);
     screen.GetMesh()->SetVertexLayout(vbl);
-    screen.GetMesh()->AddTexture(0, camera.GetCamera()->GetFrameBuffer()->GetTexture());
+    screen.GetMesh()->AddTexture(1, camera.GetCamera()->GetFrameBuffer()->GetTexture());
+    head.GetMesh()->AddTexture(1, camera.GetCamera()->GetFrameBuffer()->GetTexture());
 
     //LOOOOOP
     Timer timer(60.f);
@@ -101,7 +106,7 @@ int main() {
 
         Context::Update(timer.GetDeltaUs());
 
-        if ( window->GetKeyPressed(GLFW_KEY_C) ) std::cout << glm::to_string(screen.GetPosition()) << " " << screen.GetRotation().first.GetDegrees() << ", " << screen.GetRotation().second.GetDegrees() << "\n";
+        if ( window->GetKeyPressed(GLFW_KEY_C) ) std::cout << glm::to_string(camera.GetPosition()) << " " << camera.GetRotation().first.GetDegrees() << ", " << camera.GetRotation().second.GetDegrees() << "\n";
         if ( window->GetKeyPressed(GLFW_KEY_V) ) std::cout << glm::to_string(player.GetPosition()) << " " << player.GetRotation().first.GetDegrees() << ", " << player.GetRotation().second.GetDegrees() << "\n";
         if ( window->GetKeyPressed(GLFW_KEY_F) ) {
             std::cout << "Reloading Sahder\n";
@@ -114,6 +119,7 @@ int main() {
         window->Clear();
         camera.GetCamera()->GetFrameBuffer()->Clear();
 
+        //Context::Draw(*player.GetCamera());
         Context::DrawCameras();
 
         window->Display();

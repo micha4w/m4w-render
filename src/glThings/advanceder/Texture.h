@@ -18,6 +18,8 @@ public:
     void Bind(unsigned short slot = 0);
     void Unbind();
 
+    void Use(class Shader* shader, unsigned short slot);
+
     void ReadImage();
     void FromPNG();
 };
