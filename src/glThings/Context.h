@@ -1,20 +1,21 @@
 #pragma once
 
-#include "UUIDMap.h"
-#include "Pointer.h"
-
 #include "Mesh.h"
 #include "Camera.h"
 #include "Light.h"
+#include "Window.h"
+
+#include "UUIDMap.h"
+#include "Pointer.h"
 
 class Context {
 private:
     static m4w::Pointer<Context> m_Context;
 
 public:
-    class m4w::Pointer<class Window> m_Window;
-    class VertexArray* m_VAO;
-    class FrameBuffer* m_FBO;
+    m4w::Pointer<Window> m_Window;
+    VertexArray* m_VAO;
+    FrameBuffer* m_FBO;
 
     m4w::UUIDMap<Mesh> m_Meshes;
     m4w::UUIDMap<Camera> m_Cameras;

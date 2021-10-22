@@ -10,8 +10,6 @@
 
 #include <glm/mat4x4.hpp>
 
-#include "Context.h"
-
 class Shader {
 private:
     unsigned int m_ID;

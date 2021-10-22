@@ -128,6 +128,7 @@ int main() {
 
     std::cout << "Stopping..\n";
 
+    window.Delete();
 
     return 0;
 }

@@ -2,7 +2,6 @@
 
 #include <iostream>
 
-#include "Shader.h"
 
 #include "GLTF.h"
 #include "JSON.h"
@@ -76,7 +75,7 @@ void Mesh::Render() {
         }
 
 
-        texture->Use(m_Shader.GetCPointer(), slot);
+        texture->Use(*m_Shader, slot);
     }
 
 
@@ -85,7 +84,7 @@ void Mesh::Render() {
     glDrawElements(GL_TRIANGLES, m_VAO->m_IB->m_IndexCount, m_VAO->m_IB->m_DataType, 0);
 //    std::cout << "Rendering " << m_VAO->m_IB->GetIndexCount() << " indices of Type " << m_VAO->m_IB->m_DataType << "\n";
 
-    Context::Get()->m_BlankTexture->Use(m_Shader.GetCPointer(), 0);
+    Context::Get()->m_BlankTexture->Use(*m_Shader, 0);
     //for ( auto& [slot, texture] : m_Textures ) {
     //    texture->Unbind();
     //}

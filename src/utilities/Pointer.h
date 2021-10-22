@@ -56,6 +56,11 @@ namespace m4w {
         void Defuse() {
             m_Pointer = nullptr;
         }
+        
+        void Delete() {
+            delete m_Pointer;
+            m_Pointer = nullptr;
+        }
 
         Pointer& operator= (const Pointer& pointer) {
             this->~Pointer();
