@@ -1,7 +1,7 @@
 #include "Texture.h"
 
-#define STB_IMAGE_IMPLEMENTATION
-#include <stb/stb_image.h>
+//#define STB_IMAGE_IMPLEMENTATION
+//#include <stb/stb_image.h>
 
 #include "FrameBuffer.h"
 #include "Shader.h"
@@ -23,8 +23,8 @@ Texture::Texture(unsigned int width, unsigned int height, unsigned char* data)
 
 m4w::Pointer<Texture> Texture::FromPath(const char* path) {
     int width, height;
-    unsigned char* data = stbi_load("container.jpg", &width, &height, nullptr, 0);
-    return new Texture(width, height, data);
+    //unsigned char* data = stbi_load("container.jpg", &width, &height, nullptr, 0);
+    return new Texture(width, height/*, data*/);
 }
 
 Texture::~Texture() {

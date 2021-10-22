@@ -6,6 +6,6 @@ class GravityComponent : private Component {
 private:
     float m_G;
 public:
-    GravityComponent(float g);
+    GravityComponent(class Context& constext, float g);
     void Update(unsigned int microSeconds) override; 
 };

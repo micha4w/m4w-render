@@ -10,17 +10,18 @@
 class VertexArray {
 private:
     unsigned int m_ID;
-    
+    class Context& m_Context;
+
 public:
     m4w::Pointer<IndexBuffer> m_IB;
     m4w::Pointer<VertexBuffer> m_VB;
 
-    VertexArray ();
+    VertexArray (Context& context);
     ~VertexArray ();
 
     void SetIndexBuffer(m4w::Pointer<IndexBuffer> ib);
     void SetVertexBuffer(m4w::Pointer<VertexBuffer> vb);
 
     void Bind ();
-    static void Unbind ();
+    void Unbind ();
 };

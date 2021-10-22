@@ -7,14 +7,19 @@
 
 #include "FrameBuffer.h"
 
-class Window : public FrameBuffer {
+#include "Pointer.h"
+
+class Window {
 private:
+    class Context& m_Context;
+
     GLFWwindow* m_Instance;
+    m4w::Pointer<FrameBuffer> m_FrameBuffer;
 
     void AddColorBuffer() = delete;
     void AddDepthBuffer() = delete;
 public:
-    Window(unsigned int width, unsigned int height, const char* name);
+    Window(Context& context, unsigned int width, unsigned int height, const char* name);
     ~Window();
 
     void Display();
@@ -36,5 +41,17 @@ public:
 
     bool GetMousePressed(int button) {
         return glfwGetMouseButton(m_Instance, button);
+    }
+
+    m4w::Pointer<FrameBuffer> GetFrameBuffer() {
+        return m_FrameBuffer;
+    }
+
+    unsigned int GetWidth() {
+        return m_FrameBuffer->GetWidth();
+    }
+
+    unsigned int GetHeight() {
+        return m_FrameBuffer->GetHeight();
     }
 };

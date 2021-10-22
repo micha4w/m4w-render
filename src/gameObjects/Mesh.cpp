@@ -8,12 +8,12 @@
 #include "HeapArray.h"
 #include "Base64.h" 
 
-Mesh::Mesh(m4w::Pointer<Shader> shader)
-    : m_Shader(shader), m_ModelMatrix(1.f)
+Mesh::Mesh(Context& context, m4w::Pointer<Shader> shader)
+    : m_Context(context), m_Shader(shader), m_ModelMatrix(1.f)
 { }
 
-Mesh::Mesh(m4w::Pointer<Shader> shader, const char* gltfPath)
-    : Mesh(shader)
+Mesh::Mesh(Context& context, m4w::Pointer<Shader> shader, const char* gltfPath)
+    : Mesh(context, shader)
 {
     m4w::Pointer<m4w::JSONObject> gltf = m4w::ReadFile(gltfPath);
 
@@ -22,7 +22,7 @@ Mesh::Mesh(m4w::Pointer<Shader> shader, const char* gltfPath)
         std::cout << "No mesh found in " << gltfPath << " :( ?!\n";
     }
 
-    this->m_VAO = new VertexArray();
+    this->m_VAO = new VertexArray(m_Context);
     this->m_VBL = new VertexLayout();
 
     this->m_Name = *jsonMesh->GetString("name");
@@ -84,7 +84,7 @@ void Mesh::Render() {
     glDrawElements(GL_TRIANGLES, m_VAO->m_IB->m_IndexCount, m_VAO->m_IB->m_DataType, 0);
 //    std::cout << "Rendering " << m_VAO->m_IB->GetIndexCount() << " indices of Type " << m_VAO->m_IB->m_DataType << "\n";
 
-    Context::Get()->m_BlankTexture->Use(*m_Shader, 0);
+    m_Context.m_BlankTexture->Use(*m_Shader, 0);
     //for ( auto& [slot, texture] : m_Textures ) {
     //    texture->Unbind();
     //}

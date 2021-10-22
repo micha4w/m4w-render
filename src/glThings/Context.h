@@ -9,9 +9,6 @@
 #include "Pointer.h"
 
 class Context {
-private:
-    static m4w::Pointer<Context> m_Context;
-
 public:
     m4w::Pointer<Window> m_Window;
     VertexArray* m_VAO;
@@ -26,15 +23,12 @@ public:
 
     Context() {}
 
-    static Context* Get() {
-        return m_Context;
-    }
+    void Update(unsigned int microSeconds);
 
-    static void Update(unsigned int microSeconds);
+    void Draw(FrameBuffer& frameBuffer);
+    void Draw(Camera& camera);
+    void ClearCameras();
+    void DrawCameras();
 
-    static void Draw(FrameBuffer& frameBuffer);
-    static void Draw(Camera& camera);
-    static void DrawCameras();
-
-    static void CheckGLError(const char* info = "");
+    void CheckGLError(const char* info = "");
 };

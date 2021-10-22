@@ -4,7 +4,7 @@
 #include "GameObject.h"
 
 void Context::Update(unsigned int microSeconds) {
-    for ( auto [id, object] : Get()->m_Objects ) {
+    for ( auto [id, object] : m_Objects ) {
         object->Update(microSeconds);
     }
 }
@@ -13,7 +13,7 @@ void Context::Update(unsigned int microSeconds) {
 void Context::Draw(FrameBuffer& frameBuffer) {
     frameBuffer.Bind();
 
-    for ( auto& [id, mesh] : Get()->m_Meshes ) {
+    for ( auto& [id, mesh] : m_Meshes ) {
         mesh.Render();
     }
 }
@@ -21,16 +21,21 @@ void Context::Draw(FrameBuffer& frameBuffer) {
 void Context::Draw(Camera& camera) {
     camera.GetFrameBuffer()->Bind();
 
-    for ( auto& [id, mesh] : Get()->m_Meshes ) {
+    for ( auto& [id, mesh] : m_Meshes ) {
         camera.Use(mesh.GetShader());
         
         mesh.Render();
     }
 }
 
+void Context::ClearCameras() {
+    for ( auto& [id, camera] : m_Cameras ) {
+        camera.GetFrameBuffer()->Clear();
+    }
+}
 
 void Context::DrawCameras() {
-    for ( auto& [id, camera] : Get()->m_Cameras ) {
+    for ( auto& [id, camera] : m_Cameras ) {
         Draw(camera);
     }
 }

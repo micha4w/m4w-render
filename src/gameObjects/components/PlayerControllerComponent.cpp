@@ -4,12 +4,12 @@
 #include "Window.h"
 #include "GameObject.h"
 
-PlayerControllerComponent::PlayerControllerComponent(float speed, float sensitvity, uint16_t moveForward, uint16_t moveLeft, uint16_t moveBack, uint16_t moveRight, uint16_t moveUp, uint16_t moveDown)
-    : m_Speed(speed), m_Sensitivity(sensitvity), m_MoveForward(moveForward), m_MoveBack(moveBack), m_MoveRight(moveRight), m_MoveLeft(moveLeft), m_MoveUp(moveUp), m_MoveDown(moveDown)
+PlayerControllerComponent::PlayerControllerComponent(Context& context, float speed, float sensitvity, uint16_t moveForward, uint16_t moveLeft, uint16_t moveBack, uint16_t moveRight, uint16_t moveUp, uint16_t moveDown)
+    : Component(context), m_Speed(speed), m_Sensitivity(sensitvity), m_MoveForward(moveForward), m_MoveBack(moveBack), m_MoveRight(moveRight), m_MoveLeft(moveLeft), m_MoveUp(moveUp), m_MoveDown(moveDown)
 { }
 
 void PlayerControllerComponent::Update(unsigned int microSeconds) {
-    m4w::Pointer<Window> window = Context::Get()->m_Window;
+    m4w::Pointer<Window> window = m_Context.m_Window;
     auto [newX, newY] = window->GetMousePosition();
 
     newX = window->GetWidth()/2 - newX;

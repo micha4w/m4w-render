@@ -15,6 +15,8 @@
 
 class GameObject {
 private:
+    Context& m_Context;
+
     unsigned int m_ID;
 
     bool m_RecalculateView;
@@ -36,7 +38,7 @@ private:
 public:
     const glm::vec3 m_WorldUp = { 0.f, 1.f, 0.f };
 
-    GameObject(const glm::vec3& position = { 0.f, 0.f, 0.f });
+    GameObject(Context& context, const glm::vec3& position = { 0.f, 0.f, 0.f });
     ~GameObject();
 
     void Update(unsigned int microSeconds);
@@ -64,32 +66,32 @@ public:
     template <typename... Args>
     void CreateMesh(Args&&... args){
         if ( this->HasMesh() ) {
-            Context::Get()->m_Meshes.Remove(m_MeshID);
+            m_Context.m_Meshes.Remove(m_MeshID);
         }
 
-        m_MeshID = Context::Get()->m_Meshes.Create(std::forward_as_tuple(args...));
-        m_Mesh = Context::Get()->m_Meshes.Get(m_MeshID);
+        m_MeshID = m_Context.m_Meshes.Create(std::forward_as_tuple(args...));
+        m_Mesh = m_Context.m_Meshes.Get(m_MeshID);
     }
      
     template <typename... Args>
     void CreateLight(Args&&... args){
         if ( this->HasLight() ) {
-            Context::Get()->m_Lights.Remove(m_LightID);
+            m_Context.m_Lights.Remove(m_LightID);
         }
 
-        m_LightID = Context::Get()->m_Lights.Create(std::forward_as_tuple(args...));
-        m_Light = Context::Get()->m_Lights.Get(m_LightID);
+        m_LightID = m_Context.m_Lights.Create(std::forward_as_tuple(args...));
+        m_Light = m_Context.m_Lights.Get(m_LightID);
     }
 
     template <typename... Args>
     void CreateCamera(Args&&... args){
         if ( this->HasCamera() ) {
-            Context::Get()->m_Cameras.Remove(m_CameraID);
+            m_Context.m_Cameras.Remove(m_CameraID);
         }
 
         m_RecalculateView = true;
-        m_CameraID = Context::Get()->m_Cameras.Create(std::forward_as_tuple(args...));
-        m_Camera = Context::Get()->m_Cameras.Get(m_CameraID);
+        m_CameraID = m_Context.m_Cameras.Create(std::forward_as_tuple(args...));
+        m_Camera = m_Context.m_Cameras.Get(m_CameraID);
     }
 
     void AddComponent(m4w::Pointer<Component> component);

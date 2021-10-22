@@ -4,8 +4,8 @@
 
 #include "Context.h"
 
-Window::Window(unsigned int width, unsigned int height, const char* name)
-    : FrameBuffer(width, height, 0)
+Window::Window(Context& context, unsigned int width, unsigned int height, const char* name)
+    : m_Context(context)
 {
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -33,6 +33,7 @@ Window::Window(unsigned int width, unsigned int height, const char* name)
         return;
     }
 
+    m_FrameBuffer = new FrameBuffer(m_Context, width, height, 0);
 //    Context::Get()->m_Window = this;
 }
 

@@ -2,8 +2,8 @@
 
 #include "GameObject.h"
 
-GravityComponent::GravityComponent(float g)
-    : m_G(g)
+GravityComponent::GravityComponent(class Context& context, float g)
+    : Component(context), m_G(g)
 { }
 
 void GravityComponent::Update(unsigned int microSeconds) {

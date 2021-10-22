@@ -10,20 +10,20 @@
 #include "View.h"
 
 
-GameObject::GameObject(const glm::vec3& position)
-    : m_Position(position), m_Velocity({ 0.f, 0.f, 0.f }),
+GameObject::GameObject(Context& context, const glm::vec3& position)
+    : m_Position(position), m_Velocity({ 0.f, 0.f, 0.f }), m_Context(context),
       m_MeshID(-1), m_CameraID(-1), m_LightID(-1), m_RecalculateView(false), m_Scale(1.f)
 {
     this->SetRotation(m4w::Angle(), m4w::Angle());
-    m_ID = Context::Get()->m_Objects.Add(this);
+    m_ID = m_Context.m_Objects.Add(this);
 }
 
 GameObject::~GameObject() {
-    Context::Get()->m_Objects.Remove(m_ID);
+    m_Context.m_Objects.Remove(m_ID);
 
-    if ( HasCamera() ) Context::Get()->m_Cameras.Remove(m_CameraID);
-    if ( HasLight() ) Context::Get()->m_Lights.Remove(m_LightID);
-    if ( HasMesh() ) Context::Get()->m_Meshes.Remove(m_MeshID);
+    if ( HasCamera() ) m_Context.m_Cameras.Remove(m_CameraID);
+    if ( HasLight() ) m_Context.m_Lights.Remove(m_LightID);
+    if ( HasMesh() ) m_Context.m_Meshes.Remove(m_MeshID);
 }
 
 
@@ -113,30 +113,30 @@ float GameObject::GetScale() { return m_Scale; }
 
 void GameObject::SetMesh(Mesh* mesh) {
     if ( this->HasMesh() ) {
-        Context::Get()->m_Meshes.Remove(m_MeshID);
+        m_Context.m_Meshes.Remove(m_MeshID);
     }
 
-    m_MeshID = Context::Get()->m_Meshes.Add(std::forward<Mesh>(*mesh));
-    m_Mesh = Context::Get()->m_Meshes.Get(m_MeshID);
+    m_MeshID = m_Context.m_Meshes.Add(std::forward<Mesh>(*mesh));
+    m_Mesh = m_Context.m_Meshes.Get(m_MeshID);
 }
 
 void GameObject::SetLight(Light* light) {
     if ( this->HasLight() ) {
-        Context::Get()->m_Lights.Remove(m_LightID);
+        m_Context.m_Lights.Remove(m_LightID);
     }
 
-    m_LightID = Context::Get()->m_Lights.Add(std::forward<Light>(*light));
-    m_Light = Context::Get()->m_Lights.Get(m_LightID);
+    m_LightID = m_Context.m_Lights.Add(std::forward<Light>(*light));
+    m_Light = m_Context.m_Lights.Get(m_LightID);
 }
 
 void GameObject::SetCamera(Camera* camera) {
     if ( this->HasCamera() ) {
-        Context::Get()->m_Cameras.Remove(m_CameraID);
+        m_Context.m_Cameras.Remove(m_CameraID);
     }
 
     m_RecalculateView = true;
-    m_CameraID = Context::Get()->m_Cameras.Add(std::forward<Camera>(*camera));
-    m_Camera = Context::Get()->m_Cameras.Get(m_CameraID);
+    m_CameraID = m_Context.m_Cameras.Add(std::forward<Camera>(*camera));
+    m_Camera = m_Context.m_Cameras.Get(m_CameraID);
 }
 
 
@@ -146,9 +146,9 @@ void GameObject::AddComponent(m4w::Pointer<Component> component) {
 }
 
 
-bool GameObject::HasMesh() { return m_Mesh; }
-bool GameObject::HasLight() { return m_Light; }
-bool GameObject::HasCamera() { return m_Camera; }
+bool GameObject::HasMesh() { return m_MeshID != -1; }
+bool GameObject::HasLight() { return m_LightID != -1; }
+bool GameObject::HasCamera() { return m_CameraID != -1; }
 
 
 Mesh* GameObject::GetMesh() {

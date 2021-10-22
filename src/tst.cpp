@@ -30,51 +30,54 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 //    glViewport(0, 0, width, height);
 }
 
-m4w::Pointer<Context> Context::m_Context = new Context();
 int main() {
     std::cout << "Starting..\n";
     
-    m4w::Pointer<Window> window = new Window(720, 540, "Geem");
-    Context::Get()->m_Window = window;
+    Context context;
 
-    window->SetClearColor(0, 0.043, 0.804);
-    window->Clear();
+    m4w::Pointer<Window> window = new Window(context, 720, 540, "Geem");
+    context.m_Window = window;
+
+    window->GetFrameBuffer()->SetClearColor(0, 0.043, 0.804);
+    window->GetFrameBuffer()->Clear();
     window->Display();
     m4w::Pointer<Shader> shader(new Shader("PosColor"));
     
-    Context::Get()->m_BlankTexture = new Texture(0, 0);
-    Context::Get()->m_BlankTexture->Bind(0);
+    context.m_BlankTexture = new Texture(0, 0);
+    context.m_BlankTexture->Bind(0);
 
-    GameObject head;
-    head.CreateMesh(shader, "/media/sf_share/hed.gltf");
+    GameObject head(context);
+    head.CreateMesh(context, shader, "/media/sf_share/hed.gltf");
 
 
-    GameObject player;
-    player.AddComponent((Component*) new PlayerControllerComponent(3.f, 0.001f));
+    GameObject player(context);
+    player.AddComponent((Component*) new PlayerControllerComponent(context, 3.f, 0.001f));
     
     player.CreateCamera(
+        context,
         window->GetWidth(), window->GetHeight(),
         new PerspectiveProjection(90.f, window->GetWidth() / window->GetHeight(), 0.001f, 10000.f)
     );
-    player.GetCamera()->SetFrameBuffer(window);
+    player.GetCamera()->SetFrameBuffer(window->GetFrameBuffer());
 
-    GameObject camera({0.f, 0.f, -5.f});
+    GameObject camera(context, {0.f, 0.f, -5.f});
     camera.SetRotation(m4w::Angle::Degrees(180.f), m4w::Angle());
     camera.SetScale(0.25f);
     camera.CreateCamera(
+        context,
         window->GetWidth(), window->GetHeight(),
         new PerspectiveProjection(90.f, window->GetWidth() / window->GetHeight(), 0.001f, 10000.f)
     );
     camera.GetCamera()->GetFrameBuffer()->AddTexture();
     camera.GetCamera()->GetFrameBuffer()->SetClearColor(0.f, 0.f, 0.f, 1.f);
     
-    camera.CreateMesh(shader, "/media/sf_share/camera.gltf");
-    camera.AddComponent((Component*) new PlayerControllerComponent(3.f, 0.f, GLFW_KEY_UP, GLFW_KEY_LEFT, GLFW_KEY_DOWN, GLFW_KEY_RIGHT, 0, 0));
+    camera.CreateMesh(context, shader, "/media/sf_share/camera.gltf");
+    camera.AddComponent((Component*) new PlayerControllerComponent(context, 3.f, 0.f, GLFW_KEY_UP, GLFW_KEY_LEFT, GLFW_KEY_DOWN, GLFW_KEY_RIGHT, 0, 0));
 
 
 
-    GameObject screen;
-    screen.CreateMesh(shader);
+    GameObject screen(context);
+    screen.CreateMesh(context, shader);
     VertexLayout* vbl = new VertexLayout();
     vbl->AddElement(0, 3, GL_FLOAT); // Position
     vbl->AddElement(1, 3, GL_FLOAT); // Normal
@@ -90,7 +93,7 @@ int main() {
     unsigned int indis[] = {
         0,1,2, 1,2,3
     };
-    VertexArray* vao = new VertexArray();
+    VertexArray* vao = new VertexArray(context);
     vao->SetIndexBuffer(new IndexBuffer(sizeof(indis), indis, GL_UNSIGNED_INT));
     vao->SetVertexBuffer(new VertexBuffer(sizeof(verts), verts));
     screen.GetMesh()->SetVertexArray(vao);
@@ -104,7 +107,7 @@ int main() {
         // Update
         glfwPollEvents();
 
-        Context::Update(timer.GetDeltaUs());
+        context.Update(timer.GetDeltaUs());
 
         if ( window->GetKeyPressed(GLFW_KEY_C) ) std::cout << glm::to_string(camera.GetPosition()) << " " << camera.GetRotation().first.GetDegrees() << ", " << camera.GetRotation().second.GetDegrees() << "\n";
         if ( window->GetKeyPressed(GLFW_KEY_V) ) std::cout << glm::to_string(player.GetPosition()) << " " << player.GetRotation().first.GetDegrees() << ", " << player.GetRotation().second.GetDegrees() << "\n";
@@ -116,19 +119,18 @@ int main() {
         window->SetMousePosition(window->GetWidth()/2, window->GetHeight()/2);
 
 // Render
-        window->Clear();
+        window->GetFrameBuffer()->Clear();
         camera.GetCamera()->GetFrameBuffer()->Clear();
 
         //Context::Draw(*player.GetCamera());
-        Context::DrawCameras();
+        context.ClearCameras();
+        context.DrawCameras();
 
         window->Display();
         timer.Wait();
     }
 
     std::cout << "Stopping..\n";
-
-    window.Delete();
 
     return 0;
 }

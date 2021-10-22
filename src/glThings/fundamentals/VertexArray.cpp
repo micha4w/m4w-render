@@ -2,7 +2,9 @@
 
 #include "Context.h"
 
-VertexArray::VertexArray() {
+VertexArray::VertexArray(Context& context)
+    : m_Context(context)
+{
     glGenVertexArrays(1, &m_ID);
     this->Bind();
 }
@@ -25,7 +27,7 @@ void VertexArray::SetVertexBuffer(m4w::Pointer<VertexBuffer> vb) {
 
 void VertexArray::Bind() {
     glBindVertexArray(m_ID);
-    Context::Get()->m_VAO = this;
+    m_Context.m_VAO = this;
     //if ( m_VB ) 
     //    m_VB->Bind();
     //if ( m_IB ) 
@@ -34,5 +36,5 @@ void VertexArray::Bind() {
 
 void VertexArray::Unbind() {
     glBindVertexArray(0);
-    Context::Get()->m_VAO = nullptr;
+    m_Context.m_VAO = nullptr;
 }
