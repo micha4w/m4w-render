@@ -90,6 +90,7 @@ src_folder : str = sys.argv[1]
 tmp_folder : str = sys.argv[2]
 output_file : str = sys.argv[3]
 compile_type : str = sys.argv[4]
+args : List[str] = sys.argv[5:]
 
 # Read the dates header_dates
 previous_modifieds : Dict[str, float] = {}
@@ -128,7 +129,7 @@ for path, sub_folders, sub_files in os.walk(src_folder):
         include_folders.add("-I" + path)
 
 # Prepare command
-gpp_command = ["/usr/bin/g++", "-std=c++2a", "-g", "-lglfw", "-lGLEW", "-lGL", "-D", compile_type] + ["-O3"] * (compile_type=="RELEASE")
+gpp_command = ["/usr/bin/g++"] + args
 gpp_command.extend(include_folders)
 
 # Seperately compile all source files which were changed
@@ -161,10 +162,9 @@ if compilers or not os.path.exists(output_file):
 
     # Link all .o files
     print("Linking")
-    linker = subprocess.Popen(["/usr/bin/g++", "-std=c++2a", "-g"] + 
+    linker = subprocess.Popen(["/usr/bin/g++"] + 
                               [source.compiled for source in src_files.values()] + 
-                              ["-o", output_file, "-lglfw", "-lGLEW", "-lGL", "-D", compile_type] + 
-                              ["-O3"] * (compile_type=="RELEASE"))
+                              args)
     linker.wait()
 
     if linker.returncode:

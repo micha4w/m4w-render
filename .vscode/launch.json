@@ -13,7 +13,7 @@
                 "${workspaceFolder}/src",                           // Source Folder (Recursive)
                 "${workspaceFolder}/.vscode/custom_build/debug", // Temp Folder
                 "${workspaceFolder}/out-debug",                        // Output File
-                "DEBUG"
+                "-std=c++2a", "-g", "-lglfw", "-lGLEW", "-lGL", "-D", "DEBUG", "-O3"
             ],
             "console": "integratedTerminal"
         },

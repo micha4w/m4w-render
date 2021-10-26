@@ -9,7 +9,7 @@
                 "${workspaceFolder}/src",
                 "${workspaceFolder}/.vscode/custom_build/debug",
                 "${workspaceFolder}/out-debug",
-                "DEBUG"
+                "-std=c++2a", "-g", "-lglfw", "-lGLEW", "-lGL", "-D DEBUG"
             ],
             "options": {
                 "cwd": "${workspaceFolder}"
@@ -48,7 +48,7 @@
                 "${workspaceFolder}/src",
                 "${workspaceFolder}/.vscode/custom_build/release",
                 "${workspaceFolder}/out-release",
-                "RELEASE"
+                "-std=c++2a", "-g", "-lglfw", "-lGLEW", "-lGL", "-D RELEASE"
             ],
             "options": {
                 "cwd": "${workspaceFolder}"
