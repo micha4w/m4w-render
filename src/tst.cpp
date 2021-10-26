@@ -1,6 +1,7 @@
 #include <iostream>
 #include <chrono>
 
+
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
@@ -32,7 +33,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 
 int main() {
     std::cout << "Starting..\n";
-    
+
     Context context;
 
     m4w::Pointer<Window> window = new Window(context, 720, 540, "Geem");
@@ -85,10 +86,10 @@ int main() {
     vbl->AddElement(3, 2, GL_FLOAT); // TexCoord
     
     float verts[] = {
-        -1.f, -1.f, 5.f,   0.f, 0.f, -1.f,   1.f, 0.f, 0.f, 1.f,   0.f, 0.f,
-         1.f, -1.f, 5.f,   0.f, 0.f, -1.f,   1.f, 0.f, 0.f, 1.f,   1.f, 0.f,
-        -1.f,  1.f, 5.f,   0.f, 0.f, -1.f,   1.f, 0.f, 0.f, 1.f,   0.f, 1.f,
-         1.f,  1.f, 5.f,   0.f, 0.f, -1.f,   1.f, 0.f, 0.f, 1.f,   1.f, 1.f
+        -1.f, -1.f, 5.f,   0.f, 0.f, -1.f,   1.f, 0.f, 0.f, 0.f,   0.f, 0.f,
+         1.f, -1.f, 5.f,   0.f, 0.f, -1.f,   1.f, 0.f, 0.f, 0.f,   1.f, 0.f,
+        -1.f,  1.f, 5.f,   0.f, 0.f, -1.f,   1.f, 0.f, 0.f, 0.f,   0.f, 1.f,
+         1.f,  1.f, 5.f,   0.f, 0.f, -1.f,   1.f, 0.f, 0.f, 0.f,   1.f, 1.f
     };
     unsigned int indis[] = {
         0,1,2, 1,2,3
@@ -98,8 +99,10 @@ int main() {
     vao->SetVertexBuffer(new VertexBuffer(sizeof(verts), verts));
     screen.GetMesh()->SetVertexArray(vao);
     screen.GetMesh()->SetVertexLayout(vbl);
-    screen.GetMesh()->AddTexture(1, camera.GetCamera()->GetFrameBuffer()->GetTexture());
-    head.GetMesh()->AddTexture(1, camera.GetCamera()->GetFrameBuffer()->GetTexture());
+    //screen.CreateMesh(context, shader, "/media/sf_share/plane.gltf");
+    screen.GetMesh()->AddTexture(1, Texture::FromPath("res/textures/world.png"));
+    //head.GetMesh()->AddTexture(1, Texture::FromPath("res/textures/world.png"));
+//    screen.GetMesh()->AddTexture(1, camera.GetCamera()->GetFrameBuffer()->GetTexture());
 
     //LOOOOOP
     Timer timer(60.f);

@@ -14,7 +14,7 @@ Window::Window(Context& context, unsigned int width, unsigned int height, const 
     //glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
     m_Instance = glfwCreateWindow(width, height, name, NULL, NULL);
-    if (m_Instance == NULL) {
+    if (m_Instance == nullptr) {
             std::cout << "[ERROR] Failed to create GLFW window..\n";
             glfwTerminate();
             return;
