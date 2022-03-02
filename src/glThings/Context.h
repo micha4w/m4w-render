@@ -32,3 +32,5 @@ public:
 
     void CheckGLError(const char* info = "");
 };
+
+extern Context g_Context;

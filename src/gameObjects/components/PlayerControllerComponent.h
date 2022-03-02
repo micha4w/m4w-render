@@ -15,6 +15,6 @@ private:
              m_MoveForward,
              m_MoveBack;
 public:
-    PlayerControllerComponent(class Context& context, float speed, float sensitvity, uint16_t moveForward = 87, uint16_t moveLeft = 65, uint16_t moveBack = 83, uint16_t moveRight = 68, uint16_t moveUp = 32, uint16_t moveDown = 340);
+    PlayerControllerComponent(float speed, float sensitvity, uint16_t moveForward = 87, uint16_t moveLeft = 65, uint16_t moveBack = 83, uint16_t moveRight = 68, uint16_t moveUp = 32, uint16_t moveDown = 340);
     void Update(unsigned int microSeconds) override; 
 };

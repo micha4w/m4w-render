@@ -17,18 +17,18 @@ in vec3 v_Normal;
 in vec3 v_Position;
 
 
-float base_light = 0.3;
+const float base_light = 0.3;
 
 void main() {
     vec4 base_color = v_Color + texture2D(u_Texture, v_TexCoord);
 
-    float ambient_light = 1.f;
+    float ambient_darkness = 1.f;
     for ( int i = 0 ; i < u_LightCount ; i++ ) {
         vec3 vecToLight = u_Lights[i].Pos - v_Position;
         float intesity = ( dot( vecToLight, v_Normal ) / ( length(vecToLight) * length(v_Normal) ) );
-        ambient_light *= min(intesity + 0.7, 1) * u_Lights[i].Strength;
+        ambient_darkness *= clamp(intesity + 0.7 * u_Lights[i].Strength, 0., 1.);
     }
 
     //gl_FragColor = vec4( base_light );
-    gl_FragColor = vec4(base_color.rgb * ( ambient_light * ( 1 - base_light ) + base_light ), base_color.a);
+    gl_FragColor = vec4(base_color.rgb * ( ambient_darkness * ( 1 - base_light ) + base_light ), base_color.a);
 }

@@ -4,8 +4,7 @@
 
 #include "Context.h"
 
-Window::Window(Context& context, unsigned int width, unsigned int height, const char* name)
-    : m_Context(context)
+Window::Window(unsigned int width, unsigned int height, const char* name)
 {
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -23,7 +22,7 @@ Window::Window(Context& context, unsigned int width, unsigned int height, const 
 
 //    glViewport(0, 0, 800, 600);
 //    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-//    glfwSetInputMode(m_Instance, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    glfwSetInputMode(m_Instance, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
 //    glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
@@ -35,10 +34,10 @@ Window::Window(Context& context, unsigned int width, unsigned int height, const 
         return;
     }
 
-    m_FrameBuffer = new FrameBuffer(m_Context, width, height, 0);
+    m_FrameBuffer = new FrameBuffer(width, height, 0);
 
-    m_Context.m_BlankTexture = new Texture(0, 0);
-    m_Context.m_BlankTexture->Bind(0);
+    g_Context.m_BlankTexture = new Texture(0, 0);
+    g_Context.m_BlankTexture->Bind(0);
 //    Context::Get()->m_Window = this;
 }
 

@@ -15,8 +15,6 @@
 
 class GameObject {
 private:
-    Context& m_Context;
-
     unsigned int m_ID;
 
     bool m_RecalculateView;
@@ -38,7 +36,7 @@ private:
 public:
     const glm::vec3 m_WorldUp = { 0.f, 1.f, 0.f };
 
-    GameObject(Context& context, const glm::vec3& position = { 0.f, 0.f, 0.f });
+    GameObject(const glm::vec3& position = { 0.f, 0.f, 0.f });
     ~GameObject();
 
     void Update(unsigned int microSeconds);
@@ -66,11 +64,11 @@ public:
     template <typename... Args>
     Mesh& CreateMesh(Args&&... args){
         if ( this->HasMesh() ) {
-            m_Context.m_Meshes.Remove(m_MeshID);
+            g_Context.m_Meshes.Remove(m_MeshID);
         }
 
-        m_MeshID = m_Context.m_Meshes.Create(std::forward_as_tuple(args...));
-        m_Mesh = m_Context.m_Meshes.Get(m_MeshID);
+        m_MeshID = g_Context.m_Meshes.Create(std::forward_as_tuple(args...));
+        m_Mesh = g_Context.m_Meshes.Get(m_MeshID);
 
         return *m_Mesh;
     }
@@ -78,11 +76,11 @@ public:
     template <typename... Args>
     Light& CreateLight(Args&&... args){
         if ( this->HasLight() ) {
-            m_Context.m_Lights.Remove(m_LightID);
+            g_Context.m_Lights.Remove(m_LightID);
         }
 
-        m_LightID = m_Context.m_Lights.Create(std::forward_as_tuple(args...));
-        m_Light = m_Context.m_Lights.Get(m_LightID);
+        m_LightID = g_Context.m_Lights.Create(std::forward_as_tuple(args...));
+        m_Light = g_Context.m_Lights.Get(m_LightID);
 
         return *m_Light;
     }
@@ -90,12 +88,12 @@ public:
     template <typename... Args>
     Camera& CreateCamera(Args&&... args){
         if ( this->HasCamera() ) {
-            m_Context.m_Cameras.Remove(m_CameraID);
+            g_Context.m_Cameras.Remove(m_CameraID);
         }
 
         m_RecalculateView = true;
-        m_CameraID = m_Context.m_Cameras.Create(std::forward_as_tuple(args...));
-        m_Camera = m_Context.m_Cameras.Get(m_CameraID);
+        m_CameraID = g_Context.m_Cameras.Create(std::forward_as_tuple(args...));
+        m_Camera = g_Context.m_Cameras.Get(m_CameraID);
 
         return *m_Camera;
     }

@@ -3,6 +3,8 @@
 #include "FrameBuffer.h"
 #include "GameObject.h"
 
+Context g_Context;
+
 void Context::Update(unsigned int microSeconds) {
     for ( auto [id, object] : m_Objects ) {
         object->Update(microSeconds);

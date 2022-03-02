@@ -17,7 +17,6 @@ class Mesh {
 private:
     friend class GameObject;
 
-    class Context& m_Context;
     glm::mat4 m_ModelMatrix;
 
     m4w::Pointer<VertexArray> m_VAO;
@@ -27,8 +26,8 @@ private:
 public:
     std::string Name;
 
-    Mesh(class Context& context, m4w::Pointer<Shader> shader);
-    Mesh(class Context& context, m4w::Pointer<Shader> shader, const char* gltfPath);
+    Mesh(m4w::Pointer<Shader> shader);
+    Mesh(m4w::Pointer<Shader> shader, const char* gltfPath);
 
     void SetVertexArray(m4w::Pointer<class VertexArray> vao) {
         m_VAO = vao;

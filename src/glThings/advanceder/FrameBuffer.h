@@ -13,7 +13,6 @@ private:
     friend class Window;
     friend class Camera;
 
-    class Context& m_Context;
     unsigned int m_ID;
 
     unsigned int m_Width, m_Height;
@@ -22,12 +21,12 @@ private:
     m4w::Pointer<Texture> m_Texture;
     m4w::Pointer<RenderBuffer> m_RenderBuffer;
 
-    FrameBuffer(class Context& context, unsigned int width, unsigned int height, unsigned int id)
-    : m_Context(context), m_Width(width), m_Height(height), m_ID(id), m_ClearColor{ 0.f, 0.f, 0.f, 1.f }
+    FrameBuffer(unsigned int width, unsigned int height, unsigned int id)
+    : m_Width(width), m_Height(height), m_ID(id), m_ClearColor{ 0.f, 0.f, 0.f, 1.f }
     { }
 
 public:
-    FrameBuffer(Context& context, unsigned int width, unsigned int height);
+    FrameBuffer(unsigned int width, unsigned int height);
     ~FrameBuffer();
 
     void AddTexture();

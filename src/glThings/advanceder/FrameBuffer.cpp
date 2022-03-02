@@ -3,8 +3,8 @@
 #include "Context.h"
 #include "Window.h"
 
-FrameBuffer::FrameBuffer(Context& context, unsigned int width, unsigned int height)
-    : m_Context(context), m_Width(width), m_Height(height), m_ClearColor{ 0.f, 0.f, 0.f, 0.f }
+FrameBuffer::FrameBuffer(unsigned int width, unsigned int height)
+    : m_Width(width), m_Height(height), m_ClearColor{ 0.f, 0.f, 0.f, 0.f }
 {
     glGenFramebuffers(1, &m_ID);
     
@@ -29,10 +29,10 @@ void FrameBuffer::AddDepthBuffer() {
 
 void FrameBuffer::Bind() {
     glBindFramebuffer(GL_FRAMEBUFFER, m_ID);
-    m_Context.m_FBO = this;
+    g_Context.m_FBO = this;
 }
 
 void FrameBuffer::Unbind() {
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    m_Context.m_FBO = m_Context.m_Window->GetFrameBuffer();
+    g_Context.m_FBO = g_Context.m_Window->GetFrameBuffer();
 }

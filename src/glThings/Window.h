@@ -11,15 +11,13 @@
 
 class Window {
 private:
-    class Context& m_Context;
-
     GLFWwindow* m_Instance;
     m4w::Pointer<FrameBuffer> m_FrameBuffer;
 
     void AddColorBuffer() = delete;
     void AddDepthBuffer() = delete;
 public:
-    Window(Context& context, unsigned int width, unsigned int height, const char* name);
+    Window(unsigned int width, unsigned int height, const char* name);
     ~Window();
 
     void Display();

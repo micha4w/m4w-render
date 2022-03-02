@@ -4,8 +4,8 @@
 
 #include "Context.h"
 
-VertexArray::VertexArray(Context& context, m4w::Pointer<VertexLayout> vbl)
-    : m_Context(context), m_VBL(vbl)
+VertexArray::VertexArray(m4w::Pointer<VertexLayout> vbl)
+    : m_VBL(vbl)
 {
     glGenVertexArrays(1, &m_ID);
 
@@ -33,7 +33,7 @@ void VertexArray::SetVertexBuffer(m4w::Pointer<VertexBuffer> vb) {
 
 void VertexArray::Bind() {
     glBindVertexArray(m_ID);
-    m_Context.m_VAO = this;
+    g_Context.m_VAO = this;
     //if ( m_VB ) 
     //    m_VB->Bind();
     //if ( m_IB ) 
@@ -42,15 +42,15 @@ void VertexArray::Bind() {
 
 void VertexArray::Unbind() {
     glBindVertexArray(0);
-    m_Context.m_VAO = nullptr;
+    g_Context.m_VAO = nullptr;
 }
 
-m4w::Pointer<VertexArray> VertexArray::Sphere(Context& context, unsigned int sub_divisions, float pos[3], float radius, float color[4]){
-    return Sphere(context, sub_divisions, pos[0], pos[1], pos[2],  radius,  color[0], color[1], color[2], color[3]);
+m4w::Pointer<VertexArray> VertexArray::Sphere(unsigned int sub_divisions, float pos[3], float radius, float color[4]){
+    return Sphere(sub_divisions, pos[0], pos[1], pos[2],  radius,  color[0], color[1], color[2], color[3]);
 }
 
 
-m4w::Pointer<VertexArray> VertexArray::Sphere(Context& context, unsigned int sub_divisions, float x, float y, float z, float radius, float r, float g, float b, float a) {
+m4w::Pointer<VertexArray> VertexArray::Sphere(unsigned int sub_divisions, float x, float y, float z, float radius, float r, float g, float b, float a) {
 
     uint32_t final_square_count = 6 * std::pow(4, sub_divisions);
     float square_length = 1 / ( sub_divisions + 1 );
@@ -117,7 +117,7 @@ m4w::Pointer<VertexArray> VertexArray::Sphere(Context& context, unsigned int sub
 //        vertex.Pos[2] = vertex.Normal[2] * radius;
 //    }
 
-    VertexArray* vao = new VertexArray(context);
+    VertexArray* vao = new VertexArray();
 
     //vao->SetIndexBuffer( IndexBuffer::Squares(1) );
     vao->SetVertexBuffer( new VertexBuffer(sizeof(vertices) * 4, vertices) );
@@ -129,11 +129,11 @@ m4w::Pointer<VertexArray> VertexArray::Sphere(Context& context, unsigned int sub
 }
 
 
-m4w::Pointer<VertexArray> VertexArray::Cube(Context& context, float pos1[3], float pos2[3], float color[4]) {
-    return Cube(context, pos1[0], pos1[1], pos1[2],  pos2[0], pos2[1], pos2[2],  color[0], color[1], color[2], color[3]);
+m4w::Pointer<VertexArray> VertexArray::Cube(float pos1[3], float pos2[3], float color[4]) {
+    return Cube(pos1[0], pos1[1], pos1[2],  pos2[0], pos2[1], pos2[2],  color[0], color[1], color[2], color[3]);
 }
 
-m4w::Pointer<VertexArray> VertexArray::Cube(Context& context, float x1, float y1, float z1, float x2, float y2, float z2, float r, float g, float b, float a) {
+m4w::Pointer<VertexArray> VertexArray::Cube(float x1, float y1, float z1, float x2, float y2, float z2, float r, float g, float b, float a) {
     float pX = std::max(x1, x2);
     float nX = std::min(x1, x2);
 
@@ -175,7 +175,7 @@ m4w::Pointer<VertexArray> VertexArray::Cube(Context& context, float x1, float y1
         nX, nY, nZ,   0.f, 0.f, -1.f,   r, g, b, a,   1.f, 0.f,
         nX, pY, nZ,   0.f, 0.f, -1.f,   r, g, b, a,   1.f, 1.f,
     };
-    VertexArray* vao = new VertexArray(context);
+    VertexArray* vao = new VertexArray();
 
     vao->SetIndexBuffer(IndexBuffer::Squares(6));
     vao->SetVertexBuffer(new VertexBuffer(sizeof(verts), verts));

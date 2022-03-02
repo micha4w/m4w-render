@@ -32,36 +32,33 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 }
 
 int main() {
+
     std::cout << "Starting..\n";
 
-    Context context;
-
-    m4w::Pointer<Window> window = new Window(context, 720, 540, "Geem");
-    context.m_Window = window;
+    m4w::Pointer<Window> window = new Window(720, 540, "Geem");
+    g_Context.m_Window = window;
 
     window->GetFrameBuffer()->SetClearColor(0, 0.043, 0.804);
     window->GetFrameBuffer()->Clear();
     window->Display();
     m4w::Pointer<Shader> shader(new Shader("PosColor"));
 
-    GameObject head(context);
-    head.CreateMesh(context, shader, "res/models/hed.gltf");
+    GameObject head;
+    head.CreateMesh(shader, "res/models/hed.gltf");
 
-    GameObject player(context);
-    player.AddComponent((Component*) new PlayerControllerComponent(context, 10.f, 0.001f));
+    GameObject player;
+    player.AddComponent((Component*) new PlayerControllerComponent(10.f, 0.001f));
     
     player.CreateCamera(
-        context,
         window->GetWidth(), window->GetHeight(),
         new PerspectiveProjection(90.f, window->GetWidth() / window->GetHeight(), 0.001f, 10000.f)
     );
     player.GetCamera()->SetFrameBuffer(window->GetFrameBuffer());
 
-    GameObject camera(context, {0.f, 0.f, -5.f});
+    GameObject camera({0.f, 0.f, -5.f});
     camera.SetRotation(m4w::Angle::Degrees(180.f), m4w::Angle());
     camera.SetScale(0.25f);
     camera.CreateCamera(
-        context,
         window->GetWidth(), window->GetHeight(),
         new PerspectiveProjection(90.f, window->GetWidth() / window->GetHeight(), 0.001f, 10000.f)
     );
@@ -69,27 +66,27 @@ int main() {
     camera.GetCamera()->GetFrameBuffer()->AddDepthBuffer();
     camera.GetCamera()->GetFrameBuffer()->SetClearColor(0.f, 0.f, 0.f, 1.f);
     
-    camera.CreateMesh(context, shader, "res/models/icosphere.gltf");
-    camera.AddComponent((Component*) new PlayerControllerComponent(context, 3.f, 0.f, GLFW_KEY_UP, GLFW_KEY_LEFT, GLFW_KEY_DOWN, GLFW_KEY_RIGHT, GLFW_KEY_PAGE_UP, GLFW_KEY_PAGE_DOWN));
+    camera.CreateMesh(shader, "res/models/icosphere.gltf");
+    camera.AddComponent((Component*) new PlayerControllerComponent(3.f, 0.f, GLFW_KEY_UP, GLFW_KEY_LEFT, GLFW_KEY_DOWN, GLFW_KEY_RIGHT, GLFW_KEY_PAGE_UP, GLFW_KEY_PAGE_DOWN));
 
 
-    GameObject screen(context);
-    Mesh& screen_mesh = screen.CreateMesh(context, shader);
+    GameObject screen;
+    Mesh& screen_mesh = screen.CreateMesh(shader);
     screen_mesh.Name = "SCREEN";
-    screen_mesh.SetVertexArray( VertexArray::Cube(context, -1.f, -1.f, 4.f, 1.f, 1.f, 5.f, 0.f, 0.f, 0.f, 0.f) );
+    screen_mesh.SetVertexArray( VertexArray::Cube(-1.f, -1.f, 4.f, 1.f, 1.f, 5.f, 0.f, 0.f, 0.f, 0.f) );
     screen_mesh.AddTexture(1, camera.GetCamera()->GetFrameBuffer()->GetTexture());
 
 
-    GameObject floor(context);
-    Mesh& floor_mesh = floor.CreateMesh(context, shader);
+    GameObject floor;
+    Mesh& floor_mesh = floor.CreateMesh(shader);
     floor_mesh.Name = "FLOOR";
-    floor_mesh.SetVertexArray( VertexArray::Cube(context, -10.f, -10.f, -10.f, 10.f, -9.f, 10.f, 0.2f, 0.8f, 0.1f, 1.f) );
+    floor_mesh.SetVertexArray( VertexArray::Cube(-10.f, -10.f, -10.f, 10.f, -9.f, 10.f, 0.2f, 0.8f, 0.1f, 1.f) );
 
 
-    GameObject sphere(context, { 8.f, 0.f, 0.f });
-    Mesh& sphere_mesh = sphere.CreateMesh(context, shader);
+    GameObject sphere({ 8.f, 0.f, 0.f });
+    Mesh& sphere_mesh = sphere.CreateMesh(shader);
     sphere_mesh.Name = "BALLZ";
-    sphere_mesh.SetVertexArray( VertexArray::Sphere(context, 0, 5.f, 0.f, 0.f, 3.f, 0.8f, 0.2f, 0.4f, 1.f) );
+    sphere_mesh.SetVertexArray( VertexArray::Sphere(0, 5.f, 0.f, 0.f, 3.f, 0.8f, 0.2f, 0.4f, 1.f) );
 
 
     m4w::HeapArray<LightSource> lights(1);
@@ -102,7 +99,7 @@ int main() {
         // Update
         glfwPollEvents();
 
-        context.Update(timer.GetDeltaUs());
+        g_Context.Update(timer.GetDeltaUs());
 
         //if ( window->GetKeyPressed(GLFW_KEY_C) ) std::cout << glm::to_string(camera.GetPosition()) << " " << camera.GetRotation().first.GetDegrees() << ", " << camera.GetRotation().second.GetDegrees() << "\n";
         if ( window->GetKeyPressed(GLFW_KEY_V) ) std::cout << glm::to_string(player.GetPosition()) << " " << player.GetRotation().first.GetDegrees() << ", " << player.GetRotation().second.GetDegrees() << "\n";
@@ -117,8 +114,8 @@ int main() {
         //Context::Draw(*player.GetCamera());
         shader->SetUniformLights(lights);
 
-        context.ClearCameras();
-        context.DrawCameras();
+        g_Context.ClearCameras();
+        g_Context.DrawCameras();
 
         window->Display();
         timer.Wait();
@@ -155,6 +152,6 @@ int main() {
 */
 
 
-    //screen.CreateMesh(context, shader, "/media/sf_share/plane.gltf");
+    //screen.CreateMesh(g_Context, shader, "/media/sf_share/plane.gltf");
     //screen.GetMesh()->AddTexture(1, Texture::FromPath("res/textures/world.png"));
     //head.GetMesh()->AddTexture(1, Texture::FromPath("res/textures/world.png"));

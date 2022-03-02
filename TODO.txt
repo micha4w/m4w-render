@@ -1,8 +1,8 @@
 TODO
 ----
 
-Make extern variable Context that should be available from all places
 Make UUIDMap return reference instead of Pointer
+Generaelly make all Pointers that you can a Reference
 
 VERTEXLAYOUT SHOULD ALWAYS BE APPLIED AFTER VERTEXBUFFER
 Times this mistake was made: atleast 2

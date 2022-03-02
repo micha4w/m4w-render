@@ -9,12 +9,12 @@
 #include "HeapArray.h"
 #include "Base64.h" 
 
-Mesh::Mesh(Context& context, m4w::Pointer<Shader> shader)
-    : m_Context(context), m_Shader(shader), m_ModelMatrix(1.f)
+Mesh::Mesh(m4w::Pointer<Shader> shader)
+    : m_Shader(shader), m_ModelMatrix(1.f)
 { }
 
-Mesh::Mesh(Context& context, m4w::Pointer<Shader> shader, const char* gltfPath)
-    : Mesh(context, shader)
+Mesh::Mesh(m4w::Pointer<Shader> shader, const char* gltfPath)
+    : Mesh(shader)
 {
     m4w::Pointer<m4w::JSONObject> gltf = m4w::ReadFile(gltfPath);
 
@@ -53,7 +53,7 @@ Mesh::Mesh(Context& context, m4w::Pointer<Shader> shader, const char* gltfPath)
         }
     }
 
-    m_VAO = new VertexArray(m_Context);
+    m_VAO = new VertexArray();
 
     m4w::Accessor& indicesAccessor = accessors[*primitives->GetObject(0)->GetNumber("indices")];
     m_VAO->SetIndexBuffer( CreateIndexBuffer(indicesAccessor, bufferViews[indicesAccessor.BufferView], buffers) );
@@ -92,7 +92,7 @@ void Mesh::Render() {
 
 //    m_Context.m_Window->Display();
 
-    m_Context.m_BlankTexture->Use(*m_Shader, 0);
+    g_Context.m_BlankTexture->Use(*m_Shader, 0);
 }
 
 Shader* Mesh::GetShader() { return m_Shader; }

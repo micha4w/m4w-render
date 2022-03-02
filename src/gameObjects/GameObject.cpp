@@ -10,20 +10,20 @@
 #include "View.h"
 
 
-GameObject::GameObject(Context& context, const glm::vec3& position)
-    : m_Position(position), m_Velocity({ 0.f, 0.f, 0.f }), m_Context(context),
+GameObject::GameObject(const glm::vec3& position)
+    : m_Position(position), m_Velocity({ 0.f, 0.f, 0.f }),
       m_MeshID(-1), m_CameraID(-1), m_LightID(-1), m_RecalculateView(false), m_Scale(1.f)
 {
     this->SetRotation(m4w::Angle(), m4w::Angle());
-    m_ID = m_Context.m_Objects.Add(this);
+    m_ID = g_Context.m_Objects.Add(this);
 }
 
 GameObject::~GameObject() {
-    m_Context.m_Objects.Remove(m_ID);
+    g_Context.m_Objects.Remove(m_ID);
 
-    if ( HasCamera() ) m_Context.m_Cameras.Remove(m_CameraID);
-    if ( HasLight() ) m_Context.m_Lights.Remove(m_LightID);
-    if ( HasMesh() ) m_Context.m_Meshes.Remove(m_MeshID);
+    if ( HasCamera() ) g_Context.m_Cameras.Remove(m_CameraID);
+    if ( HasLight() ) g_Context.m_Lights.Remove(m_LightID);
+    if ( HasMesh() ) g_Context.m_Meshes.Remove(m_MeshID);
 }
 
 
@@ -115,30 +115,30 @@ float GameObject::GetScale() { return m_Scale; }
 
 void GameObject::SetMesh(Mesh* mesh) {
     if ( this->HasMesh() ) {
-        m_Context.m_Meshes.Remove(m_MeshID);
+        g_Context.m_Meshes.Remove(m_MeshID);
     }
 
-    m_MeshID = m_Context.m_Meshes.Add(std::forward<Mesh>(*mesh));
-    m_Mesh = m_Context.m_Meshes.Get(m_MeshID);
+    m_MeshID = g_Context.m_Meshes.Add(std::forward<Mesh>(*mesh));
+    m_Mesh = g_Context.m_Meshes.Get(m_MeshID);
 }
 
 void GameObject::SetLight(Light* light) {
     if ( this->HasLight() ) {
-        m_Context.m_Lights.Remove(m_LightID);
+        g_Context.m_Lights.Remove(m_LightID);
     }
 
-    m_LightID = m_Context.m_Lights.Add(std::forward<Light>(*light));
-    m_Light = m_Context.m_Lights.Get(m_LightID);
+    m_LightID = g_Context.m_Lights.Add(std::forward<Light>(*light));
+    m_Light = g_Context.m_Lights.Get(m_LightID);
 }
 
 void GameObject::SetCamera(Camera* camera) {
     if ( this->HasCamera() ) {
-        m_Context.m_Cameras.Remove(m_CameraID);
+        g_Context.m_Cameras.Remove(m_CameraID);
     }
 
     m_RecalculateView = true;
-    m_CameraID = m_Context.m_Cameras.Add(std::forward<Camera>(*camera));
-    m_Camera = m_Context.m_Cameras.Get(m_CameraID);
+    m_CameraID = g_Context.m_Cameras.Add(std::forward<Camera>(*camera));
+    m_Camera = g_Context.m_Cameras.Get(m_CameraID);
 }
 
 

@@ -9,15 +9,13 @@
 
 class Camera {
 private:
-    class Context& m_Context;
-
     friend class GameObject;
 
     m4w::Pointer<View> m_View;
     m4w::Pointer<Projection> m_Projection;
     m4w::Pointer<FrameBuffer> m_FrameBuffer;
 public:
-    Camera(Context& context, unsigned int width, unsigned int height, Projection* projection, View* view = new View());
+    Camera(unsigned int width, unsigned int height, Projection* projection, View* view = new View());
     ~Camera();
 
     void SetProjection(m4w::Pointer<Projection> projection);
