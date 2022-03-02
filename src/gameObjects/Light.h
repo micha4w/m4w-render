@@ -2,6 +2,12 @@
 
 #include "HeapArray.h"
 
+struct LightSource {
+    float Pos[3];
+    float Strength;
+    float Hue[3];
+};
+
 class Light {
 private:
     class GameObject* m_Owner;

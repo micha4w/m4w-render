@@ -54,4 +54,8 @@ public:
     unsigned int GetHeight() {
         return m_FrameBuffer->GetHeight();
     }
+
+    bool IsFocused() {
+        return glfwGetWindowAttrib(m_Instance, GLFW_FOCUSED);
+    }
 };

@@ -9,6 +9,9 @@ PlayerControllerComponent::PlayerControllerComponent(Context& context, float spe
 { }
 
 void PlayerControllerComponent::Update(unsigned int microSeconds) {
+    if ( !m_Context.m_Window->IsFocused() )
+        return;
+
     m4w::Pointer<Window> window = m_Context.m_Window;
     auto [newX, newY] = window->GetMousePosition();
 

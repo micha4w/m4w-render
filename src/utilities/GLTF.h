@@ -41,7 +41,7 @@ namespace m4w {
 
     Types TypesFromString(const char* name);
     m4w::Pointer<IndexBuffer> CreateIndexBuffer(const Accessor& indicesAccesor, const BufferView& indicesView, const HeapArray<BinaryData>& buffers);
-    m4w::Pointer<VertexBuffer> CreateVertexBuffer(VertexLayout* vbl, std::vector<Accessor*> accessors, const HeapArray<BinaryData>& buffers, const HeapArray<BufferView>& bufferViews, unsigned int vertexCount);
+    m4w::Pointer<VertexBuffer> CreateVertexBuffer(unsigned int vertexSize, std::vector<Accessor*> accessors, const HeapArray<BinaryData>& buffers, const HeapArray<BufferView>& bufferViews, unsigned int vertexCount);
     HeapArray<Accessor> GetAccessors(JSONObject* gltf);
     HeapArray<BufferView> GetBufferViews(JSONObject* gltf);
     HeapArray<BinaryData> GetBuffers(JSONObject* gltf);

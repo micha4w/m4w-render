@@ -1,5 +1,10 @@
 #include "Shader.h"
 
+#include <iostream>
+
+#include "Light.h"
+#include "HeapArray.h"
+
 Shader::Shader (std::string vertexPath, std::string fragmentPath) 
     : m_FragmentFile(fragmentPath), m_VertexFile(vertexPath)
 {
@@ -31,6 +36,7 @@ void Shader::Unbind() {
 void Shader::Recompile() {
     this->Unbind();
     glDeleteProgram(m_ID);
+    m_UniformLocations.clear();
 
     m_ID = glCreateProgram();
     Load(m_VertexFile, GL_VERTEX_SHADER);
@@ -84,5 +90,18 @@ void Shader::SetUniform4f(const char* name, float f0, float f1, float f2, float 
 void Shader::SetUniformMat4(const char* name, glm::mat4 matrix) {
     this->Bind();
     glUniformMatrix4fv(GetUniformLocation(name), 1, false, &matrix[0][0]);
+}
+
+void Shader::SetUniformLights(m4w::HeapArray<LightSource>& lights) {
+
+    this->SetUniform1i("u_LightCount", lights.GetSize());
+
+    for ( int i = 0 ; i < lights.GetSize() ; i++ ) {
+        LightSource& light = lights[i];
+
+        this->SetUniform3f((std::string("u_Lights[") + std::to_string(i) + "].Pos").c_str(), light.Pos[0], light.Pos[1], light.Pos[2]);
+        this->SetUniform1f((std::string("u_Lights[") + std::to_string(i) + "].Strength").c_str(), light.Strength);
+        this->SetUniform3f((std::string("u_Lights[") + std::to_string(i) + "].Hue").c_str(), light.Hue[0], light.Hue[1], light.Hue[2]);
+    }
 }
 

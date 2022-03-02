@@ -64,27 +64,31 @@ public:
 
 
     template <typename... Args>
-    void CreateMesh(Args&&... args){
+    Mesh& CreateMesh(Args&&... args){
         if ( this->HasMesh() ) {
             m_Context.m_Meshes.Remove(m_MeshID);
         }
 
         m_MeshID = m_Context.m_Meshes.Create(std::forward_as_tuple(args...));
         m_Mesh = m_Context.m_Meshes.Get(m_MeshID);
+
+        return *m_Mesh;
     }
      
     template <typename... Args>
-    void CreateLight(Args&&... args){
+    Light& CreateLight(Args&&... args){
         if ( this->HasLight() ) {
             m_Context.m_Lights.Remove(m_LightID);
         }
 
         m_LightID = m_Context.m_Lights.Create(std::forward_as_tuple(args...));
         m_Light = m_Context.m_Lights.Get(m_LightID);
+
+        return *m_Light;
     }
 
     template <typename... Args>
-    void CreateCamera(Args&&... args){
+    Camera& CreateCamera(Args&&... args){
         if ( this->HasCamera() ) {
             m_Context.m_Cameras.Remove(m_CameraID);
         }
@@ -92,6 +96,8 @@ public:
         m_RecalculateView = true;
         m_CameraID = m_Context.m_Cameras.Create(std::forward_as_tuple(args...));
         m_Camera = m_Context.m_Cameras.Get(m_CameraID);
+
+        return *m_Camera;
     }
 
     void AddComponent(m4w::Pointer<Component> component);

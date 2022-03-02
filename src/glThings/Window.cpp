@@ -25,6 +25,8 @@ Window::Window(Context& context, unsigned int width, unsigned int height, const 
 //    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 //    glfwSetInputMode(m_Instance, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     glEnable(GL_DEPTH_TEST);
+    glEnable(GL_CULL_FACE);
+//    glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
 
     // GLEW
     if ( glewInit() != GLEW_OK ) {
@@ -34,6 +36,9 @@ Window::Window(Context& context, unsigned int width, unsigned int height, const 
     }
 
     m_FrameBuffer = new FrameBuffer(m_Context, width, height, 0);
+
+    m_Context.m_BlankTexture = new Texture(0, 0);
+    m_Context.m_BlankTexture->Bind(0);
 //    Context::Get()->m_Window = this;
 }
 

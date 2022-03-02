@@ -17,6 +17,10 @@ namespace m4w {
         HeapArray(unsigned int size)
             : m_Size(size), m_Pointer(new T[size]), m_Owners(new unsigned int(1))
         { }
+        
+        //HeapArray(T* pointer, unsigned int size)
+        //    : m_Size(size), m_Pointer(pointer), m_Owners(new unsigned int(1))
+        //{ }
 
         ~HeapArray() {
             *m_Owners -= 1;

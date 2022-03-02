@@ -10,6 +10,8 @@
 
 #include <glm/mat4x4.hpp>
 
+#include "HeapArray.h"
+
 class Shader {
 private:
     unsigned int m_ID;
@@ -109,4 +111,5 @@ public:
     void SetUniform4f(const char* name, float f0, float f1, float f2, float f3);
 
     void SetUniformMat4(const char* name, glm::mat4 matrix);
+    void SetUniformLights(m4w::HeapArray<struct LightSource>& lights);
 };

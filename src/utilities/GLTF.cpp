@@ -31,9 +31,9 @@ namespace m4w {
     }
 
 
-    m4w::Pointer<VertexBuffer> CreateVertexBuffer(VertexLayout* vbl, std::vector<Accessor*> accessors, const HeapArray<BinaryData>& buffers, const HeapArray<BufferView>& bufferViews, unsigned int vertexCount) {
+    m4w::Pointer<VertexBuffer> CreateVertexBuffer(unsigned int vertexSize, std::vector<Accessor*> accessors, const HeapArray<BinaryData>& buffers, const HeapArray<BufferView>& bufferViews, unsigned int vertexCount) {
 
-        char* vertexData = new char[vbl->Size() * vertexCount];
+        char* vertexData = new char[vertexSize * vertexCount];
 
         unsigned int offset = 0;
         for ( Accessor* accessor : accessors ) {
@@ -43,13 +43,13 @@ namespace m4w {
             char* data = &buffer.DataPointer[bufferView.Offset];
             unsigned int size = accessor->Type * VertexLayout::glSizeof(accessor->ComponentType);
             for ( int i = 0 ; i < vertexCount ; i++ ) {
-                std::copy(&data[ i * size ], &data[ (i + 1) * size ], &vertexData[ i * vbl->Size() + offset ]);
+                std::copy(&data[ i * size ], &data[ (i + 1) * size ], &vertexData[ i * vertexSize + offset ]);
             }
 
             offset += size;
         }
 
-        m4w::Pointer<VertexBuffer> vb( new VertexBuffer(vbl->Size() * vertexCount, vertexData) );
+        m4w::Pointer<VertexBuffer> vb( new VertexBuffer(vertexSize * vertexCount, vertexData) );
 
         delete[] vertexData;
         return vb;

@@ -66,10 +66,12 @@ void GameObject::SetRotation(const m4w::Angle& yaw, const m4w::Angle& pitch) {
     m_Pitch = pitch;
 
     m_Pitch.ClampDegrees( -89.9, 89.9 );
+
     float y = m_Pitch.Sin();
 
-    float x = -m_Yaw.Sin();
-    float z = -m_Yaw.Cos();
+    float cY = m_Pitch.Cos();
+    float x = -m_Yaw.Sin() * cY;
+    float z = -m_Yaw.Cos() * cY;
 
     m_Rotation = { x, y, z };
     m_RecalculateView = true;

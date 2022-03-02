@@ -1,5 +1,12 @@
 TODO
 ----
 
+Make extern variable Context that should be available from all places
+Make UUIDMap return reference instead of Pointer
+
+VERTEXLAYOUT SHOULD ALWAYS BE APPLIED AFTER VERTEXBUFFER
+Times this mistake was made: atleast 2
+
+Old:
 Figure out Pointers in VertexBuffer and IndexBuffer
 Figure out thing were compiler does padding on structs
