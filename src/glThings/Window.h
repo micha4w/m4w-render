@@ -13,9 +13,17 @@ class Window {
 private:
     GLFWwindow* m_Instance;
     m4w::Pointer<FrameBuffer> m_FrameBuffer;
+    bool m_MouseGrabbed;
+    
+    uint16_t m_LastKeysPressed[350];
+    uint16_t m_CurrentKeysPressed[350];
 
     void AddColorBuffer() = delete;
     void AddDepthBuffer() = delete;
+
+    static void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+        std::cout << key << " " << (scancode ? "PRESS" : "RELEASE") << std::endl;
+    }
 public:
     Window(unsigned int width, unsigned int height, const char* name);
     ~Window();
@@ -53,7 +61,16 @@ public:
         return m_FrameBuffer->GetHeight();
     }
 
-    bool IsFocused() {
+    bool IsFocused () {
         return glfwGetWindowAttrib(m_Instance, GLFW_FOCUSED);
+    }
+
+    bool IsMouseGrabbed () {
+        return m_MouseGrabbed;
+    }
+
+    void SetMouseGrabbed (bool grab) {
+        m_MouseGrabbed = grab;
+            glfwSetInputMode(m_Instance, GLFW_CURSOR, grab ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL);
     }
 };

@@ -108,7 +108,9 @@ int main() {
             shader->Recompile();
         }
 
-        window->SetMousePosition(window->GetWidth()/2, window->GetHeight()/2);
+        window->SetMouseGrabbed(window->GetKeyPressed(GLFW_KEY_ESCAPE));
+        if ( window->IsMouseGrabbed() )
+            window->SetMousePosition(window->GetWidth()/2, window->GetHeight()/2);
 
 // Render
         //Context::Draw(*player.GetCamera());

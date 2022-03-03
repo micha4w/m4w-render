@@ -22,6 +22,7 @@ Window::Window(unsigned int width, unsigned int height, const char* name)
 
 //    glViewport(0, 0, 800, 600);
 //    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+    glfwSetKeyCallback(m_Instance, Window::KeyCallback);
     glfwSetInputMode(m_Instance, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
