@@ -51,7 +51,7 @@ int main() {
     
     player.CreateCamera(
         window->GetWidth(), window->GetHeight(),
-        new PerspectiveProjection(m4w::Angle::Degrees(70.f).GetRadians(), window->GetWidth() / window->GetHeight(), 0.001f, 10000.f)
+        new PerspectiveProjection(m4w::Angle::Degrees(70.f), window->GetWidth() / window->GetHeight(), 0.001f, 10000.f)
     );
     player.GetCamera()->SetFrameBuffer(window->GetFrameBuffer());
 
@@ -60,7 +60,7 @@ int main() {
     camera.SetScale(0.25f);
     camera.CreateCamera(
         window->GetWidth(), window->GetHeight(),
-        new PerspectiveProjection(m4w::Angle::Degrees(70.f).GetRadians(), window->GetWidth() / window->GetHeight(), 0.001f, 10000.f)
+        new PerspectiveProjection(m4w::Angle::Degrees(70.f), window->GetWidth() / window->GetHeight(), 0.001f, 10000.f)
     );
     camera.GetCamera()->GetFrameBuffer()->AddTexture();
     camera.GetCamera()->GetFrameBuffer()->AddDepthBuffer();
@@ -103,14 +103,22 @@ int main() {
 
         //if ( window->GetKeyPressed(GLFW_KEY_C) ) std::cout << glm::to_string(camera.GetPosition()) << " " << camera.GetRotation().first.GetDegrees() << ", " << camera.GetRotation().second.GetDegrees() << "\n";
         if ( window->IsKeyPressed(GLFW_KEY_V) ) std::cout << glm::to_string(player.GetPosition()) << " " << player.GetRotation().first.GetDegrees() << ", " << player.GetRotation().second.GetDegrees() << "\n";
-        if ( window->WasKeyJustPressed(GLFW_KEY_F) ) {
+        if ( window->WasKeyPressed(GLFW_KEY_F) ) {
             std::cout << "Reloading Sahder\n";
             shader->Recompile();
         }
 
-        if ( window->WasKeyJustPressed(GLFW_KEY_ESCAPE) ) {
+        if ( window->WasKeyPressed(GLFW_KEY_ESCAPE) ) {
             window->SetMouseGrabbed( !window->IsMouseGrabbed() );
         }
+        if ( window->WasKeyPressed(GLFW_KEY_C) )
+            player.GetCamera()->SetProjection(
+                new PerspectiveProjection(m4w::Angle::Degrees(30.f), window->GetWidth() / window->GetHeight(), 0.001f, 10000.f)
+            );
+        if ( window->WasKeyReleased(GLFW_KEY_C) )
+            player.GetCamera()->SetProjection(
+                new PerspectiveProjection(m4w::Angle::Degrees(70.f), window->GetWidth() / window->GetHeight(), 0.001f, 10000.f)
+            );
 
         if ( window->IsMouseGrabbed() )
             window->SetMousePosition(window->GetWidth()/2, window->GetHeight()/2);

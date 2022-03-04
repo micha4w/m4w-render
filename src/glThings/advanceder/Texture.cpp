@@ -51,6 +51,6 @@ void Texture::Use(Shader& shader, unsigned short slot) {
     shader.Bind();
     this->Bind(slot);
     shader.SetUniform1i("u_Texture", slot);
-    shader.SetUniform1i("u_TextureID", slot);
+    //shader.SetUniform1i("u_TextureID", slot);
 }
 

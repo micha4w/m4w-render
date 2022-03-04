@@ -81,11 +81,11 @@ bool Window::IsKeyPressed (int key) {
     return m_KeysPressed[key];
 }
 
-bool Window::WasKeyJustPressed (int key) {
+bool Window::WasKeyPressed (int key) {
     return m_KeysPressed[key] && !m_LastKeysPressed[key];
 }
 
-bool Window::WasKeyJustReleased (int key) {
+bool Window::WasKeyReleased (int key) {
     return m_KeysPressed[key] && !m_LastKeysPressed[key];
 }
 

@@ -70,35 +70,35 @@ m4w::Pointer<VertexArray> VertexArray::Sphere(unsigned int sub_divisions, float 
             next_ud = ud + square_length;
 
             // +X
-            vertices[ cur++ ] = {  .5f,      ud,      lr,    1.f, 0.f, 0.f,   r, g, b, a,   next_lr,      ud };
-            vertices[ cur++ ] = {  .5f, next_ud,      lr,    1.f, 0.f, 0.f,   r, g, b, a,   next_lr, next_ud };
-            vertices[ cur++ ] = {  .5f, next_ud, next_lr,    1.f, 0.f, 0.f,   r, g, b, a,        lr, next_ud };
-            vertices[ cur++ ] = {  .5f,      ud, next_lr,    1.f, 0.f, 0.f,   r, g, b, a,        lr,      ud };
+            vertices[ cur++ ] = {  .5f,      ud,      lr,    2.f, 2*(ud+next_ud), 2*(lr+next_lr),   r, g, b, a,   next_lr,      ud };
+            vertices[ cur++ ] = {  .5f, next_ud,      lr,    2.f, 2*(ud+next_ud), 2*(lr+next_lr),   r, g, b, a,   next_lr, next_ud };
+            vertices[ cur++ ] = {  .5f, next_ud, next_lr,    2.f, 2*(ud+next_ud), 2*(lr+next_lr),   r, g, b, a,        lr, next_ud };
+            vertices[ cur++ ] = {  .5f,      ud, next_lr,    2.f, 2*(ud+next_ud), 2*(lr+next_lr),   r, g, b, a,        lr,      ud };
             // -X
-            vertices[ cur++ ] = { -.5f, next_ud, next_lr,   -1.f, 0.f, 0.f,   r, g, b, a,   next_lr, next_ud };
-            vertices[ cur++ ] = { -.5f, next_ud,      lr,   -1.f, 0.f, 0.f,   r, g, b, a,        lr, next_ud };
-            vertices[ cur++ ] = { -.5f,      ud,      lr,   -1.f, 0.f, 0.f,   r, g, b, a,        lr,      ud };
-            vertices[ cur++ ] = { -.5f,      ud, next_lr,   -1.f, 0.f, 0.f,   r, g, b, a,   next_lr,      ud };
+            vertices[ cur++ ] = { -.5f, next_ud, next_lr,   -2.f, 2*(ud+next_ud), 2*(lr+next_lr),   r, g, b, a,   next_lr, next_ud };
+            vertices[ cur++ ] = { -.5f, next_ud,      lr,   -2.f, 2*(ud+next_ud), 2*(lr+next_lr),   r, g, b, a,        lr, next_ud };
+            vertices[ cur++ ] = { -.5f,      ud,      lr,   -2.f, 2*(ud+next_ud), 2*(lr+next_lr),   r, g, b, a,        lr,      ud };
+            vertices[ cur++ ] = { -.5f,      ud, next_lr,   -2.f, 2*(ud+next_ud), 2*(lr+next_lr),   r, g, b, a,   next_lr,      ud };
             // +Y
-            vertices[ cur++ ] = {      lr,  .5f,      ud,   0.f,  1.f, 0.f,   r, g, b, a,        lr,      ud };
-            vertices[ cur++ ] = {      lr,  .5f, next_ud,   0.f,  1.f, 0.f,   r, g, b, a,   next_lr,      ud };
-            vertices[ cur++ ] = { next_lr,  .5f, next_ud,   0.f,  1.f, 0.f,   r, g, b, a,   next_lr, next_ud };
-            vertices[ cur++ ] = { next_lr,  .5f,      ud,   0.f,  1.f, 0.f,   r, g, b, a,        lr, next_ud };
+            vertices[ cur++ ] = {      lr,  .5f,      ud,   2*(lr+next_lr),  2.f, 2*(ud+next_ud),   r, g, b, a,        lr,      ud };
+            vertices[ cur++ ] = {      lr,  .5f, next_ud,   2*(lr+next_lr),  2.f, 2*(ud+next_ud),   r, g, b, a,   next_lr,      ud };
+            vertices[ cur++ ] = { next_lr,  .5f, next_ud,   2*(lr+next_lr),  2.f, 2*(ud+next_ud),   r, g, b, a,   next_lr, next_ud };
+            vertices[ cur++ ] = { next_lr,  .5f,      ud,   2*(lr+next_lr),  2.f, 2*(ud+next_ud),   r, g, b, a,        lr, next_ud };
             // -Y
-            vertices[ cur++ ] = { next_lr, -.5f, next_ud,   0.f, -1.f, 0.f,   r, g, b, a,   next_lr,      ud };
-            vertices[ cur++ ] = {      lr, -.5f, next_ud,   0.f, -1.f, 0.f,   r, g, b, a,   next_lr, next_ud };
-            vertices[ cur++ ] = {      lr, -.5f,      ud,   0.f, -1.f, 0.f,   r, g, b, a,        lr, next_ud };
-            vertices[ cur++ ] = { next_lr, -.5f,      ud,   0.f, -1.f, 0.f,   r, g, b, a,        lr,      ud };
+            vertices[ cur++ ] = { next_lr, -.5f, next_ud,   2*(lr+next_lr), -2.f, 2*(ud+next_ud),   r, g, b, a,   next_lr,      ud };
+            vertices[ cur++ ] = {      lr, -.5f, next_ud,   2*(lr+next_lr), -2.f, 2*(ud+next_ud),   r, g, b, a,   next_lr, next_ud };
+            vertices[ cur++ ] = {      lr, -.5f,      ud,   2*(lr+next_lr), -2.f, 2*(ud+next_ud),   r, g, b, a,        lr, next_ud };
+            vertices[ cur++ ] = { next_lr, -.5f,      ud,   2*(lr+next_lr), -2.f, 2*(ud+next_ud),   r, g, b, a,        lr,      ud };
             // +Z
-            vertices[ cur++ ] = {      ud,      lr,  .5f,   0.f, 0.f,  1.f,   r, g, b, a,        lr,      ud };
-            vertices[ cur++ ] = { next_ud,      lr,  .5f,   0.f, 0.f,  1.f,   r, g, b, a,   next_lr,      ud };
-            vertices[ cur++ ] = { next_ud, next_lr,  .5f,   0.f, 0.f,  1.f,   r, g, b, a,   next_lr, next_ud };
-            vertices[ cur++ ] = {      ud, next_lr,  .5f,   0.f, 0.f,  1.f,   r, g, b, a,        lr, next_ud };
+            vertices[ cur++ ] = {      ud,      lr,  .5f,   2*(ud+next_ud), 2*(lr+next_lr),  2.f,   r, g, b, a,        lr,      ud };
+            vertices[ cur++ ] = { next_ud,      lr,  .5f,   2*(ud+next_ud), 2*(lr+next_lr),  2.f,   r, g, b, a,   next_lr,      ud };
+            vertices[ cur++ ] = { next_ud, next_lr,  .5f,   2*(ud+next_ud), 2*(lr+next_lr),  2.f,   r, g, b, a,   next_lr, next_ud };
+            vertices[ cur++ ] = {      ud, next_lr,  .5f,   2*(ud+next_ud), 2*(lr+next_lr),  2.f,   r, g, b, a,        lr, next_ud };
             // -Z
-            vertices[ cur++ ] = { next_ud, next_lr, -.5f,   0.f, 0.f, -1.f,   r, g, b, a,         lr, next_ud };
-            vertices[ cur++ ] = { next_ud,      lr, -.5f,   0.f, 0.f, -1.f,   r, g, b, a,         lr,      ud };
-            vertices[ cur++ ] = {      ud,      lr, -.5f,   0.f, 0.f, -1.f,   r, g, b, a,    next_lr,      ud };
-            vertices[ cur++ ] = {      ud, next_lr, -.5f,   0.f, 0.f, -1.f,   r, g, b, a,    next_lr, next_ud };
+            vertices[ cur++ ] = { next_ud, next_lr, -.5f,   2*(ud+next_ud), 2*(lr+next_lr), -2.f,   r, g, b, a,         lr, next_ud };
+            vertices[ cur++ ] = { next_ud,      lr, -.5f,   2*(ud+next_ud), 2*(lr+next_lr), -2.f,   r, g, b, a,         lr,      ud };
+            vertices[ cur++ ] = {      ud,      lr, -.5f,   2*(ud+next_ud), 2*(lr+next_lr), -2.f,   r, g, b, a,    next_lr,      ud };
+            vertices[ cur++ ] = {      ud, next_lr, -.5f,   2*(ud+next_ud), 2*(lr+next_lr), -2.f,   r, g, b, a,    next_lr, next_ud };
 
         }
     }
@@ -107,13 +107,13 @@ m4w::Pointer<VertexArray> VertexArray::Sphere(unsigned int sub_divisions, float 
         VertexLayout::DefaultVertex& vertex = vertices[cur];
         float len = std::sqrt(vertex.Pos[0]*vertex.Pos[0] + vertex.Pos[1]*vertex.Pos[1] + vertex.Pos[2]*vertex.Pos[2]);
 
-        vertex.Normal[0] = vertex.Pos[0] / len;
-        vertex.Normal[1] = vertex.Pos[1] / len;
-        vertex.Normal[2] = vertex.Pos[2] / len;
+        //vertex.Normal[0] = vertex.Pos[0] / len;
+        //vertex.Normal[1] = vertex.Pos[1] / len;
+        //vertex.Normal[2] = vertex.Pos[2] / len;
 
-        vertex.Pos[0] = vertex.Normal[0] * radius;
-        vertex.Pos[1] = vertex.Normal[1] * radius;
-        vertex.Pos[2] = vertex.Normal[2] * radius;
+        vertex.Pos[0] = vertex.Pos[0] / len * radius;
+        vertex.Pos[1] = vertex.Pos[1] / len * radius;
+        vertex.Pos[2] = vertex.Pos[2] / len * radius;
     }
 
     VertexArray* vao = new VertexArray();

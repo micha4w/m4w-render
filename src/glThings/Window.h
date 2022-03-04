@@ -33,8 +33,8 @@ public:
     void SetMousePosition (float x, float y);
 
     bool IsKeyPressed (int key);
-    bool WasKeyJustPressed (int key);
-    bool WasKeyJustReleased (int key);
+    bool WasKeyPressed (int key);
+    bool WasKeyReleased (int key);
 
     m4w::Pointer<FrameBuffer> GetFrameBuffer ();
     unsigned int GetWidth ();

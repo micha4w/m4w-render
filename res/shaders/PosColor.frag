@@ -25,10 +25,9 @@ void main() {
     float ambient_darkness = 1.f;
     for ( int i = 0 ; i < u_LightCount ; i++ ) {
         vec3 vecToLight = u_Lights[i].Pos - v_Position;
-        float intesity = ( dot( vecToLight, v_Normal ) / ( length(vecToLight) * length(v_Normal) ) );
-        ambient_darkness *= clamp(intesity + 0.7 * u_Lights[i].Strength, 0., 1.);
+        float intensity = ( dot( vecToLight, v_Normal ) / ( length(vecToLight) * length(v_Normal) ) );
+        ambient_darkness *= 1. - clamp((intensity  * 0.5 + 0.5) * u_Lights[i].Strength, 0., 1.);
     }
 
-    //gl_FragColor = vec4( base_light );
-    gl_FragColor = vec4(base_color.rgb * ( ambient_darkness * ( 1 - base_light ) + base_light ), base_color.a);
+    gl_FragColor = vec4(base_color.rgb  * ( ( 1. - ambient_darkness ) * ( 1 - base_light ) + base_light ), base_color.a);
 }
