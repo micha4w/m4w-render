@@ -4,6 +4,7 @@
 
 #include "Context.h"
 
+
 Window::Window (unsigned int width, unsigned int height, const char* name)
 {
     glfwInit();
@@ -24,7 +25,9 @@ Window::Window (unsigned int width, unsigned int height, const char* name)
 //    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
     glfwSetKeyCallback(m_Instance, Window::KeyCallback);
 
+#ifdef RELEASE
     glfwSetInputMode(m_Instance, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+#endif
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
 //    glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
@@ -42,14 +45,6 @@ Window::Window (unsigned int width, unsigned int height, const char* name)
     g_Context.m_BlankTexture->Bind(0);
     
     m_GrabMouse = true;
-
-    //m_KeysPressed = new bool[350];
-    //m_LastKeysPressed = new bool[350];
-    //for (int i = 0 ; i < 350 ; i++ ) {
-    //    m_KeysPressed[i] = false;
-    //    m_LastKeysPressed[i] = false;
-    //}
-//    Context::Get()->m_Window = this;
 }
 
 Window::~Window () {
@@ -62,6 +57,63 @@ void Window::Display () {
 
 bool Window::ShouldClose () {
     return glfwWindowShouldClose(m_Instance);
+}
+
+void Window::PollEvents () {
+    for ( int i = 0 ; i < 350 ; i++ ) {
+        m_LastKeysPressed[i] = m_KeysPressed[i];
+    }
+
+    glfwPollEvents();
+}
+
+std::tuple<float, float> Window::GetMousePosition () {
+    double xpos, ypos;
+    glfwGetCursorPos(m_Instance, &xpos, &ypos);
+    return {xpos, ypos};
+}
+
+void Window::SetMousePosition (float x, float y) {
+    glfwSetCursorPos(m_Instance, x, y);
+}
+
+bool Window::IsKeyPressed (int key) {
+    return m_KeysPressed[key];
+}
+
+bool Window::WasKeyJustPressed (int key) {
+    return m_KeysPressed[key] && !m_LastKeysPressed[key];
+}
+
+bool Window::WasKeyJustReleased (int key) {
+    return m_KeysPressed[key] && !m_LastKeysPressed[key];
+}
+
+m4w::Pointer<FrameBuffer> Window::GetFrameBuffer () {
+    return m_FrameBuffer;
+}
+
+unsigned int Window::GetWidth () {
+    return m_FrameBuffer->GetWidth();
+}
+
+unsigned int Window::GetHeight () {
+    return m_FrameBuffer->GetHeight();
+}
+
+bool Window::IsFocused () {
+    return glfwGetWindowAttrib(m_Instance, GLFW_FOCUSED);
+}
+
+bool Window::IsMouseGrabbed () {
+    return m_GrabMouse;
+}
+
+void Window::SetMouseGrabbed (bool grab) {
+    m_GrabMouse = grab;
+#ifdef RELEASE
+    glfwSetInputMode(m_Instance, GLFW_CURSOR, m_GrabMouse ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL);
+#endif
 }
 
 void Window::KeyCallback (GLFWwindow* glWindow, int key, int scancode, int action, int mods) {

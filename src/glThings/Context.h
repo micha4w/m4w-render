@@ -20,8 +20,9 @@ public:
     m4w::UUIDMap<class GameObject*> m_Objects;
 
     Texture* m_BlankTexture;
+    VertexLayout DefaultVertexLayout;
 
-    Context() {}
+    Context();
 
     void Update(unsigned int microSeconds);
 

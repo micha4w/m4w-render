@@ -4,6 +4,7 @@
 
 #include <GL/glew.h>
 
+#include "Context.h"
 #include "VertexArray.h"
 
 unsigned int VertexLayout::Size() const {
@@ -25,16 +26,10 @@ unsigned int VertexLayout::glSizeof(unsigned int type) {
     }
 }
 
-m4w::Pointer<VertexLayout> VertexLayout::Default() {
-    VertexLayout* vbl = new VertexLayout();
-
-    vbl->AddElement(0, 3, GL_FLOAT); // Position
-    vbl->AddElement(1, 3, GL_FLOAT); // Normal
-    vbl->AddElement(2, 4, GL_FLOAT); // Color
-    vbl->AddElement(3, 2, GL_FLOAT); // TexCoord
-
-    return vbl;
+VertexLayout& VertexLayout::GetDefault() {
+    return g_Context.DefaultVertexLayout;
 }
+
 
 void VertexLayout::AddElement(unsigned short position, unsigned short count, unsigned int type, bool normalize) {
     VertexLayoutElement newEl = { position, count, type, normalize };

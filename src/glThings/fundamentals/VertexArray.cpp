@@ -4,7 +4,7 @@
 
 #include "Context.h"
 
-VertexArray::VertexArray(m4w::Pointer<VertexLayout> vbl)
+VertexArray::VertexArray(VertexLayout& vbl)
     : m_VBL(vbl)
 {
     glGenVertexArrays(1, &m_ID);
@@ -27,8 +27,7 @@ void VertexArray::SetVertexBuffer(m4w::Pointer<VertexBuffer> vb) {
     m_VB = vb;
     m_VB->Bind();
 
-    m_VBL->Use(*this);
-    m_VBL = nullptr;
+    m_VBL.Use(*this);
 }
 
 void VertexArray::Bind() {
@@ -52,8 +51,8 @@ m4w::Pointer<VertexArray> VertexArray::Sphere(unsigned int sub_divisions, float 
 
 m4w::Pointer<VertexArray> VertexArray::Sphere(unsigned int sub_divisions, float x, float y, float z, float radius, float r, float g, float b, float a) {
 
-    uint32_t final_square_count = 6 * std::pow(4, sub_divisions);
-    float square_length = 1 / ( sub_divisions + 1 );
+    uint32_t final_square_count = 6 * (sub_divisions + 1) * (sub_divisions + 1);
+    const float square_length = 1.f / ( sub_divisions + 1 );
 
     uint32_t vertex_count = final_square_count * 4;
 
@@ -104,24 +103,23 @@ m4w::Pointer<VertexArray> VertexArray::Sphere(unsigned int sub_divisions, float 
         }
     }
 
-//    for ( cur = 0 ; cur < final_square_count ; cur++ ) {
-//        VertexLayout::DefaultVertex& vertex = vertices[cur];
-//        float len = std::sqrt(vertex.Pos[0]*vertex.Pos[0] + vertex.Pos[1]*vertex.Pos[1] + vertex.Pos[2]*vertex.Pos[2]);
-//
-//        vertex.Normal[0] = vertex.Pos[0] / len;
-//        vertex.Normal[1] = vertex.Pos[1] / len;
-//        vertex.Normal[2] = vertex.Pos[2] / len;
-//
-//        vertex.Pos[0] = vertex.Normal[0] * radius;
-//        vertex.Pos[1] = vertex.Normal[1] * radius;
-//        vertex.Pos[2] = vertex.Normal[2] * radius;
-//    }
+    for ( cur = 0 ; cur < vertex_count ; cur++ ) {
+        VertexLayout::DefaultVertex& vertex = vertices[cur];
+        float len = std::sqrt(vertex.Pos[0]*vertex.Pos[0] + vertex.Pos[1]*vertex.Pos[1] + vertex.Pos[2]*vertex.Pos[2]);
+
+        vertex.Normal[0] = vertex.Pos[0] / len;
+        vertex.Normal[1] = vertex.Pos[1] / len;
+        vertex.Normal[2] = vertex.Pos[2] / len;
+
+        vertex.Pos[0] = vertex.Normal[0] * radius;
+        vertex.Pos[1] = vertex.Normal[1] * radius;
+        vertex.Pos[2] = vertex.Normal[2] * radius;
+    }
 
     VertexArray* vao = new VertexArray();
 
     //vao->SetIndexBuffer( IndexBuffer::Squares(1) );
-    vao->SetVertexBuffer( new VertexBuffer(sizeof(vertices) * 4, vertices) );
-    VertexLayout::Default()->Use(*vao);
+    vao->SetVertexBuffer( new VertexBuffer(sizeof(vertices), vertices) );
     vao->SetIndexBuffer( IndexBuffer::Squares(final_square_count) );
 
     //delete[] vertices;
@@ -179,7 +177,6 @@ m4w::Pointer<VertexArray> VertexArray::Cube(float x1, float y1, float z1, float 
 
     vao->SetIndexBuffer(IndexBuffer::Squares(6));
     vao->SetVertexBuffer(new VertexBuffer(sizeof(verts), verts));
-    VertexLayout::Default()->Use(*vao);
 
     return vao;
 }

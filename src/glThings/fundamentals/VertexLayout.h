@@ -19,13 +19,16 @@ private:
 
     unsigned long m_Size = 0;
 
+    void Use(class VertexArray& vao);
+
 public:
+
     static unsigned int glSizeof(unsigned int type);
-    static m4w::Pointer<VertexLayout> Default();
+    static void InitDefault();
+    static VertexLayout& GetDefault();
 
     unsigned int Size() const;
     void AddElement(unsigned short position, unsigned short count, unsigned int type, bool normalized = false);
-    void Use(class VertexArray& vao);
 
     struct DefaultVertex {
         float Pos[3];

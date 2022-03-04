@@ -5,6 +5,14 @@
 
 Context g_Context;
 
+Context::Context () {
+    DefaultVertexLayout.AddElement(0, 3, GL_FLOAT); // Position
+    DefaultVertexLayout.AddElement(1, 3, GL_FLOAT); // Normal
+    DefaultVertexLayout.AddElement(2, 4, GL_FLOAT); // Color
+    DefaultVertexLayout.AddElement(3, 2, GL_FLOAT); // TexCoord
+}
+
+
 void Context::Update(unsigned int microSeconds) {
     for ( auto [id, object] : m_Objects ) {
         object->Update(microSeconds);

@@ -8,6 +8,7 @@
 #include "VertexBuffer.h"
 #include "VertexLayout.h"
 
+
 class VertexArray {
 private:
     unsigned int m_ID;
@@ -15,9 +16,9 @@ private:
 public:
     m4w::Pointer<IndexBuffer> m_IB;
     m4w::Pointer<VertexBuffer> m_VB;
-    m4w::Pointer<VertexLayout> m_VBL;
+    VertexLayout m_VBL;
 
-    VertexArray (m4w::Pointer<VertexLayout> vbl = VertexLayout::Default());
+    VertexArray (VertexLayout& vbl = VertexLayout::GetDefault());
     ~VertexArray ();
 
     void SetIndexBuffer(m4w::Pointer<IndexBuffer> ib);

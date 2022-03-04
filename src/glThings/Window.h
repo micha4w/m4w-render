@@ -27,59 +27,20 @@ public:
 
     void Display ();
     bool ShouldClose ();
+    void PollEvents ();
 
-    void PollEvents () {
-        for ( int i = 0 ; i < 350 ; i++ ) {
-            m_LastKeysPressed[i] = m_KeysPressed[i];
-        }
+    std::tuple<float, float> GetMousePosition ();
+    void SetMousePosition (float x, float y);
 
-        glfwPollEvents();
-    }
+    bool IsKeyPressed (int key);
+    bool WasKeyJustPressed (int key);
+    bool WasKeyJustReleased (int key);
 
-    std::tuple<float, float> GetMousePosition () {
-        double xpos, ypos;
-        glfwGetCursorPos(m_Instance, &xpos, &ypos);
-        return {xpos, ypos};
-    }
+    m4w::Pointer<FrameBuffer> GetFrameBuffer ();
+    unsigned int GetWidth ();
+    unsigned int GetHeight ();
 
-    void SetMousePosition (float x, float y) {
-        glfwSetCursorPos(m_Instance, x, y);
-    }
-
-    bool IsKeyPressed (int key) {
-        return m_KeysPressed[key];
-    }
-
-    bool IsKeyJustPressed (int key) {
-        return m_KeysPressed[key] && !m_LastKeysPressed[key];
-    }
-
-    bool IsKeyJustReleased (int key) {
-        return m_KeysPressed[key] && !m_LastKeysPressed[key];
-    }
-
-    m4w::Pointer<FrameBuffer> GetFrameBuffer () {
-        return m_FrameBuffer;
-    }
-
-    unsigned int GetWidth () {
-        return m_FrameBuffer->GetWidth();
-    }
-
-    unsigned int GetHeight () {
-        return m_FrameBuffer->GetHeight();
-    }
-
-    bool IsFocused () {
-        return glfwGetWindowAttrib(m_Instance, GLFW_FOCUSED);
-    }
-
-    bool IsMouseGrabbed () {
-        return m_GrabMouse;
-    }
-
-    void SetMouseGrabbed (bool grab) {
-        m_GrabMouse = grab;
-        glfwSetInputMode(m_Instance, GLFW_CURSOR, m_GrabMouse ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL);
-    }
+    bool IsFocused ();
+    bool IsMouseGrabbed ();
+    void SetMouseGrabbed (bool grab);
 };

@@ -51,7 +51,7 @@ int main() {
     
     player.CreateCamera(
         window->GetWidth(), window->GetHeight(),
-        new PerspectiveProjection(90.f, window->GetWidth() / window->GetHeight(), 0.001f, 10000.f)
+        new PerspectiveProjection(m4w::Angle::Degrees(70.f).GetRadians(), window->GetWidth() / window->GetHeight(), 0.001f, 10000.f)
     );
     player.GetCamera()->SetFrameBuffer(window->GetFrameBuffer());
 
@@ -60,7 +60,7 @@ int main() {
     camera.SetScale(0.25f);
     camera.CreateCamera(
         window->GetWidth(), window->GetHeight(),
-        new PerspectiveProjection(90.f, window->GetWidth() / window->GetHeight(), 0.001f, 10000.f)
+        new PerspectiveProjection(m4w::Angle::Degrees(70.f).GetRadians(), window->GetWidth() / window->GetHeight(), 0.001f, 10000.f)
     );
     camera.GetCamera()->GetFrameBuffer()->AddTexture();
     camera.GetCamera()->GetFrameBuffer()->AddDepthBuffer();
@@ -86,7 +86,7 @@ int main() {
     GameObject sphere({ 8.f, 0.f, 0.f });
     Mesh& sphere_mesh = sphere.CreateMesh(shader);
     sphere_mesh.Name = "BALLZ";
-    sphere_mesh.SetVertexArray( VertexArray::Sphere(0, 5.f, 0.f, 0.f, 3.f, 0.8f, 0.2f, 0.4f, 1.f) );
+    sphere_mesh.SetVertexArray( VertexArray::Sphere(10, 5.f, 0.f, 0.f, 3.f, 0.8f, 0.2f, 0.4f, 1.f) );
 
 
     m4w::HeapArray<LightSource> lights(1);
@@ -103,12 +103,12 @@ int main() {
 
         //if ( window->GetKeyPressed(GLFW_KEY_C) ) std::cout << glm::to_string(camera.GetPosition()) << " " << camera.GetRotation().first.GetDegrees() << ", " << camera.GetRotation().second.GetDegrees() << "\n";
         if ( window->IsKeyPressed(GLFW_KEY_V) ) std::cout << glm::to_string(player.GetPosition()) << " " << player.GetRotation().first.GetDegrees() << ", " << player.GetRotation().second.GetDegrees() << "\n";
-        if ( window->IsKeyPressed(GLFW_KEY_F) ) {
+        if ( window->WasKeyJustPressed(GLFW_KEY_F) ) {
             std::cout << "Reloading Sahder\n";
             shader->Recompile();
         }
 
-        if ( window->IsKeyJustPressed(GLFW_KEY_ESCAPE) ) {
+        if ( window->WasKeyJustPressed(GLFW_KEY_ESCAPE) ) {
             window->SetMouseGrabbed( !window->IsMouseGrabbed() );
         }
 

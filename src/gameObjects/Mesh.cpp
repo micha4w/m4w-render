@@ -53,13 +53,11 @@ Mesh::Mesh(m4w::Pointer<Shader> shader, const char* gltfPath)
         }
     }
 
-    m_VAO = new VertexArray();
+    m_VAO = new VertexArray(vbl);
 
     m4w::Accessor& indicesAccessor = accessors[*primitives->GetObject(0)->GetNumber("indices")];
     m_VAO->SetIndexBuffer( CreateIndexBuffer(indicesAccessor, bufferViews[indicesAccessor.BufferView], buffers) );
     m_VAO->SetVertexBuffer( CreateVertexBuffer(vbl.Size(), effectiveAccessors, buffers, bufferViews, vertexCount) );
-
-    vbl.Use(*m_VAO);
 }
 
 void Mesh::AddTexture(unsigned int position, m4w::Pointer<Texture> texture) {
