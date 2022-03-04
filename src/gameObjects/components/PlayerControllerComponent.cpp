@@ -9,7 +9,7 @@ PlayerControllerComponent::PlayerControllerComponent(float speed, float sensitvi
 { }
 
 void PlayerControllerComponent::Update(unsigned int microSeconds) {
-    if ( !g_Context.m_Window->IsFocused() )
+    if ( !g_Context.m_Window->IsFocused() || !g_Context.m_Window->IsMouseGrabbed() )
         return;
 
     m4w::Pointer<Window> window = g_Context.m_Window;
@@ -21,9 +21,9 @@ void PlayerControllerComponent::Update(unsigned int microSeconds) {
     m_Owner->Rotate(m4w::Angle::Radians(newX * m_Sensitivity), m4w::Angle::Radians(newY * m_Sensitivity));
 
     glm::vec3 move(0.f, 0.f, 0.f);
-    move.z = window->GetKeyPressed(m_MoveForward) - window->GetKeyPressed(m_MoveBack);
-    move.x = window->GetKeyPressed(m_MoveLeft) - window->GetKeyPressed(m_MoveRight);
-    move.y = window->GetKeyPressed(m_MoveUp) - window->GetKeyPressed(m_MoveDown);
+    move.z = window->IsKeyPressed(m_MoveForward) - window->IsKeyPressed(m_MoveBack);
+    move.x = window->IsKeyPressed(m_MoveLeft) - window->IsKeyPressed(m_MoveRight);
+    move.y = window->IsKeyPressed(m_MoveUp) - window->IsKeyPressed(m_MoveDown);
 
     m_Owner->Walk(m_Speed * move * 0.01f);
 }

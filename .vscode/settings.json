@@ -52,7 +52,10 @@
         "ratio": "cpp",
         "thread": "cpp",
         "bitset": "cpp",
-        "set": "cpp"
+        "set": "cpp",
+        "compare": "cpp",
+        "concepts": "cpp",
+        "numbers": "cpp"
     },
     "cmake.configureOnOpen": true
 }

@@ -4,7 +4,7 @@
 
 #include "Context.h"
 
-Window::Window(unsigned int width, unsigned int height, const char* name)
+Window::Window (unsigned int width, unsigned int height, const char* name)
 {
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -22,6 +22,8 @@ Window::Window(unsigned int width, unsigned int height, const char* name)
 
 //    glViewport(0, 0, 800, 600);
 //    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+    glfwSetKeyCallback(m_Instance, Window::KeyCallback);
+
     glfwSetInputMode(m_Instance, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
@@ -38,17 +40,30 @@ Window::Window(unsigned int width, unsigned int height, const char* name)
 
     g_Context.m_BlankTexture = new Texture(0, 0);
     g_Context.m_BlankTexture->Bind(0);
+    
+    m_GrabMouse = true;
+
+    //m_KeysPressed = new bool[350];
+    //m_LastKeysPressed = new bool[350];
+    //for (int i = 0 ; i < 350 ; i++ ) {
+    //    m_KeysPressed[i] = false;
+    //    m_LastKeysPressed[i] = false;
+    //}
 //    Context::Get()->m_Window = this;
 }
 
-Window::~Window() {
+Window::~Window () {
     glfwTerminate();
 }
 
-void Window::Display() {
+void Window::Display () {
     glfwSwapBuffers(m_Instance);
 }
 
-bool Window::ShouldClose() {
+bool Window::ShouldClose () {
     return glfwWindowShouldClose(m_Instance);
+}
+
+void Window::KeyCallback (GLFWwindow* glWindow, int key, int scancode, int action, int mods) {
+    g_Context.m_Window->m_KeysPressed[key] = action;
 }

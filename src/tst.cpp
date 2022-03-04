@@ -97,18 +97,23 @@ int main() {
     Timer timer(60.f);
     while(!window->ShouldClose()) {
         // Update
-        glfwPollEvents();
+        window->PollEvents();
 
         g_Context.Update(timer.GetDeltaUs());
 
         //if ( window->GetKeyPressed(GLFW_KEY_C) ) std::cout << glm::to_string(camera.GetPosition()) << " " << camera.GetRotation().first.GetDegrees() << ", " << camera.GetRotation().second.GetDegrees() << "\n";
-        if ( window->GetKeyPressed(GLFW_KEY_V) ) std::cout << glm::to_string(player.GetPosition()) << " " << player.GetRotation().first.GetDegrees() << ", " << player.GetRotation().second.GetDegrees() << "\n";
-        if ( window->GetKeyPressed(GLFW_KEY_F) ) {
+        if ( window->IsKeyPressed(GLFW_KEY_V) ) std::cout << glm::to_string(player.GetPosition()) << " " << player.GetRotation().first.GetDegrees() << ", " << player.GetRotation().second.GetDegrees() << "\n";
+        if ( window->IsKeyPressed(GLFW_KEY_F) ) {
             std::cout << "Reloading Sahder\n";
             shader->Recompile();
         }
 
-        window->SetMousePosition(window->GetWidth()/2, window->GetHeight()/2);
+        if ( window->IsKeyJustPressed(GLFW_KEY_ESCAPE) ) {
+            window->SetMouseGrabbed( !window->IsMouseGrabbed() );
+        }
+
+        if ( window->IsMouseGrabbed() )
+            window->SetMousePosition(window->GetWidth()/2, window->GetHeight()/2);
 
 // Render
         //Context::Draw(*player.GetCamera());
