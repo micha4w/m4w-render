@@ -44,30 +44,30 @@ void VertexArray::Unbind() {
     g_Context.m_VAO = nullptr;
 }
 
-m4w::Pointer<VertexArray> VertexArray::Sphere(unsigned int sub_divisions, float pos[3], float radius, float color[4]){
-    return Sphere(sub_divisions, pos[0], pos[1], pos[2],  radius,  color[0], color[1], color[2], color[3]);
+m4w::Pointer<VertexArray> VertexArray::Sphere(unsigned int sub_divisions, float pos[3], float radius, float color[4], bool smooth){
+    return Sphere(sub_divisions, pos[0], pos[1], pos[2],  radius,  color[0], color[1], color[2], color[3], smooth);
 }
 
 
-m4w::Pointer<VertexArray> VertexArray::Sphere(unsigned int sub_divisions, float x, float y, float z, float radius, float r, float g, float b, float a) {
+m4w::Pointer<VertexArray> VertexArray::Sphere(unsigned int sub_divisions, float x, float y, float z, float radius, float r, float g, float b, float a, bool smooth) {
 
     uint32_t final_square_count = 6 * (sub_divisions + 1) * (sub_divisions + 1);
     const float square_length = 1.f / ( sub_divisions + 1 );
 
     uint32_t vertex_count = final_square_count * 4;
 
-    //VertexLayout::DefaultVertex* vertices = new VertexLayout::DefaultVertex[vertex_count];    
-    VertexLayout::DefaultVertex vertices[vertex_count];    
+    VertexLayout::DefaultVertex* vertices = new VertexLayout::DefaultVertex[vertex_count];    
+    //VertexLayout::DefaultVertex vertices[vertex_count];
 
     uint32_t cur = 0;
 
-    float next_lr;
-    for ( float lr = -.5f ; lr < .5f ; lr = next_lr ) {
-        next_lr = lr + square_length;
+    for ( uint32_t i = 0 ; i < sub_divisions + 1 ; i++ ) {
+        float lr = square_length * i - .5f; 
+        float next_lr = lr + square_length;
 
-        float next_ud;
-        for ( float ud = -.5f ; ud < .5f ; ud = next_ud ) {
-            next_ud = ud + square_length;
+        for ( uint32_t j = 0 ; j < sub_divisions + 1 ; j++ ) {
+            float ud = square_length * j - .5f;
+            float next_ud = ud + square_length;
 
             // +X
             vertices[ cur++ ] = {  .5f,      ud,      lr,    2.f, 2*(ud+next_ud), 2*(lr+next_lr),   r, g, b, a,   next_lr,      ud };
@@ -107,9 +107,11 @@ m4w::Pointer<VertexArray> VertexArray::Sphere(unsigned int sub_divisions, float 
         VertexLayout::DefaultVertex& vertex = vertices[cur];
         float len = std::sqrt(vertex.Pos[0]*vertex.Pos[0] + vertex.Pos[1]*vertex.Pos[1] + vertex.Pos[2]*vertex.Pos[2]);
 
-        //vertex.Normal[0] = vertex.Pos[0] / len;
-        //vertex.Normal[1] = vertex.Pos[1] / len;
-        //vertex.Normal[2] = vertex.Pos[2] / len;
+        if ( smooth ) {
+            vertex.Normal[0] = vertex.Pos[0] / len;
+            vertex.Normal[1] = vertex.Pos[1] / len;
+            vertex.Normal[2] = vertex.Pos[2] / len;
+        }
 
         vertex.Pos[0] = vertex.Pos[0] / len * radius;
         vertex.Pos[1] = vertex.Pos[1] / len * radius;
@@ -119,10 +121,10 @@ m4w::Pointer<VertexArray> VertexArray::Sphere(unsigned int sub_divisions, float 
     VertexArray* vao = new VertexArray();
 
     //vao->SetIndexBuffer( IndexBuffer::Squares(1) );
-    vao->SetVertexBuffer( new VertexBuffer(sizeof(vertices), vertices) );
+    vao->SetVertexBuffer( new VertexBuffer(sizeof(vertices[0]) * vertex_count, vertices) );
     vao->SetIndexBuffer( IndexBuffer::Squares(final_square_count) );
 
-    //delete[] vertices;
+    delete[] vertices;
     return vao;
 }
 

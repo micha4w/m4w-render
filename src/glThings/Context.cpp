@@ -13,38 +13,36 @@ Context::Context () {
 }
 
 
-void Context::Update(unsigned int microSeconds) {
+void Context::Update (unsigned int microSeconds) {
     for ( auto [id, object] : m_Objects ) {
         object->Update(microSeconds);
     }
 }
 
 
-void Context::Draw(FrameBuffer& frameBuffer) {
-    frameBuffer.Bind();
+//void Context::Draw (FrameBuffer& frameBuffer) {
+//    frameBuffer.Bind();
+//
+//    for ( auto& [id, mesh] : m_Meshes ) {
+//        mesh.Render(Shader("PosColor"));
+//    }
+//}
 
-    for ( auto& [id, mesh] : m_Meshes ) {
-        mesh.Render();
+void Context::Draw (Camera& camera) {
+    camera.Use();
+
+    for ( auto& [id, mesh] : m_Meshes ) {        
+        mesh.Render(*camera.GetShader());
     }
 }
 
-void Context::Draw(Camera& camera) {
-    camera.GetFrameBuffer()->Bind();
-
-    for ( auto& [id, mesh] : m_Meshes ) {
-        camera.Use(mesh.GetShader());
-        
-        mesh.Render();
-    }
-}
-
-void Context::ClearCameras() {
+void Context::ClearCameras () {
     for ( auto& [id, camera] : m_Cameras ) {
         camera.GetFrameBuffer()->Clear();
     }
 }
 
-void Context::DrawCameras() {
+void Context::DrawCameras () {
     for ( auto& [id, camera] : m_Cameras ) {
         Draw(camera);
     }

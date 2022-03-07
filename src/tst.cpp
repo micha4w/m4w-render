@@ -41,57 +41,60 @@ int main() {
     window->GetFrameBuffer()->SetClearColor(0, 0.043, 0.804);
     window->GetFrameBuffer()->Clear();
     window->Display();
-    m4w::Pointer<Shader> shader(new Shader("PosColor"));
+    m4w::Pointer<Shader> shader = new Shader("PosColor");
 
     GameObject head;
-    head.CreateMesh(shader, "res/models/hed.gltf");
+    head.CreateMesh( "res/models/hed.gltf");
 
     GameObject player;
     player.AddComponent((Component*) new PlayerControllerComponent(10.f, 0.001f));
     
     player.CreateCamera(
         window->GetWidth(), window->GetHeight(),
-        new PerspectiveProjection(m4w::Angle::Degrees(70.f), window->GetWidth() / window->GetHeight(), 0.001f, 10000.f)
+        new PerspectiveProjection(m4w::Angle::Degrees(70.f), window->GetWidth() / window->GetHeight(), 0.001f, 10000.f),
+        shader
     );
     player.GetCamera()->SetFrameBuffer(window->GetFrameBuffer());
 
     GameObject camera({0.f, 0.f, -5.f});
     camera.SetRotation(m4w::Angle::Degrees(180.f), m4w::Angle());
-    camera.SetScale(0.25f);
     camera.CreateCamera(
         window->GetWidth(), window->GetHeight(),
-        new PerspectiveProjection(m4w::Angle::Degrees(70.f), window->GetWidth() / window->GetHeight(), 0.001f, 10000.f)
+        new OrthographicProjection(5, 5, 0.001f, 10000.f),
+        shader
     );
     camera.GetCamera()->GetFrameBuffer()->AddTexture();
     camera.GetCamera()->GetFrameBuffer()->AddDepthBuffer();
-    camera.GetCamera()->GetFrameBuffer()->SetClearColor(0.f, 0.f, 0.f, 1.f);
+    camera.GetCamera()->GetFrameBuffer()->SetClearColor(0, 0.043, 0.804);
     
-    camera.CreateMesh(shader, "res/models/icosphere.gltf");
+    camera.CreateMesh("res/models/icosphere.gltf");
     camera.AddComponent((Component*) new PlayerControllerComponent(3.f, 0.f, GLFW_KEY_UP, GLFW_KEY_LEFT, GLFW_KEY_DOWN, GLFW_KEY_RIGHT, GLFW_KEY_PAGE_UP, GLFW_KEY_PAGE_DOWN));
 
 
     GameObject screen;
-    Mesh& screen_mesh = screen.CreateMesh(shader);
+    Mesh& screen_mesh = screen.CreateMesh();
     screen_mesh.Name = "SCREEN";
     screen_mesh.SetVertexArray( VertexArray::Cube(-1.f, -1.f, 4.f, 1.f, 1.f, 5.f, 0.f, 0.f, 0.f, 0.f) );
     screen_mesh.AddTexture(1, camera.GetCamera()->GetFrameBuffer()->GetTexture());
 
 
     GameObject floor;
-    Mesh& floor_mesh = floor.CreateMesh(shader);
+    Mesh& floor_mesh = floor.CreateMesh();
     floor_mesh.Name = "FLOOR";
     floor_mesh.SetVertexArray( VertexArray::Cube(-10.f, -10.f, -10.f, 10.f, -9.f, 10.f, 0.2f, 0.8f, 0.1f, 1.f) );
 
 
     GameObject sphere({ 8.f, 0.f, 0.f });
-    Mesh& sphere_mesh = sphere.CreateMesh(shader);
+    Mesh& sphere_mesh = sphere.CreateMesh();
     sphere_mesh.Name = "BALLZ";
     sphere_mesh.SetVertexArray( VertexArray::Sphere(10, 5.f, 0.f, 0.f, 3.f, 0.8f, 0.2f, 0.4f, 1.f) );
 
 
-    m4w::HeapArray<LightSource> lights(1);
-    lights[0] = { 0.f, 100.f, 0.f, 1.f, 0.f, 0.f, 0.f };
-    //lights[1] = { 0.f, 100.f, 100.f, 1.f, 0.f, 0.f, 0.f };
+    m4w::HeapArray<LightSource> lights(2);
+    lights[0] = { 0.f, 100.f, 0.f, 1.f, 1.f, 1.f, 0.f };
+    lights[1] = { 0.f, 100.f, 100.f, 1.f, 0.f, 0.f, 1.f };
+
+    std::cout << "Looping..\n";
 
     //LOOOOOP
     Timer timer(60.f);

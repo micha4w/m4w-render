@@ -48,6 +48,7 @@ void GameObject::Update(unsigned int microSeconds) {
         if ( this->HasMesh() ) {
             m_Mesh->m_ModelMatrix = glm::mat4(1.f);
             m_Mesh->m_ModelMatrix = glm::translate(m_Mesh->m_ModelMatrix, m_Position);
+            m_Mesh->m_ModelMatrix = glm::scale(m_Mesh->m_ModelMatrix, glm::vec3(m_Scale));
             m_Mesh->m_ModelMatrix = glm::rotate(m_Mesh->m_ModelMatrix, m_Pitch.GetRadians(), {1, 0, 0});
             m_Mesh->m_ModelMatrix = glm::rotate(m_Mesh->m_ModelMatrix, m_Yaw.GetRadians(), {0, 1, 0});
             //m_Mesh->m_ModelMatrix = glm::rotate(m_Mesh->m_ModelMatrix, m_Roll, {0, 0, 1});

@@ -48,9 +48,9 @@ void IndexBuffer::Unbind () {
 }
 
 m4w::Pointer<IndexBuffer> IndexBuffer::Squares (unsigned int square_count) {
-    unsigned int* indices = new unsigned int[square_count * 6];
+    uint32_t* indices = new uint32_t[square_count * 6];
 
-    for ( unsigned int current_square = 0 ; current_square < square_count ; current_square += 1) {
+    for ( uint32_t current_square = 0 ; current_square < square_count ; current_square += 1) {
         indices[current_square * 6 + 0] = current_square * 4 + 0;
         indices[current_square * 6 + 1] = current_square * 4 + 1;
         indices[current_square * 6 + 2] = current_square * 4 + 2;

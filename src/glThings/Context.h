@@ -22,16 +22,16 @@ public:
     Texture* m_BlankTexture;
     VertexLayout DefaultVertexLayout;
 
-    Context();
+    Context ();
 
-    void Update(unsigned int microSeconds);
+    void Update (unsigned int microSeconds);
 
-    void Draw(FrameBuffer& frameBuffer);
-    void Draw(Camera& camera);
-    void ClearCameras();
-    void DrawCameras();
+//    void Draw (FrameBuffer& frameBuffer);
+    void Draw (Camera& camera);
+    void ClearCameras ();
+    void DrawCameras ();
 
-    void CheckGLError(const char* info = "");
+    void CheckGLError (const char* info = "");
 };
 
 extern Context g_Context;

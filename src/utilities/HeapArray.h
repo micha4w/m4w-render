@@ -61,7 +61,11 @@ namespace m4w {
         }
 
         T& operator[] (unsigned int index) const {
-            if ( index >= m_Size ) std::cout << "[ERROR] Heaparray Index out of bounds!\n";
+            if ( index >= m_Size ) {
+                std::cout << "[ERROR] Heaparray Index out of bounds!\n";
+                return m_Pointer[0];
+            }
+            
             return m_Pointer[index];
         }
     };
