@@ -14,6 +14,7 @@ public:
     ~Timer();
 
     void Wait();
+    float GetDeltaS();
     unsigned int GetDeltaNs();
     unsigned int GetDeltaUs();
 };

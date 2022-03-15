@@ -2,8 +2,30 @@
 
 #include <iostream>
 
+//#include <X11/Xlib.h>
+//#include <X11/Xutil.h>
+//#include <X11/Xos.h>
+//#define GLFW_EXPOSE_NATIVE_X11
+
+#include <GLFW/glfw3native.h>
+
 #include "Context.h"
 
+#ifdef GLFW_EXPOSE_NATIVE_X11
+static void xwin_changeatom(GLFWwindow* window, const char* atom, const char* new_value, int prop_mode) {
+    Window x11_window = glfwGetX11Window(window);
+    Display* x11_display = glfwGetX11Display();
+    Atom wtype = XInternAtom(x11_display, atom, false);
+    Atom desk = XInternAtom(x11_display, new_value, false);
+    XChangeProperty(x11_display, x11_window, wtype, 4, 32, prop_mode, (const unsigned char*) new_value, 1);
+}
+
+/* Set window types defined by the EWMH standard, possible values:
+   -> "desktop", "dock", "toolbar", "menu", "utility", "splash", "dialog", "normal" */
+void xwin_settype(GLFWwindow* window, const char* _net_wm_window_type) {
+        xwin_changeatom(window, "_NET_WM_WINDOW_TYPE", _net_wm_window_type, PropModeReplace);
+}
+#endif
 
 Window::Window (unsigned int width, unsigned int height, const char* name)
 {
@@ -11,6 +33,9 @@ Window::Window (unsigned int width, unsigned int height, const char* name)
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_TRANSPARENT_FRAMEBUFFER, GLFW_TRUE);
+    
+
     //glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
     m_Instance = glfwCreateWindow(width, height, name, NULL, NULL);
@@ -19,6 +44,12 @@ Window::Window (unsigned int width, unsigned int height, const char* name)
             glfwTerminate();
             return;
     }
+
+#ifdef GLFW_EXPOSE_NATIVE_X11
+    //X11 Stuff only on linux!
+    xwin_settype(m_Instance, "_NET_WM_WINDOW_TYPE_DESKTOP");
+#endif
+
     glfwMakeContextCurrent(m_Instance);
 
 //    glViewport(0, 0, 800, 600);

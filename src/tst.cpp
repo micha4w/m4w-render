@@ -38,16 +38,18 @@ int main() {
     m4w::Pointer<Window> window = new Window(720, 540, "Geem");
     g_Context.m_Window = window;
 
-    window->GetFrameBuffer()->SetClearColor(0, 0.043, 0.804);
+//    window->GetFrameBuffer()->SetClearColor(0, 0.043, 0.804);
+    window->GetFrameBuffer()->SetClearColor(0, 0, 0, 0);
     window->GetFrameBuffer()->Clear();
     window->Display();
     m4w::Pointer<Shader> shader = new Shader("PosColor");
+    m4w::Pointer<Shader> lightShader = new Shader("Depth");
 
     GameObject head;
     head.CreateMesh( "res/models/hed.gltf");
 
     GameObject player;
-    player.AddComponent((Component*) new PlayerControllerComponent(10.f, 0.001f));
+    player.AddComponent((Component*) new PlayerControllerComponent(10.f, .002f));
     
     player.CreateCamera(
         window->GetWidth(), window->GetHeight(),
@@ -61,21 +63,20 @@ int main() {
     camera.CreateCamera(
         window->GetWidth(), window->GetHeight(),
         new OrthographicProjection(5, 5, 0.001f, 10000.f),
-        shader
+        lightShader
     );
-    camera.GetCamera()->GetFrameBuffer()->AddTexture();
+    //camera.GetCamera()->GetFrameBuffer()->AddTexture();
     camera.GetCamera()->GetFrameBuffer()->AddDepthBuffer();
-    camera.GetCamera()->GetFrameBuffer()->SetClearColor(0, 0.043, 0.804);
     
     camera.CreateMesh("res/models/icosphere.gltf");
-    camera.AddComponent((Component*) new PlayerControllerComponent(3.f, 0.f, GLFW_KEY_UP, GLFW_KEY_LEFT, GLFW_KEY_DOWN, GLFW_KEY_RIGHT, GLFW_KEY_PAGE_UP, GLFW_KEY_PAGE_DOWN));
+    camera.AddComponent((Component*) new PlayerControllerComponent(10.f, 0.f, GLFW_KEY_UP, GLFW_KEY_LEFT, GLFW_KEY_DOWN, GLFW_KEY_RIGHT, GLFW_KEY_PAGE_UP, GLFW_KEY_PAGE_DOWN));
 
 
     GameObject screen;
     Mesh& screen_mesh = screen.CreateMesh();
     screen_mesh.Name = "SCREEN";
     screen_mesh.SetVertexArray( VertexArray::Cube(-1.f, -1.f, 4.f, 1.f, 1.f, 5.f, 0.f, 0.f, 0.f, 0.f) );
-    screen_mesh.AddTexture(1, camera.GetCamera()->GetFrameBuffer()->GetTexture());
+    screen_mesh.AddTexture(1, camera.GetCamera()->GetFrameBuffer()->GetDepthBuffer());
 
 
     GameObject floor;
@@ -87,7 +88,7 @@ int main() {
     GameObject sphere({ 8.f, 0.f, 0.f });
     Mesh& sphere_mesh = sphere.CreateMesh();
     sphere_mesh.Name = "BALLZ";
-    sphere_mesh.SetVertexArray( VertexArray::Sphere(10, 5.f, 0.f, 0.f, 3.f, 0.8f, 0.2f, 0.4f, 1.f) );
+    sphere_mesh.SetVertexArray( VertexArray::Sphere(1, 5.f, 0.f, 0.f, 3.f, 0.8f, 0.2f, 0.4f, 1.f, false) );
 
 
     m4w::HeapArray<LightSource> lights(2);
@@ -102,13 +103,14 @@ int main() {
         // Update
         window->PollEvents();
 
-        g_Context.Update(timer.GetDeltaUs());
+        g_Context.Update(timer.GetDeltaS());
 
         //if ( window->GetKeyPressed(GLFW_KEY_C) ) std::cout << glm::to_string(camera.GetPosition()) << " " << camera.GetRotation().first.GetDegrees() << ", " << camera.GetRotation().second.GetDegrees() << "\n";
         if ( window->IsKeyPressed(GLFW_KEY_V) ) std::cout << glm::to_string(player.GetPosition()) << " " << player.GetRotation().first.GetDegrees() << ", " << player.GetRotation().second.GetDegrees() << "\n";
         if ( window->WasKeyPressed(GLFW_KEY_F) ) {
             std::cout << "Reloading Sahder\n";
             shader->Recompile();
+            lightShader->Recompile();
         }
 
         if ( window->WasKeyPressed(GLFW_KEY_ESCAPE) ) {

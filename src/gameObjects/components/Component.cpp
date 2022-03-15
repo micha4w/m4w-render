@@ -1,5 +1,5 @@
 #include "Component.h"
 
-void Component::Update(unsigned int microSeconds){
+void Component::Update(float seconds){
     return;
 }

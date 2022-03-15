@@ -31,12 +31,12 @@ glm::vec3 operator* (const glm::vec3& vec, unsigned int mul) {
     return {vec.x * mul, vec.y * mul, vec.z * mul};
 }
 
-void GameObject::Update(unsigned int microSeconds) {
+void GameObject::Update(float seconds) {
     for ( Component* component : m_Components ) {
-        component->Update(microSeconds);
+        component->Update(seconds);
     }
 
-    m_Position += m_Velocity * microSeconds;
+    m_Position += m_Velocity * seconds;
 
     if ( m_RecalculateView ) {
         if ( this->HasCamera() ) {

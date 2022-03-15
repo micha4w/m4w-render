@@ -6,7 +6,7 @@
 #include "Pointer.h"
 
 #include "Texture.h"
-#include "RenderBuffer.h"
+#include "DepthBuffer.h"
 
 class FrameBuffer {
 private:
@@ -19,7 +19,7 @@ private:
     float m_ClearColor[4];
 
     m4w::Pointer<Texture> m_Texture;
-    m4w::Pointer<RenderBuffer> m_RenderBuffer;
+    m4w::Pointer<DepthBuffer> m_DepthBuffer;
 
     FrameBuffer(unsigned int width, unsigned int height, unsigned int id)
     : m_Width(width), m_Height(height), m_ID(id), m_ClearColor{ 0.f, 0.f, 0.f, 1.f }
@@ -32,9 +32,9 @@ public:
     void AddTexture();
     void AddDepthBuffer();
     bool HasTexture() const { return m_Texture; };
-    bool HasRenderBuffer() const { return m_RenderBuffer; };
+    bool HasDepthBuffer() const { return m_DepthBuffer; };
     m4w::Pointer<Texture> GetTexture() { return m_Texture; }
-    m4w::Pointer<Texture> GetRenderBuffer() { return m_RenderBuffer; }
+    m4w::Pointer<DepthBuffer> GetDepthBuffer() { return m_DepthBuffer; }
 
     void Bind();
     void Unbind();

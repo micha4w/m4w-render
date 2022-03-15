@@ -39,7 +39,7 @@ public:
     GameObject(const glm::vec3& position = { 0.f, 0.f, 0.f });
     ~GameObject();
 
-    void Update(unsigned int microSeconds);
+    void Update(float seconds);
 
     void Rotate(const m4w::Angle& dYaw, const m4w::Angle& dPitch);
     void SetRotation(const m4w::Angle& yaw, const m4w::Angle& pitch);

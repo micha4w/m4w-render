@@ -23,8 +23,8 @@ void FrameBuffer::AddTexture() {
 
 void FrameBuffer::AddDepthBuffer() {
     this->Bind();
-    m_RenderBuffer = new RenderBuffer(m_Width, m_Height);
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, m_RenderBuffer->m_ID);
+    m_DepthBuffer = new DepthBuffer(m_Width, m_Height);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, m_DepthBuffer->m_ID, 0);
 }
 
 void FrameBuffer::Bind() {

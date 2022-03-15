@@ -30,5 +30,6 @@ void Timer::Wait() {
     m_LastTime = endTime;
 }
 
+float Timer::GetDeltaS() { return m_DeltaNs / 1000000000.f; }
 unsigned int Timer::GetDeltaUs() { return m_DeltaNs / 1000; }
 unsigned int Timer::GetDeltaNs() { return m_DeltaNs; }

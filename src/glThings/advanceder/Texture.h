@@ -2,17 +2,15 @@
 
 #include <GL/glew.h>
 
+#include "GraphicBuffer.h"
 #include "Shader.h"
 
 #include "Pointer.h"
 
-class Texture {
+class Texture : private GraphicBuffer {
 private:
     friend class FrameBuffer;
 
-    unsigned int m_ID;
-
-    unsigned int m_Width, m_Height;
     unsigned short m_Slot;
 
 public:

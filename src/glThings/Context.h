@@ -24,7 +24,7 @@ public:
 
     Context ();
 
-    void Update (unsigned int microSeconds);
+    void Update (float seconds);
 
 //    void Draw (FrameBuffer& frameBuffer);
     void Draw (Camera& camera);

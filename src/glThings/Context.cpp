@@ -13,9 +13,9 @@ Context::Context () {
 }
 
 
-void Context::Update (unsigned int microSeconds) {
+void Context::Update (float seconds) {
     for ( auto [id, object] : m_Objects ) {
-        object->Update(microSeconds);
+        object->Update(seconds);
     }
 }
 

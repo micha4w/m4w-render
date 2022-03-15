@@ -8,7 +8,7 @@ PlayerControllerComponent::PlayerControllerComponent(float speed, float sensitvi
     : m_Speed(speed), m_Sensitivity(sensitvity), m_MoveForward(moveForward), m_MoveBack(moveBack), m_MoveRight(moveRight), m_MoveLeft(moveLeft), m_MoveUp(moveUp), m_MoveDown(moveDown)
 { }
 
-void PlayerControllerComponent::Update(unsigned int microSeconds) {
+void PlayerControllerComponent::Update(float seconds) {
     if ( !g_Context.m_Window->IsFocused() || !g_Context.m_Window->IsMouseGrabbed() )
         return;
 
@@ -25,7 +25,7 @@ void PlayerControllerComponent::Update(unsigned int microSeconds) {
     move.x = window->IsKeyPressed(m_MoveLeft) - window->IsKeyPressed(m_MoveRight);
     move.y = window->IsKeyPressed(m_MoveUp) - window->IsKeyPressed(m_MoveDown);
 
-    m_Owner->Walk(m_Speed * move * 0.01f);
+    m_Owner->Walk(seconds * m_Speed * move);
 }
 
 
