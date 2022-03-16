@@ -1,12 +1,16 @@
 #pragma once
 
-class GraphicBuffer {
-public:
-    unsigned int m_ID;
+namespace m4w {
 
-    unsigned int m_Width, m_Height;
+    class GraphicBuffer {
+    public:
+        unsigned int m_ID;
 
-    GraphicBuffer (unsigned int width, unsigned int height);
+        unsigned int m_Width, m_Height;
 
-    virtual void Bind () { }
-};
+        GraphicBuffer (unsigned int width, unsigned int height);
+
+        virtual void Bind () { }
+    };
+
+}

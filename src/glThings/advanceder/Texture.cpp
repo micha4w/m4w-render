@@ -6,7 +6,7 @@
 #include "FrameBuffer.h"
 #include "Shader.h"
 
-Texture::Texture(unsigned int width, unsigned int height, unsigned char* data)
+m4w::Texture::Texture (unsigned int width, unsigned int height, unsigned char* data)
     : GraphicBuffer(width, height)
 {
     glGenTextures(1, &m_ID);
@@ -22,7 +22,7 @@ Texture::Texture(unsigned int width, unsigned int height, unsigned char* data)
     glGenerateMipmap(GL_TEXTURE_2D);
 }
 
-m4w::Pointer<Texture> Texture::FromPath(const char* path) {
+m4w::Pointer<m4w::Texture> m4w::Texture::FromPath(const char* path) {
     int width, height;
     unsigned char* data = stbi_load(path, &width, &height, nullptr, 0);
     Texture* texture = new Texture(width, height, data);
@@ -31,23 +31,23 @@ m4w::Pointer<Texture> Texture::FromPath(const char* path) {
     return texture;
 }
 
-Texture::~Texture() {
+m4w::Texture::~Texture () {
     glDeleteTextures(1, &m_ID); 
 }
 
-void Texture::Bind(unsigned short slot) {
+void m4w::Texture::Bind (unsigned short slot) {
     m_Slot = slot;
     glActiveTexture(GL_TEXTURE0 + slot);
     glBindTexture(GL_TEXTURE_2D, m_ID);
 }
 
-void Texture::Unbind() {
+void m4w::Texture::Unbind () {
     glActiveTexture(GL_TEXTURE0 + m_Slot);
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 
-void Texture::Use(Shader& shader, unsigned short slot) {
+void m4w::Texture::Use (Shader& shader, unsigned short slot) {
     shader.Bind();
     this->Bind(slot);
     shader.SetUniform1i("u_Texture", slot);

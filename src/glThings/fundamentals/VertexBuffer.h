@@ -2,18 +2,22 @@
 
 #include <GL/glew.h>
 
-class VertexBuffer {
-private:
-    friend class VertexArray;
+namespace m4w {
 
-    unsigned int m_ID;
+    class VertexBuffer {
+    private:
+        friend class VertexArray;
 
-    unsigned int m_Size;
-    //void* m_Data;
+        unsigned int m_ID;
 
-    void Bind ();
-    static void Unbind ();
-public:
-    VertexBuffer (unsigned int size, void* data);
-    ~VertexBuffer ();
-};
+        unsigned int m_Size;
+        //void* m_Data;
+
+        void Bind ();
+        static void Unbind ();
+    public:
+        VertexBuffer (unsigned int size, void* data);
+        ~VertexBuffer ();
+    };
+
+}

@@ -7,11 +7,11 @@
 #include "Context.h"
 #include "VertexArray.h"
 
-unsigned int VertexLayout::Size() const {
+unsigned int m4w::VertexLayout::Size() const {
     return m_Size;
 }
 
-unsigned int VertexLayout::glSizeof(unsigned int type) {
+unsigned int m4w::VertexLayout::glSizeof(unsigned int type) {
     switch (type) {
         case GL_SHORT: return sizeof(GLshort);
         case GL_UNSIGNED_SHORT: return sizeof(GLushort);
@@ -26,18 +26,18 @@ unsigned int VertexLayout::glSizeof(unsigned int type) {
     }
 }
 
-VertexLayout& VertexLayout::GetDefault() {
+m4w::VertexLayout& m4w::VertexLayout::GetDefault () {
     return g_Context.DefaultVertexLayout;
 }
 
 
-void VertexLayout::AddElement(unsigned short position, unsigned short count, unsigned int type, bool normalize) {
+void m4w::VertexLayout::AddElement (unsigned short position, unsigned short count, unsigned int type, bool normalize) {
     VertexLayoutElement newEl = { position, count, type, normalize };
     m_Elements.push_back(newEl);
     m_Size += count * glSizeof(type);
 }
 
-void VertexLayout::Use(VertexArray& vao) {
+void m4w::VertexLayout::Use (VertexArray& vao) {
     vao.Bind();
 
     unsigned long offset = 0;

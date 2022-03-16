@@ -13,26 +13,30 @@
 #include "VertexLayout.h"
 #include "VertexArray.h"
 
-class Mesh {
-private:
-    friend class GameObject;
+namespace m4w {
 
-    glm::mat4 m_ModelMatrix;
+    class Mesh {
+    private:
+        friend class GameObject;
 
-    m4w::Pointer<VertexArray> m_VAO;
+        glm::mat4 m_ModelMatrix;
 
-    std::unordered_map<unsigned int, m4w::Pointer<Texture>> m_Textures;
-public:
-    std::string Name;
+        m4w::Pointer<VertexArray> m_VAO;
 
-    Mesh ();
-    Mesh (const char* gltfPath);
+        std::unordered_map<unsigned int, m4w::Pointer<Texture>> m_Textures;
+    public:
+        std::string Name;
 
-    void SetVertexArray(m4w::Pointer<class VertexArray> vao) {
-        m_VAO = vao;
-    }
+        Mesh ();
+        Mesh (const char* gltfPath);
 
-    void AddTexture(unsigned int position, m4w::Pointer<Texture> texture);
+        void SetVertexArray(m4w::Pointer<class VertexArray> vao) {
+            m_VAO = vao;
+        }
 
-    void Render(Shader& shader);
-};
+        void AddTexture(unsigned int position, m4w::Pointer<Texture> texture);
+
+        void Render(Shader& shader);
+    };
+
+}

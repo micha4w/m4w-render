@@ -4,15 +4,19 @@
 
 #include "Projection.h"
 
-class PerspectiveProjection : public Projection {
-private:
-    m4w::Angle m_Fov;
-    float m_Ratio;
+namespace m4w {
 
-public:
-    PerspectiveProjection (m4w::Angle fov, float aspectRatio, float near, float far);
-    ~PerspectiveProjection ();
+    class PerspectiveProjection : public Projection {
+    private:
+        m4w::Angle m_Fov;
+        float m_Ratio;
 
-    void Recalculate ();
-    void SetFOV (m4w::Angle fov);
-};
+    public:
+        PerspectiveProjection (m4w::Angle fov, float aspectRatio, float near, float far);
+        ~PerspectiveProjection ();
+
+        void Recalculate ();
+        void SetFOV (m4w::Angle fov);
+    };
+
+}

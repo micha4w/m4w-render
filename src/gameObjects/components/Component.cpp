@@ -1,5 +1,5 @@
 #include "Component.h"
 
-void Component::Update(float seconds){
+void m4w::Component::Update (float seconds){
     return;
 }

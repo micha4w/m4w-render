@@ -4,15 +4,19 @@
 
 #include "GraphicBuffer.h"
 
-class DepthBuffer : private GraphicBuffer {
-private:
-    friend class FrameBuffer;
+namespace m4w {
+    
+    class DepthBuffer : private GraphicBuffer {
+    private:
+        friend class FrameBuffer;
 
-    unsigned short m_Slot;
-public:
-    DepthBuffer (unsigned int width, unsigned int height);
-    ~DepthBuffer ();
+        unsigned short m_Slot;
+    public:
+        DepthBuffer (unsigned int width, unsigned int height);
+        ~DepthBuffer ();
 
-    void Bind (unsigned short slot = 0);
-    void Unbind ();
-};
+        void Bind (unsigned short slot = 0);
+        void Unbind ();
+    };
+
+}

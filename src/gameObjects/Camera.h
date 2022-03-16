@@ -8,27 +8,31 @@
 #include "Window.h"
 #include "Shader.h"
 
-class Camera {
-private:
-    friend class GameObject;
+namespace m4w {
 
-    m4w::Pointer<View> m_View;
-    m4w::Pointer<Projection> m_Projection;
-    m4w::Pointer<FrameBuffer> m_FrameBuffer;
-    m4w::Pointer<Shader> m_Shader;
-public:
-    Camera(unsigned int width, unsigned int height, Projection* projection, m4w::Pointer<Shader> shader = new Shader("PosColor"), View* view = new View());
-    ~Camera();
+    class Camera {
+    private:
+        friend class GameObject;
 
-    void SetProjection (m4w::Pointer<Projection> projection);
-    void SetView (m4w::Pointer<View> view);
-    void SetFrameBuffer (m4w::Pointer<FrameBuffer> frameBuffer);
-    void SetShader (m4w::Pointer<Shader> shader);
+        Pointer<View> m_View;
+        Pointer<Projection> m_Projection;
+        Pointer<FrameBuffer> m_FrameBuffer;
+        Pointer<Shader> m_Shader;
+    public:
+        Camera(unsigned int width, unsigned int height, Projection* projection, Pointer<Shader> shader = new Shader("PosColor"), View* view = new View());
+        ~Camera();
 
-    m4w::Pointer<Projection> GetProjection ();
-    m4w::Pointer<View> GetView ();
-    m4w::Pointer<FrameBuffer> GetFrameBuffer ();
-    m4w::Pointer<Shader> GetShader ();
+        void SetProjection (Pointer<Projection> projection);
+        void SetView (Pointer<View> view);
+        void SetFrameBuffer (Pointer<FrameBuffer> frameBuffer);
+        void SetShader (Pointer<Shader> shader);
 
-    void Use();
-};
+        Pointer<Projection> GetProjection ();
+        Pointer<View> GetView ();
+        Pointer<FrameBuffer> GetFrameBuffer ();
+        Pointer<Shader> GetShader ();
+
+        void Use();
+    };
+
+}

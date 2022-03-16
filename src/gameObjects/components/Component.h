@@ -1,8 +1,12 @@
 #pragma once
 
-class Component {
-public:
-    class GameObject* m_Owner;
+namespace m4w {
 
-    virtual void Update(float seconds);
-};
+    class Component {
+    public:
+        class GameObject* m_Owner;
+
+        virtual void Update(float seconds);
+    };
+    
+}

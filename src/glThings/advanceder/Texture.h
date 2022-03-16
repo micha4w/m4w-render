@@ -7,22 +7,26 @@
 
 #include "Pointer.h"
 
-class Texture : private GraphicBuffer {
-private:
-    friend class FrameBuffer;
+namespace m4w {
 
-    unsigned short m_Slot;
+    class Texture : private GraphicBuffer {
+    private:
+        friend class FrameBuffer;
 
-public:
-    Texture(unsigned int width, unsigned int height, unsigned char* data = nullptr);
-    static m4w::Pointer<Texture> FromPath(const char* path);
-    ~Texture();
+        unsigned short m_Slot;
 
-    void Bind(unsigned short slot = 0);
-    void Unbind();
+    public:
+        Texture(unsigned int width, unsigned int height, unsigned char* data = nullptr);
+        static m4w::Pointer<Texture> FromPath(const char* path);
+        ~Texture();
 
-    void Use(Shader& shader, unsigned short slot);
+        void Bind(unsigned short slot = 0);
+        void Unbind();
 
-    void ReadImage();
-    void FromPNG();
-};
+        void Use(Shader& shader, unsigned short slot);
+
+        void ReadImage();
+        void FromPNG();
+    };
+
+}

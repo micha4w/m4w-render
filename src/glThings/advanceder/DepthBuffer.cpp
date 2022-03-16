@@ -1,7 +1,7 @@
 #include "DepthBuffer.h"
 
 
-DepthBuffer::DepthBuffer(unsigned int width, unsigned int height)
+m4w::DepthBuffer::DepthBuffer (unsigned int width, unsigned int height)
     : GraphicBuffer(width, height)
 {
     glGenTextures(1, &m_ID);
@@ -15,17 +15,17 @@ DepthBuffer::DepthBuffer(unsigned int width, unsigned int height)
 
 }
 
-DepthBuffer::~DepthBuffer() {
+m4w::DepthBuffer::~DepthBuffer () {
     glDeleteRenderbuffers(1, &m_ID);
 }
 
-void DepthBuffer::Bind(unsigned short slot) {
+void m4w::DepthBuffer::Bind (unsigned short slot) {
     m_Slot = slot;
     glActiveTexture(GL_TEXTURE0 + slot);
     glBindTexture(GL_TEXTURE_2D, m_ID);
 }
 
-void DepthBuffer::Unbind() {
+void m4w::DepthBuffer::Unbind () {
     glActiveTexture(GL_TEXTURE0 + m_Slot);
     glBindTexture(GL_TEXTURE_2D, 0);
 }

@@ -4,15 +4,15 @@
 
 using namespace std::chrono;
 
-Timer::Timer(float fps)
+m4w::Timer::Timer(float fps)
     : m_FPS(fps), m_NSPF(1'000'000'000/fps), m_LastTime(system_clock::now())
 { }
 
-Timer::~Timer() {
+m4w::Timer::~Timer() {
     
 }
 
-void Timer::Wait() {
+void m4w::Timer::Wait() {
     system_clock::time_point startTime = system_clock::now();
 
     int64_t sleepTime = m_NSPF - (startTime - m_LastTime).count();
@@ -30,6 +30,6 @@ void Timer::Wait() {
     m_LastTime = endTime;
 }
 
-float Timer::GetDeltaS() { return m_DeltaNs / 1000000000.f; }
-unsigned int Timer::GetDeltaUs() { return m_DeltaNs / 1000; }
-unsigned int Timer::GetDeltaNs() { return m_DeltaNs; }
+float m4w::Timer::GetDeltaS () { return m_DeltaNs / 1000000000.f; }
+unsigned int m4w::Timer::GetDeltaUs() { return m_DeltaNs / 1000; }
+unsigned int m4w::Timer::GetDeltaNs() { return m_DeltaNs; }

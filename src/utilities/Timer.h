@@ -2,19 +2,23 @@
 
 #include <chrono>
 
-class Timer {
-private:
-    float m_FPS;
-    int64_t m_NSPF;
-    unsigned int m_DeltaNs;
+namespace m4w {
 
-    std::chrono::system_clock::time_point m_LastTime;
-public:
-    Timer(float fps);
-    ~Timer();
+    class Timer {
+    private:
+        float m_FPS;
+        int64_t m_NSPF;
+        unsigned int m_DeltaNs;
 
-    void Wait();
-    float GetDeltaS();
-    unsigned int GetDeltaNs();
-    unsigned int GetDeltaUs();
-};
+        std::chrono::system_clock::time_point m_LastTime;
+    public:
+        Timer(float fps);
+        ~Timer();
+
+        void Wait();
+        float GetDeltaS();
+        unsigned int GetDeltaNs();
+        unsigned int GetDeltaUs();
+    };
+
+}

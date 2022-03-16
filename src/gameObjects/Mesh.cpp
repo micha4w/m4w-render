@@ -9,11 +9,11 @@
 #include "HeapArray.h"
 #include "Base64.h" 
 
-Mesh::Mesh ()
+m4w::Mesh::Mesh ()
     : m_ModelMatrix(1.f)
 { }
 
-Mesh::Mesh (const char* gltfPath)
+m4w::Mesh::Mesh (const char* gltfPath)
     : Mesh()
 {
     m4w::Pointer<m4w::JSONObject> gltf = m4w::ReadFile(gltfPath);
@@ -60,13 +60,13 @@ Mesh::Mesh (const char* gltfPath)
     m_VAO->SetVertexBuffer( CreateVertexBuffer(vbl.Size(), effectiveAccessors, buffers, bufferViews, vertexCount) );
 }
 
-void Mesh::AddTexture(unsigned int position, m4w::Pointer<Texture> texture) {
+void m4w::Mesh::AddTexture (unsigned int position, m4w::Pointer<Texture> texture) {
     if ( position == 0 ) std::cout << "[WARNING] Overriding Texture Slot 0!\n";
     m_Textures.emplace(position, texture);
 }
 
 
-void Mesh::Render(Shader& shader) {
+void m4w::Mesh::Render (Shader& shader) {
     m_VAO->Bind();
 
     for ( auto& [slot, texture] : m_Textures ) {
