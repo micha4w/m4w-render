@@ -2,11 +2,15 @@
 
 #include "Projection.h"
 
-class OrthographicProjection : public Projection {
-private:
-    float m_Width, m_Height;
+namespace m4w {
 
-public:
-    OrthographicProjection(float width, float height, float near, float far);
-    ~OrthographicProjection();
-};
+    class OrthographicProjection : public Projection {
+    private:
+        float m_Width, m_Height;
+
+    public:
+        OrthographicProjection(float width, float height, float near, float far);
+        ~OrthographicProjection();
+    };
+
+}

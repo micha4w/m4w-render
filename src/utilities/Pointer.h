@@ -40,8 +40,8 @@ namespace m4w {
 
             if ( *m_Owners == 0 ) {
                 if ( m_Pointer ) {
-                    delete m_Pointer;
                     //std::cout << "del " << typeid(T).name() << "\n";
+                    delete m_Pointer;
                 }
                 delete m_Owners;
             }

@@ -4,13 +4,14 @@
 
 #include <GL/glew.h>
 
+#include "Context.h"
 #include "VertexArray.h"
 
-unsigned int VertexLayout::Size() const {
+unsigned int m4w::VertexLayout::Size() const {
     return m_Size;
 }
 
-unsigned int VertexLayout::glSizeof(unsigned int type) {
+unsigned int m4w::VertexLayout::glSizeof(unsigned int type) {
     switch (type) {
         case GL_SHORT: return sizeof(GLshort);
         case GL_UNSIGNED_SHORT: return sizeof(GLushort);
@@ -25,24 +26,18 @@ unsigned int VertexLayout::glSizeof(unsigned int type) {
     }
 }
 
-m4w::Pointer<VertexLayout> VertexLayout::Default() {
-    VertexLayout* vbl = new VertexLayout();
-
-    vbl->AddElement(0, 3, GL_FLOAT); // Position
-    vbl->AddElement(1, 3, GL_FLOAT); // Normal
-    vbl->AddElement(2, 4, GL_FLOAT); // Color
-    vbl->AddElement(3, 2, GL_FLOAT); // TexCoord
-
-    return vbl;
+m4w::VertexLayout& m4w::VertexLayout::GetDefault () {
+    return g_Context.DefaultVertexLayout;
 }
 
-void VertexLayout::AddElement(unsigned short position, unsigned short count, unsigned int type, bool normalize) {
+
+void m4w::VertexLayout::AddElement (unsigned short position, unsigned short count, unsigned int type, bool normalize) {
     VertexLayoutElement newEl = { position, count, type, normalize };
     m_Elements.push_back(newEl);
     m_Size += count * glSizeof(type);
 }
 
-void VertexLayout::Use(VertexArray& vao) {
+void m4w::VertexLayout::Use (VertexArray& vao) {
     vao.Bind();
 
     unsigned long offset = 0;

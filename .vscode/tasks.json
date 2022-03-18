@@ -9,7 +9,9 @@
                 "${workspaceFolder}/src",
                 "${workspaceFolder}/.vscode/custom_build/debug",
                 "${workspaceFolder}/out-debug",
-                "-std=c++2a", "-g", "-lglfw", "-lGLEW", "-lGL", "-D DEBUG"
+                "False",
+                "/usr/bin/g++",
+                "-std=c++2a", "-g", "-lglfw", "-lGLEW", "-lGL", "-lX11", "-D M4W_DEBUG"
             ],
             "options": {
                 "cwd": "${workspaceFolder}"
@@ -26,12 +28,27 @@
         {
             "type": "process",
             "label": "m4w - Debug build all",
-            "command": "${workspaceFolder}/.vscode/custom_build/build.sh",
+            "command": "python3",
             "args": [
-                "DEBUG"
+                "${workspaceFolder}/.vscode/custom_build/build.py",
+                "${workspaceFolder}/src",
+                "${workspaceFolder}/.vscode/custom_build/debug",
+                "${workspaceFolder}/out-debug",
+                "True",
+                "/usr/bin/g++",
+                "-std=c++2a", "-g", "-lglfw", "-lGLEW", "-lGL", "-lX11", "-D M4W_DEBUG"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "presentation": {
+                "clear": true
+            },
+            "problemMatcher": [
+                "$gcc"
             ],
             "group": "build",
-            "detail": "build all sources"
+            "detail": "only build edited sources"
         },
 
 
@@ -48,7 +65,9 @@
                 "${workspaceFolder}/src",
                 "${workspaceFolder}/.vscode/custom_build/release",
                 "${workspaceFolder}/out-release",
-                "-std=c++2a", "-g", "-lglfw", "-lGLEW", "-lGL", "-D RELEASE"
+                "False",
+                "/usr/bin/g++",
+                "-std=c++2a", "-g", "-lglfw", "-lGLEW", "-lGL", "-lX11", "-D M4W_RELEASE", "-O3"
             ],
             "options": {
                 "cwd": "${workspaceFolder}"
@@ -62,15 +81,31 @@
             "group": "build",
             "detail": "only build edited sources"
         },
+
         {
             "type": "process",
             "label": "m4w - Release build all",
-            "command": "${workspaceFolder}/.vscode/custom_build/build.sh",
+            "command": "python3",
             "args": [
-                "RELEASE"
+                "${workspaceFolder}/.vscode/custom_build/build.py",
+                "${workspaceFolder}/src",
+                "${workspaceFolder}/.vscode/custom_build/release",
+                "${workspaceFolder}/out-release",
+                "True",
+                "/usr/bin/g++",
+                "-std=c++2a", "-g", "-lglfw", "-lGLEW", "-lGL", "-lX11", "-D M4W_RELEASE", "-O3"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "presentation": {
+                "clear": true
+            },
+            "problemMatcher": [
+                "$gcc"
             ],
             "group": "build",
-            "detail": "build all sources"
+            "detail": "only build edited sources"
         }
     ],
     "version": "2.0.0"

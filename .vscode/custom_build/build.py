@@ -89,8 +89,9 @@ class Source(CppFile):
 src_folder : str = sys.argv[1]
 tmp_folder : str = sys.argv[2]
 output_file : str = sys.argv[3]
-compile_type : str = sys.argv[4]
-args : List[str] = sys.argv[5:]
+build_all : bool = sys.argv[4].lower() != "false"
+gcc : List[str] = sys.argv[5]
+args : List[str] = sys.argv[6:]
 
 # Read the dates header_dates
 previous_modifieds : Dict[str, float] = {}
@@ -105,6 +106,7 @@ if os.path.exists(tmp_folder + "/last_header_dates.txt"):
                 print("Error somewhere in last_header_dates.txt >> " + line)
 else:
     print("header_dates doesn't exist, creating one.")
+    os.makedirs(tmp_folder, exist_ok=True)
     open(tmp_folder + "/last_header_dates.txt", "x").close()
 
 hdr_files : Dict[str, Header] = {}
@@ -129,13 +131,13 @@ for path, sub_folders, sub_files in os.walk(src_folder):
         include_folders.add("-I" + path)
 
 # Prepare command
-gpp_command = ["/usr/bin/g++"] + args
+gpp_command = [gcc] + args
 gpp_command.extend(include_folders)
 
 # Seperately compile all source files which were changed
 compilers : List[subprocess.Popen] = []
 for src_file in src_files.values():
-    if src_file.changed():
+    if build_all or src_file.changed():
         print("Compiling", src_file.file_name)
         compilers.append( subprocess.Popen(gpp_command + ["-c", src_file.path, "-o", src_file.compiled]) )
 
@@ -162,7 +164,7 @@ if compilers or not os.path.exists(output_file):
 
     # Link all .o files
     print("Linking")
-    linker = subprocess.Popen(["/usr/bin/g++"] + 
+    linker = subprocess.Popen([gcc, "-o" + output_file] + 
                               [source.compiled for source in src_files.values()] + 
                               args)
     linker.wait()

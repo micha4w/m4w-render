@@ -3,46 +3,52 @@
 #include "FrameBuffer.h"
 #include "GameObject.h"
 
-Context g_Context;
+m4w::Context m4w::g_Context;
 
-void Context::Update(unsigned int microSeconds) {
+m4w::Context::Context () {
+    DefaultVertexLayout.AddElement(0, 3, GL_FLOAT); // Position
+    DefaultVertexLayout.AddElement(1, 3, GL_FLOAT); // Normal
+    DefaultVertexLayout.AddElement(2, 4, GL_FLOAT); // Color
+    DefaultVertexLayout.AddElement(3, 2, GL_FLOAT); // TexCoord
+}
+
+
+void m4w::Context::Update (float seconds) {
     for ( auto [id, object] : m_Objects ) {
-        object->Update(microSeconds);
+        object->Update(seconds);
     }
 }
 
 
-void Context::Draw(FrameBuffer& frameBuffer) {
-    frameBuffer.Bind();
+//void m4w::Context::Draw (FrameBuffer& frameBuffer) {
+//    frameBuffer.Bind();
+//
+//    for ( auto& [id, mesh] : m_Meshes ) {
+//        mesh.Render(Shader("PosColor"));
+//    }
+//}
 
-    for ( auto& [id, mesh] : m_Meshes ) {
-        mesh.Render();
+void m4w::Context::Draw (Camera& camera) {
+    camera.Use();
+
+    for ( auto& [id, mesh] : m_Meshes ) {        
+        mesh.Render(*camera.GetShader());
     }
 }
 
-void Context::Draw(Camera& camera) {
-    camera.GetFrameBuffer()->Bind();
-
-    for ( auto& [id, mesh] : m_Meshes ) {
-        camera.Use(mesh.GetShader());
-        
-        mesh.Render();
-    }
-}
-
-void Context::ClearCameras() {
+void m4w::Context::ClearCameras () {
     for ( auto& [id, camera] : m_Cameras ) {
         camera.GetFrameBuffer()->Clear();
     }
 }
 
-void Context::DrawCameras() {
+void m4w::Context::DrawCameras () {
     for ( auto& [id, camera] : m_Cameras ) {
         Draw(camera);
     }
 }
 
-void Context::CheckGLError(const char* info) {
+void m4w::Context::CheckGLError (const char* info) {
     
     std::cerr << info;
 

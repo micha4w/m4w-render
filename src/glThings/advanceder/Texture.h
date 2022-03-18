@@ -2,29 +2,31 @@
 
 #include <GL/glew.h>
 
+#include "GraphicBuffer.h"
 #include "Shader.h"
 
 #include "Pointer.h"
 
-class Texture {
-private:
-    friend class FrameBuffer;
+namespace m4w {
 
-    unsigned int m_ID;
+    class Texture : private GraphicBuffer {
+    private:
+        friend class FrameBuffer;
 
-    unsigned int m_Width, m_Height;
-    unsigned short m_Slot;
+        unsigned short m_Slot;
 
-public:
-    Texture(unsigned int width, unsigned int height, unsigned char* data = nullptr);
-    static m4w::Pointer<Texture> FromPath(const char* path);
-    ~Texture();
+    public:
+        Texture(unsigned int width, unsigned int height, unsigned char* data = nullptr);
+        static m4w::Pointer<Texture> FromPath(const char* path);
+        ~Texture();
 
-    void Bind(unsigned short slot = 0);
-    void Unbind();
+        void Bind(unsigned short slot = 0);
+        void Unbind();
 
-    void Use(Shader& shader, unsigned short slot);
+        void Use(Shader& shader, unsigned short slot);
 
-    void ReadImage();
-    void FromPNG();
-};
+        void ReadImage();
+        void FromPNG();
+    };
+
+}

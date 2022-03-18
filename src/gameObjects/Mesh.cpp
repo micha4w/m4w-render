@@ -9,12 +9,12 @@
 #include "HeapArray.h"
 #include "Base64.h" 
 
-Mesh::Mesh(m4w::Pointer<Shader> shader)
-    : m_Shader(shader), m_ModelMatrix(1.f)
+m4w::Mesh::Mesh ()
+    : m_ModelMatrix(1.f)
 { }
 
-Mesh::Mesh(m4w::Pointer<Shader> shader, const char* gltfPath)
-    : Mesh(shader)
+m4w::Mesh::Mesh (const char* gltfPath)
+    : Mesh()
 {
     m4w::Pointer<m4w::JSONObject> gltf = m4w::ReadFile(gltfPath);
 
@@ -53,22 +53,20 @@ Mesh::Mesh(m4w::Pointer<Shader> shader, const char* gltfPath)
         }
     }
 
-    m_VAO = new VertexArray();
+    m_VAO = new VertexArray(vbl);
 
     m4w::Accessor& indicesAccessor = accessors[*primitives->GetObject(0)->GetNumber("indices")];
     m_VAO->SetIndexBuffer( CreateIndexBuffer(indicesAccessor, bufferViews[indicesAccessor.BufferView], buffers) );
     m_VAO->SetVertexBuffer( CreateVertexBuffer(vbl.Size(), effectiveAccessors, buffers, bufferViews, vertexCount) );
-
-    vbl.Use(*m_VAO);
 }
 
-void Mesh::AddTexture(unsigned int position, m4w::Pointer<Texture> texture) {
+void m4w::Mesh::AddTexture (unsigned int position, m4w::Pointer<Texture> texture) {
     if ( position == 0 ) std::cout << "[WARNING] Overriding Texture Slot 0!\n";
     m_Textures.emplace(position, texture);
 }
 
 
-void Mesh::Render() {
+void m4w::Mesh::Render (Shader& shader) {
     m_VAO->Bind();
 
     for ( auto& [slot, texture] : m_Textures ) {
@@ -78,11 +76,11 @@ void Mesh::Render() {
         }
 
 
-        texture->Use(*m_Shader, slot);
+        texture->Use(shader, slot);
     }
 
 
-    m_Shader->SetUniformMat4("u_Model", m_ModelMatrix);
+    shader.SetUniformMat4("u_Model", m_ModelMatrix);
 
     if ( m_VAO->m_IB->m_ID )
         glDrawElements(GL_TRIANGLES, m_VAO->m_IB->m_IndexCount, m_VAO->m_IB->m_DataType, 0);
@@ -92,7 +90,5 @@ void Mesh::Render() {
 
 //    m_Context.m_Window->Display();
 
-    g_Context.m_BlankTexture->Use(*m_Shader, 0);
+    g_Context.m_BlankTexture->Use(shader, 0);
 }
-
-Shader* Mesh::GetShader() { return m_Shader; }

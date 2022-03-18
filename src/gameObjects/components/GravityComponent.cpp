@@ -2,10 +2,10 @@
 
 #include "GameObject.h"
 
-GravityComponent::GravityComponent(float g)
+m4w::GravityComponent::GravityComponent (float g)
     : m_G(g)
 { }
 
-void GravityComponent::Update(unsigned int microSeconds) {
-    m_Owner->Accelerate({ 0.f, -microSeconds * m_G, 0.f });
+void m4w::GravityComponent::Update (float seconds) {
+    m_Owner->Accelerate({ 0.f, -seconds * m_G, 0.f });
 }

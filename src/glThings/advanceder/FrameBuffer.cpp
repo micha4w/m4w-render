@@ -3,7 +3,7 @@
 #include "Context.h"
 #include "Window.h"
 
-FrameBuffer::FrameBuffer(unsigned int width, unsigned int height)
+m4w::FrameBuffer::FrameBuffer (unsigned int width, unsigned int height)
     : m_Width(width), m_Height(height), m_ClearColor{ 0.f, 0.f, 0.f, 0.f }
 {
     glGenFramebuffers(1, &m_ID);
@@ -11,28 +11,28 @@ FrameBuffer::FrameBuffer(unsigned int width, unsigned int height)
     this->Bind();
 }
 
-FrameBuffer::~FrameBuffer() {
+m4w::FrameBuffer::~FrameBuffer () {
     glDeleteFramebuffers(1, &m_ID);
 }
 
-void FrameBuffer::AddTexture() {
+void m4w::FrameBuffer::AddTexture () {
     this->Bind();
     m_Texture = new Texture(m_Width, m_Height);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_Texture->m_ID, 0);  
 }
 
-void FrameBuffer::AddDepthBuffer() {
+void m4w::FrameBuffer::AddDepthBuffer () {
     this->Bind();
-    m_RenderBuffer = new RenderBuffer(m_Width, m_Height);
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, m_RenderBuffer->m_ID);
+    m_DepthBuffer = new DepthBuffer(m_Width, m_Height);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, m_DepthBuffer->m_ID, 0);
 }
 
-void FrameBuffer::Bind() {
+void m4w::FrameBuffer::Bind () {
     glBindFramebuffer(GL_FRAMEBUFFER, m_ID);
     g_Context.m_FBO = this;
 }
 
-void FrameBuffer::Unbind() {
+void m4w::FrameBuffer::Unbind () {
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     g_Context.m_FBO = g_Context.m_Window->GetFrameBuffer();
 }
