@@ -1,8 +1,9 @@
 {
     "tasks": [
+        
         {
             "type": "process",
-            "label": "m4w - Debug build changed",
+            "label": "Unix - Debug build changed",
             "command": "python3",
             "args": [
                 "${workspaceFolder}/.vscode/custom_build/build.py",
@@ -27,7 +28,7 @@
         },
         {
             "type": "process",
-            "label": "m4w - Debug build all",
+            "label": "Unix - Debug build all",
             "command": "python3",
             "args": [
                 "${workspaceFolder}/.vscode/custom_build/build.py",
@@ -58,7 +59,7 @@
 
         {
             "type": "process",
-            "label": "m4w - Release build changed",
+            "label": "Unix - Release build changed",
             "command": "python3",
             "args": [
                 "${workspaceFolder}/.vscode/custom_build/build.py",
@@ -84,7 +85,7 @@
 
         {
             "type": "process",
-            "label": "m4w - Release build all",
+            "label": "Unix - Release build all",
             "command": "python3",
             "args": [
                 "${workspaceFolder}/.vscode/custom_build/build.py",
@@ -93,6 +94,114 @@
                 "${workspaceFolder}/out-release",
                 "True",
                 "/usr/bin/g++",
+                "-std=c++2a", "-g", "-lglfw", "-lGLEW", "-lGL", "-D RELEASE", "-O3"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "presentation": {
+                "clear": true
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": "build",
+            "detail": "only build edited sources"
+        },
+
+        {
+            "type": "process",
+            "label": "Win - Debug build changed",
+            "command": "python3",
+            "args": [
+                "${workspaceFolder}/.vscode/custom_build/build.py",
+                "${workspaceFolder}/src",
+                "${workspaceFolder}/.vscode/custom_build/debug",
+                "${workspaceFolder}/out-debug",
+                "False",
+                "C:/msys64/mingw64/bin/g++.exe",
+                "-std=c++2a", "-g", "-lglfw", "-lGLEW", "-lGL", "-D DEBUG"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "presentation": {
+                "clear": true
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": "build",
+            "detail": "only build edited sources"
+        },
+        {
+            "type": "process",
+            "label": "Win - Debug build all",
+            "command": "python3",
+            "args": [
+                "${workspaceFolder}/.vscode/custom_build/build.py",
+                "${workspaceFolder}/src",
+                "${workspaceFolder}/.vscode/custom_build/debug",
+                "${workspaceFolder}/out-debug",
+                "True",
+                "C:/msys64/mingw64/bin/g++.exe",
+                "-std=c++2a", "-g", "-lglfw", "-lGLEW", "-lGL", "-D DEBUG"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "presentation": {
+                "clear": true
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": "build",
+            "detail": "only build edited sources"
+        },
+
+
+
+
+
+
+        {
+            "type": "process",
+            "label": "Win - Release build changed",
+            "command": "python3",
+            "args": [
+                "${workspaceFolder}/.vscode/custom_build/build.py",
+                "${workspaceFolder}/src",
+                "${workspaceFolder}/.vscode/custom_build/release",
+                "${workspaceFolder}/out-release",
+                "False",
+                "C:/msys64/mingw64/bin/g++.exe",
+                "-std=c++2a", "-g", "-lglfw", "-lGLEW", "-lGL", "-D RELEASE", "-O3"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "presentation": {
+                "clear": true
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": "build",
+            "detail": "only build edited sources"
+        },
+
+        {
+            "type": "process",
+            "label": "Win - Release build all",
+            "command": "python3",
+            "args": [
+                "${workspaceFolder}/.vscode/custom_build/build.py",
+                "${workspaceFolder}/src",
+                "${workspaceFolder}/.vscode/custom_build/release",
+                "${workspaceFolder}/out-release",
+                "True",
+                "C:/msys64/mingw64/bin/g++.exe",
                 "-std=c++2a", "-g", "-lglfw", "-lGLEW", "-lGL", "-D RELEASE", "-O3"
             ],
             "options": {
