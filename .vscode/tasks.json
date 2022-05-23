@@ -12,7 +12,7 @@
                 "${workspaceFolder}/out-debug",
                 "False",
                 "/usr/bin/g++",
-                "-std=c++2a", "-g", "-lglfw", "-lGLEW", "-lGL", "-D DEBUG"
+                "-std=c++2a", "-g", "-lglfw", "-lGLEW", "-lGL", "-lX11", "-D M4W_DEBUG"
             ],
             "options": {
                 "cwd": "${workspaceFolder}"
@@ -37,7 +37,7 @@
                 "${workspaceFolder}/out-debug",
                 "True",
                 "/usr/bin/g++",
-                "-std=c++2a", "-g", "-lglfw", "-lGLEW", "-lGL", "-D DEBUG"
+                "-std=c++2a", "-g", "-lglfw", "-lGLEW", "-lGL", "-lX11", "-D M4W_DEBUG"
             ],
             "options": {
                 "cwd": "${workspaceFolder}"
@@ -68,7 +68,7 @@
                 "${workspaceFolder}/out-release",
                 "False",
                 "/usr/bin/g++",
-                "-std=c++2a", "-g", "-lglfw", "-lGLEW", "-lGL", "-D RELEASE", "-O3"
+                "-std=c++2a", "-g", "-lglfw", "-lGLEW", "-lGL", "-lX11", "-D M4W_RELEASE", "-O3"
             ],
             "options": {
                 "cwd": "${workspaceFolder}"
@@ -94,7 +94,7 @@
                 "${workspaceFolder}/out-release",
                 "True",
                 "/usr/bin/g++",
-                "-std=c++2a", "-g", "-lglfw", "-lGLEW", "-lGL", "-D RELEASE", "-O3"
+                "-std=c++2a", "-g", "-lglfw", "-lGLEW", "-lGL", "-lX11", "-D M4W_RELEASE", "-O3"
             ],
             "options": {
                 "cwd": "${workspaceFolder}"

@@ -2,9 +2,13 @@
 
 #include "Component.h"
 
-class CollisionComponent : public Component {
-private:
+namespace m4w {
 
-public:
+    class CollisionComponent : public Component {
+    private:
 
-};
+    public:
+
+    };
+    
+}

@@ -3,7 +3,7 @@
 #include "Context.h"
 #include "VertexArray.h"
 
-VertexBuffer::VertexBuffer (unsigned int size, void* data)
+m4w::VertexBuffer::VertexBuffer (unsigned int size, void* data)
     : m_Size(size)//, m_Data(data)
 {
 
@@ -12,14 +12,14 @@ VertexBuffer::VertexBuffer (unsigned int size, void* data)
     glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
 }
 
-VertexBuffer::~VertexBuffer () {
+m4w::VertexBuffer::~VertexBuffer () {
     glDeleteBuffers(1, &m_ID);
 }
 
-void VertexBuffer::Bind () {
+void m4w::VertexBuffer::Bind () {
     glBindBuffer(GL_ARRAY_BUFFER, m_ID);
 }
 
-void VertexBuffer::Unbind () {
+void m4w::VertexBuffer::Unbind () {
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }

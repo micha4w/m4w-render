@@ -10,7 +10,8 @@ m4w::Angle m4w::Angle::Radians(float value) {
     
     float pi = glm::pi<float>();
     value = std::fmod(value, 2*pi);
-//    if ( value < 0 ) value = pi - value;
+    // if ( value < 0 )
+    //     value = 2*pi - value;
 
     angle.m_Radians = value;
     angle.m_Degrees = glm::degrees<float>(value);
@@ -22,8 +23,8 @@ m4w::Angle m4w::Angle::Degrees(float value) {
     m4w::Angle angle;
     
     value = std::fmod(value, 360.f);
-    if ( value < 0 ) value = 360.f - value;
-
+    // if ( value < 0 )
+    //     value = 360.f - value;
 
     angle.m_Degrees = value;
     angle.m_Radians = glm::radians<float>(value);
@@ -49,4 +50,16 @@ void m4w::Angle::ClampDegrees(float lower, float upper) {
 
 m4w::Angle m4w::Angle::operator+ (const Angle& other) const {
     return Angle::Radians(this->m_Radians + other.m_Radians);
+}
+
+m4w::Angle m4w::Angle::operator* (const float& factor) const {
+    return Angle::Radians(this->m_Radians * factor);
+}
+
+bool m4w::Angle::operator== (const m4w::Angle& other) const {
+    return this->m_Radians == other.m_Radians;
+}
+
+bool m4w::Angle::operator!= (const m4w::Angle& other) const {
+    return this->m_Radians != other.m_Radians;
 }

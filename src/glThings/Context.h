@@ -8,30 +8,34 @@
 #include "UUIDMap.h"
 #include "Pointer.h"
 
-class Context {
-public:
-    m4w::Pointer<Window> m_Window;
-    VertexArray* m_VAO;
-    FrameBuffer* m_FBO;
+namespace m4w {
 
-    m4w::UUIDMap<Mesh> m_Meshes;
-    m4w::UUIDMap<Camera> m_Cameras;
-    m4w::UUIDMap<Light> m_Lights;
-    m4w::UUIDMap<class GameObject*> m_Objects;
+    class Context {
+    public:
+        Pointer<Window> m_Window;
+        VertexArray* m_VAO;
+        FrameBuffer* m_FBO;
 
-    Texture* m_BlankTexture;
-    VertexLayout DefaultVertexLayout;
+        UUIDMap<Mesh> m_Meshes;
+        UUIDMap<Camera> m_Cameras;
+        UUIDMap<Light> m_Lights;
+        UUIDMap<class GameObject*> m_Objects;
 
-    Context();
+        Texture* m_BlankTexture;
+        VertexLayout DefaultVertexLayout;
 
-    void Update(unsigned int microSeconds);
+        Context ();
 
-    void Draw(FrameBuffer& frameBuffer);
-    void Draw(Camera& camera);
-    void ClearCameras();
-    void DrawCameras();
+        void Update (float seconds);
 
-    void CheckGLError(const char* info = "");
-};
+    //    void Draw (FrameBuffer& frameBuffer);
+        void Draw (Camera& camera);
+        void ClearCameras ();
+        void DrawCameras ();
 
-extern Context g_Context;
+        void CheckGLError (const char* info = "");
+    };
+
+    extern Context g_Context;
+
+}
