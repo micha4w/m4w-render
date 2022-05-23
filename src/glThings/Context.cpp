@@ -32,7 +32,7 @@ void m4w::Context::Draw (Camera& camera) {
     camera.Use();
 
     for ( auto& [id, mesh] : m_Meshes ) {        
-        mesh.Render(*camera.GetShader());
+        mesh.Render(camera);
     }
 }
 

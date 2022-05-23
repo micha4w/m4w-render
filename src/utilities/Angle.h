@@ -24,5 +24,8 @@ namespace m4w {
         void ClampDegrees(float lower, float upper);
     
         Angle operator+ (const Angle& other) const;
+        Angle operator* (const float& factor) const;
+        bool operator== (const Angle& other) const;
+        bool operator!= (const Angle& other) const;
     };
 };

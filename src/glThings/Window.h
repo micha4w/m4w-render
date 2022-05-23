@@ -9,6 +9,9 @@
 
 #include "Pointer.h"
 
+#define m4w_KEY_COUNT 350
+
+
 namespace m4w {
 
     class Window {
@@ -16,8 +19,8 @@ namespace m4w {
         GLFWwindow* m_Instance;
         m4w::Pointer<FrameBuffer> m_FrameBuffer;
         bool m_GrabMouse;
-        bool m_LastKeysPressed[350];
-        bool m_KeysPressed[350];
+        bool m_LastKeysPressed[m4w_KEY_COUNT];
+        bool m_KeysPressed[m4w_KEY_COUNT];
 
         static void KeyCallback (GLFWwindow* glWindow, int key, int scancode, int action, int mods);
 

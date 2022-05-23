@@ -7,7 +7,6 @@
 #include "UUIDMap.h"
 
 #include "Shader.h"
-#include "View.h"
 
 
 m4w::GameObject::GameObject (const glm::vec3& position)
@@ -40,9 +39,9 @@ void m4w::GameObject::Update (float seconds) {
 
     if ( m_RecalculateView ) {
         if ( this->HasCamera() ) {
-            m_Camera->m_View->m_Position = m_Position;
-            m_Camera->m_View->m_Offset = m_Rotation;
-            m_Camera->m_View->m_Recalculate = true;
+            m_Camera->m_Position = m_Position;
+            m_Camera->m_Offset = m_Rotation;
+            m_Camera->m_Recalculate = true;
         }
 
         if ( this->HasMesh() ) {

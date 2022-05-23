@@ -1,6 +1,7 @@
 #include "Window.h"
 
 #include <iostream>
+#include <cstring>
 
 #ifdef M4W_DESKTOP
 
@@ -174,9 +175,7 @@ bool m4w::Window::ShouldClose () {
 }
 
 void m4w::Window::PollEvents () {
-    for ( int i = 0 ; i < 350 ; i++ ) {
-        m_LastKeysPressed[i] = m_KeysPressed[i];
-    }
+    std::memcpy(m_LastKeysPressed, m_KeysPressed, sizeof(m_KeysPressed));
 
     glfwPollEvents();
 }

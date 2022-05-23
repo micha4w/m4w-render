@@ -7,7 +7,7 @@
 #include <glm/mat4x4.hpp>
 
 #include "Pointer.h"
-#include "Shader.h"
+#include "Camera.h"
 
 #include "Texture.h"
 #include "VertexLayout.h"
@@ -36,7 +36,7 @@ namespace m4w {
 
         void AddTexture(unsigned int position, m4w::Pointer<Texture> texture);
 
-        void Render(Shader& shader);
+        void Render(Camera& camera);
     };
 
 }

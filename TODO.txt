@@ -1,11 +1,15 @@
 TODO
 ----
 
+Make m4w::Camera use m4w::Pointer in constructor
 Make UUIDMap return reference instead of Pointer
 Generaelly make all Pointers that you can a Reference
 
 VERTEXLAYOUT SHOULD ALWAYS BE APPLIED AFTER VERTEXBUFFER
 Times this mistake was made: atleast 2
+
+Check that there is no Cyclic reference, that stops Pointer from removing them
+
 
 Old:
 Figure out Pointers in VertexBuffer and IndexBuffer

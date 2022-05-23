@@ -66,7 +66,8 @@ void m4w::Mesh::AddTexture (unsigned int position, m4w::Pointer<Texture> texture
 }
 
 
-void m4w::Mesh::Render (Shader& shader) {
+void m4w::Mesh::Render (Camera& camera) {
+    Shader& shader = *camera.GetShader();
     m_VAO->Bind();
 
     for ( auto& [slot, texture] : m_Textures ) {
@@ -75,11 +76,11 @@ void m4w::Mesh::Render (Shader& shader) {
             continue;
         }
 
-
         texture->Use(shader, slot);
     }
 
-
+    glm::mat4 mvp = camera.m_VP * m_ModelMatrix;
+    shader.SetUniformMat4("u_MVP", mvp);
     shader.SetUniformMat4("u_Model", m_ModelMatrix);
 
     if ( m_VAO->m_IB->m_ID )

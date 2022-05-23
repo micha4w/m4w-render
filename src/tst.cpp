@@ -18,18 +18,10 @@
 #include "VertexLayout.h"
 
 #include "Shader.h"
-#include "PerspectiveProjection.h"
-#include "OrthographicProjection.h"
-#include "View.h"
 
 #include "GameObject.h"
 #include "PlayerControllerComponent.h"
 
-
-void framebuffer_size_callback(GLFWwindow* window, int width, int height)
-{
-//    glViewport(0, 0, width, height);
-}
 
 int main() {
 
@@ -46,37 +38,38 @@ int main() {
     m4w::Pointer<m4w::Shader> lightShader = new m4w::Shader("Depth");
 
     m4w::GameObject head;
-    head.CreateMesh( "res/models/hed.gltf");
+    head.CreateMesh("res/models/hed.gltf");
 
     m4w::GameObject player;
     player.AddComponent((m4w::Component*) new m4w::PlayerControllerComponent(10.f, .002f));
     
     player.CreateCamera(
         window->GetWidth(), window->GetHeight(),
-        new m4w::PerspectiveProjection(m4w::Angle::Degrees(70.f), window->GetWidth() / window->GetHeight(), 0.001f, 10000.f),
+        0.001f, 10000.f,
         shader
     );
     player.GetCamera()->SetFrameBuffer(window->GetFrameBuffer());
+    player.GetCamera()->SetPerspectiveProjection(m4w::Angle::Degrees(70.f));
 
-    m4w::GameObject camera({0.f, 0.f, -5.f});
-    camera.SetRotation(m4w::Angle::Degrees(180.f), m4w::Angle());
-    camera.CreateCamera(
+    m4w::GameObject lightCamera({0.f, 0.f, -5.f});
+    lightCamera.SetRotation(m4w::Angle::Degrees(180.f), m4w::Angle());
+    lightCamera.CreateCamera(
         window->GetWidth(), window->GetHeight(),
-        new m4w::OrthographicProjection(5, 5, 0.001f, 10000.f),
+        0.001f, 10000.f,
         lightShader
     );
-    //camera.GetCamera()->GetFrameBuffer()->AddTexture();
-    camera.GetCamera()->GetFrameBuffer()->AddDepthBuffer();
+    //lightCamera.GetCamera()->GetFrameBuffer()->AddTexture();
+    lightCamera.GetCamera()->GetFrameBuffer()->AddDepthBuffer();
     
-    camera.CreateMesh("res/models/icosphere.gltf");
-    camera.AddComponent((m4w::Component*) new m4w::PlayerControllerComponent(10.f, 0.f, GLFW_KEY_UP, GLFW_KEY_LEFT, GLFW_KEY_DOWN, GLFW_KEY_RIGHT, GLFW_KEY_PAGE_UP, GLFW_KEY_PAGE_DOWN));
+    lightCamera.CreateMesh("res/models/icosphere.gltf");
+    lightCamera.AddComponent((m4w::Component*) new m4w::PlayerControllerComponent(10.f, 0.f, GLFW_KEY_UP, GLFW_KEY_LEFT, GLFW_KEY_DOWN, GLFW_KEY_RIGHT, GLFW_KEY_PAGE_UP, GLFW_KEY_PAGE_DOWN));
 
 
     m4w::GameObject screen;
     m4w::Mesh& screen_mesh = screen.CreateMesh();
     screen_mesh.Name = "SCREEN";
     screen_mesh.SetVertexArray( m4w::VertexArray::Cube(-1.f, -1.f, 4.f, 1.f, 1.f, 5.f, 0.f, 0.f, 0.f, 0.f) );
-    screen_mesh.AddTexture(1, camera.GetCamera()->GetFrameBuffer()->GetDepthBuffer());
+    screen_mesh.AddTexture(1, lightCamera.GetCamera()->GetFrameBuffer()->GetDepthBuffer());
 
 
     m4w::GameObject floor;
@@ -99,36 +92,33 @@ int main() {
 
     //LOOOOOP
     m4w::Timer timer(60.f);
-    while(!window->ShouldClose()) {
-        // Update
+    while ( !window->ShouldClose() ) {
+
+    // Update
         window->PollEvents();
 
         m4w::g_Context.Update(timer.GetDeltaS());
 
-        //if ( window->GetKeyPressed(GLFW_KEY_C) ) std::cout << glm::to_string(camera.GetPosition()) << " " << camera.GetRotation().first.GetDegrees() << ", " << camera.GetRotation().second.GetDegrees() << "\n";
-        if ( window->IsKeyPressed(GLFW_KEY_V) ) std::cout << glm::to_string(player.GetPosition()) << " " << player.GetRotation().first.GetDegrees() << ", " << player.GetRotation().second.GetDegrees() << "\n";
+        //if ( window->GetKeyPressed(GLFW_KEY_C) ) std::cout << glm::to_string(lightCamera.GetPosition()) << " " << lightCamera.GetRotation().first.GetDegrees() << ", " << lightCamera.GetRotation().second.GetDegrees() << "\n";
+        if ( window->IsKeyPressed(GLFW_KEY_V) )
+            std::cout << glm::to_string(player.GetPosition()) << " " << player.GetRotation().first.GetDegrees() << ", " << player.GetRotation().second.GetDegrees() << "\n";
         if ( window->WasKeyPressed(GLFW_KEY_F) ) {
             std::cout << "Reloading Sahder\n";
             shader->Recompile();
             lightShader->Recompile();
         }
 
-        if ( window->WasKeyPressed(GLFW_KEY_ESCAPE) ) {
+        if ( window->WasKeyPressed(GLFW_KEY_ESCAPE) )
             window->SetMouseGrabbed( !window->IsMouseGrabbed() );
-        }
-        if ( window->WasKeyPressed(GLFW_KEY_C) )
-            player.GetCamera()->SetProjection(
-                new m4w::PerspectiveProjection(m4w::Angle::Degrees(30.f), window->GetWidth() / window->GetHeight(), 0.001f, 10000.f)
-            );
-        if ( window->WasKeyReleased(GLFW_KEY_C) )
-            player.GetCamera()->SetProjection(
-                new m4w::PerspectiveProjection(m4w::Angle::Degrees(70.f), window->GetWidth() / window->GetHeight(), 0.001f, 10000.f)
-            );
+        if ( window->WasKeyPressed(GLFW_KEY_LEFT_ALT) )
+            player.GetCamera()->SetPerspectiveProjection(m4w::Angle::Degrees(30.f));
+        if ( window->WasKeyReleased(GLFW_KEY_LEFT_ALT) )
+            player.GetCamera()->SetPerspectiveProjection(m4w::Angle::Degrees(70.f));
 
         if ( window->IsMouseGrabbed() )
             window->SetMousePosition(window->GetWidth()/2, window->GetHeight()/2);
 
-// Render
+    // Render
         //Context::Draw(*player.GetCamera());
         shader->SetUniformLights(lights);
 
