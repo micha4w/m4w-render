@@ -1,7 +1,5 @@
 #pragma once
 
-#include <glm/gtc/matrix_transform.hpp>
-
 namespace m4w {
     class Angle {
     private:

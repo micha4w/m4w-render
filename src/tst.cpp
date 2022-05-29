@@ -58,6 +58,7 @@ int main() {
         0.001f, 10000.f,
         lightShader
     );
+    lightCamera.GetCamera()->SetOrthographicProjection(5, 5);
     //lightCamera.GetCamera()->GetFrameBuffer()->AddTexture();
     lightCamera.GetCamera()->GetFrameBuffer()->AddDepthBuffer();
     

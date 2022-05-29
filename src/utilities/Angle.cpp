@@ -1,5 +1,7 @@
 #include "Angle.h"
 
+#include <glm/gtc/matrix_transform.hpp>
+
 m4w::Angle::Angle()
     : m_Degrees(0), m_Radians(0)
 { }

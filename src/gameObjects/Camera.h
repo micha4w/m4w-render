@@ -1,6 +1,7 @@
 #pragma once
 
 #include <glm/mat4x4.hpp>
+#include <glm/gtc/constants.hpp>
 
 #include "Pointer.h"
 
@@ -28,14 +29,22 @@ namespace m4w {
         glm::mat4 m_Projection;
         ProjectionType m_ProjectionType;
         float m_NearPlane, m_FarPlane;
-        Angle m_FOV;
+        union ProjectionUnion {
+            Angle FOV;
+            struct {
+                float W;
+                float H;
+            } Size;
+
+            ProjectionUnion() { Size = { 1, 1 }; }
+        } m_ProjectionVars;
 
         glm::mat4 m_View;
         glm::vec3 m_Position, m_Offset;
         Angle m_Yaw, m_Pitch;
 
         const glm::vec3 m_WorldUp = { 0.f, 1.f, 0.f };
-        const float piHalf = glm::pi<float>() / 2;
+        const float piHalf = glm::half_pi<float>();
 
         void CalculateProjection ();
         void CalculatePerspective ();
@@ -46,7 +55,7 @@ namespace m4w {
         ~Camera();
 
         void SetPerspectiveProjection (Angle fov);
-        void SetOrthographicProjection ();
+        void SetOrthographicProjection (float width, float height);
 
 
         void SetView (const glm::vec3& position = {0.f, 0.f, 0.f}, const m4w::Angle& yaw = m4w::Angle(), const m4w::Angle& pitch = m4w::Angle());

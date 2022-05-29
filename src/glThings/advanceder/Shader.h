@@ -2,12 +2,11 @@
 
 #include <iostream>
 #include <fstream>
-#include <GL/glew.h>
-#include <unistd.h>
-
+#include <filesystem>
 #include <string>
 #include <map>
 
+#include <GL/glew.h>
 #include <glm/mat4x4.hpp>
 
 #include "HeapArray.h"
@@ -50,7 +49,7 @@ namespace m4w {
             {
                 char infoLog[512];
                 glGetShaderInfoLog(shader, 512, NULL, infoLog);
-                std::cout << "[ERROR] Shader compilation failed: " << get_current_dir_name() << path << "\n" << code << "\n" << rawCode << "\n" << infoLog << std::endl;
+                std::cout << "[ERROR] Shader compilation failed: " << std::filesystem::current_path() << path << "\n" << code << "\n" << rawCode << "\n" << infoLog << std::endl;
 
                 glDeleteShader(shader);
                 return;

@@ -9,10 +9,10 @@ m4w::PlayerControllerComponent::PlayerControllerComponent (float speed, float se
 { }
 
 void m4w::PlayerControllerComponent::Update (float seconds) {
-    if ( !g_Context.m_Window->IsFocused() || !g_Context.m_Window->IsMouseGrabbed() )
+    m4w::Pointer<Window>& window = g_Context.m_Window;
+    if ( !window->IsFocused() || !window->IsMouseGrabbed() )
         return;
 
-    m4w::Pointer<Window> window = g_Context.m_Window;
     auto [newX, newY] = window->GetMousePosition();
 
     newX = window->GetWidth()/2 - newX;

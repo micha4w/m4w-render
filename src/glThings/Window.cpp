@@ -100,6 +100,7 @@ static void XTest(GLFWwindow* window) {
 
 
 m4w::Window::Window (unsigned int width, unsigned int height, const char* name)
+    : m_KeysPressed({0}), m_LastKeysPressed({0})
 {
     if (!glfwInit()) {
         std::cout << "[ERROR] Failed to initialize glfw..\n";
@@ -123,6 +124,7 @@ m4w::Window::Window (unsigned int width, unsigned int height, const char* name)
             return;
     }
     glfwMakeContextCurrent(m_Instance);
+    //glfwSwapInterval(0);
 
 #ifdef M4W_DESKTOP
     //X11 Stuff only on linux!
@@ -150,8 +152,8 @@ m4w::Window::Window (unsigned int width, unsigned int height, const char* name)
         return;
     }
     glEnable(GL_DEPTH_TEST);
-    glEnable(GL_CULL_FACE);
-//    glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+    // glEnable(GL_CULL_FACE);
+    // glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
 
 
     m_FrameBuffer = new FrameBuffer(width, height, 0);
@@ -230,5 +232,5 @@ void m4w::Window::SetMouseGrabbed (bool grab) {
 }
 
 void m4w::Window::KeyCallback (GLFWwindow* glWindow, int key, int scancode, int action, int mods) {
-    g_Context.m_Window->m_KeysPressed[key] = action;
+    g_Context.m_Window->m_KeysPressed[key] = action != GLFW_RELEASE;
 }

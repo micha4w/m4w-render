@@ -23,9 +23,7 @@ namespace m4w {
         m4w::Pointer<Texture> m_Texture;
         m4w::Pointer<DepthBuffer> m_DepthBuffer;
 
-        FrameBuffer(unsigned int width, unsigned int height, unsigned int id)
-        : m_Width(width), m_Height(height), m_ID(id), m_ClearColor{ 0.f, 0.f, 0.f, 1.f }
-        { }
+        FrameBuffer(unsigned int width, unsigned int height, unsigned int id);
 
     public:
         FrameBuffer(unsigned int width, unsigned int height);

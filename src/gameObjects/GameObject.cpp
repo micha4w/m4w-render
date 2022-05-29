@@ -85,9 +85,8 @@ void m4w::GameObject::Walk (const glm::vec3& vector) {
 }
 
 void m4w::GameObject::Move (const glm::vec3& vector) {
-    if ( vector.x || vector.y || vector.z ) {
+    if ( vector.x || vector.y || vector.z )
         this->Teleport(m_Position + vector);
-    }
 }
 
 void m4w::GameObject::Teleport (const glm::vec3& position) {
