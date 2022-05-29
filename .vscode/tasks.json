@@ -1,6 +1,7 @@
 {
     "tasks": [
-        
+    
+    // Unix
         {
             "type": "process",
             "label": "Unix - Debug build changed",
@@ -52,11 +53,6 @@
             "detail": "only build edited sources"
         },
 
-
-
-
-
-
         {
             "type": "process",
             "label": "Unix - Release build changed",
@@ -82,7 +78,6 @@
             "group": "build",
             "detail": "only build edited sources"
         },
-
         {
             "type": "process",
             "label": "Unix - Release build all",
@@ -109,6 +104,8 @@
             "detail": "only build edited sources"
         },
 
+
+    // Windows
         {
             "type": "process",
             "label": "Win - Debug build changed",
@@ -120,7 +117,7 @@
                 "${workspaceFolder}/out-debug",
                 "False",
                 "C:/msys64/mingw64/bin/g++.exe",
-                "-std=c++2a", "-g", "-lglfw", "-lGLEW", "-lGL", "-D DEBUG"
+                "-std=c++2a", "-g", "-lglfw3", "-lglew32", "-lopengl32", "-D DEBUG"
             ],
             "options": {
                 "cwd": "${workspaceFolder}"
@@ -145,7 +142,7 @@
                 "${workspaceFolder}/out-debug",
                 "True",
                 "C:/msys64/mingw64/bin/g++.exe",
-                "-std=c++2a", "-g", "-lglfw", "-lGLEW", "-lGL", "-D DEBUG"
+                "-std=c++2a", "-g", "-lglfw3", "-lglew32", "-lopengl32", "-D DEBUG"
             ],
             "options": {
                 "cwd": "${workspaceFolder}"
@@ -159,11 +156,6 @@
             "group": "build",
             "detail": "only build edited sources"
         },
-
-
-
-
-
 
         {
             "type": "process",
@@ -176,7 +168,7 @@
                 "${workspaceFolder}/out-release",
                 "False",
                 "C:/msys64/mingw64/bin/g++.exe",
-                "-std=c++2a", "-g", "-lglfw", "-lGLEW", "-lGL", "-D RELEASE", "-O3"
+                "-std=c++2a", "-g", "-lglfw3", "-lglew32", "-lopengl32", "-D RELEASE", "-O3"
             ],
             "options": {
                 "cwd": "${workspaceFolder}"
@@ -190,7 +182,6 @@
             "group": "build",
             "detail": "only build edited sources"
         },
-
         {
             "type": "process",
             "label": "Win - Release build all",
@@ -202,7 +193,7 @@
                 "${workspaceFolder}/out-release",
                 "True",
                 "C:/msys64/mingw64/bin/g++.exe",
-                "-std=c++2a", "-g", "-lglfw", "-lGLEW", "-lGL", "-D RELEASE", "-O3"
+                "-std=c++2a", "-g", "-lglfw3", "-lglew32", "-lopengl32", "-D RELEASE", "-O3"
             ],
             "options": {
                 "cwd": "${workspaceFolder}"

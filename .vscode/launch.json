@@ -66,7 +66,7 @@
             "name": "Debug Win - Build changed and Debug OpenGL",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/out-debug",
+            "program": "${workspaceFolder}/out-debug.exe",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
@@ -81,7 +81,7 @@
                 }
             ],
             "preLaunchTask": "Win - Debug build changed",
-            "miDebuggerPath": "/usr/bin/gdb"
+            "miDebuggerPath": "C:/msys64/mingw64/bin/gdb.exe"
         },
 
         {
