@@ -10,7 +10,7 @@
                 "${workspaceFolder}/.vscode/custom_build/build.py",
                 "${workspaceFolder}/src",
                 "${workspaceFolder}/.vscode/custom_build/debug",
-                "${workspaceFolder}/out-debug",
+                "${workspaceFolder}/unix-debug",
                 "False",
                 "/usr/bin/g++",
                 "-std=c++2a", "-g", "-lglfw", "-lGLEW", "-lGL", "-lX11", "-D M4W_DEBUG"
@@ -35,7 +35,7 @@
                 "${workspaceFolder}/.vscode/custom_build/build.py",
                 "${workspaceFolder}/src",
                 "${workspaceFolder}/.vscode/custom_build/debug",
-                "${workspaceFolder}/out-debug",
+                "${workspaceFolder}/unix-debug",
                 "True",
                 "/usr/bin/g++",
                 "-std=c++2a", "-g", "-lglfw", "-lGLEW", "-lGL", "-lX11", "-D M4W_DEBUG"
@@ -61,7 +61,7 @@
                 "${workspaceFolder}/.vscode/custom_build/build.py",
                 "${workspaceFolder}/src",
                 "${workspaceFolder}/.vscode/custom_build/release",
-                "${workspaceFolder}/out-release",
+                "${workspaceFolder}/unix-release",
                 "False",
                 "/usr/bin/g++",
                 "-std=c++2a", "-g", "-lglfw", "-lGLEW", "-lGL", "-lX11", "-D M4W_RELEASE", "-O3"
@@ -86,7 +86,7 @@
                 "${workspaceFolder}/.vscode/custom_build/build.py",
                 "${workspaceFolder}/src",
                 "${workspaceFolder}/.vscode/custom_build/release",
-                "${workspaceFolder}/out-release",
+                "${workspaceFolder}/unix-release",
                 "True",
                 "/usr/bin/g++",
                 "-std=c++2a", "-g", "-lglfw", "-lGLEW", "-lGL", "-lX11", "-D M4W_RELEASE", "-O3"
@@ -114,7 +114,7 @@
                 "${workspaceFolder}/.vscode/custom_build/build.py",
                 "${workspaceFolder}/src",
                 "${workspaceFolder}/.vscode/custom_build/debug",
-                "${workspaceFolder}/out-debug",
+                "${workspaceFolder}/win-debug.exe",
                 "False",
                 "C:/msys64/mingw64/bin/g++.exe",
                 "-std=c++2a", "-g", "-lglfw3", "-lglew32", "-lopengl32", "-D DEBUG"
@@ -139,7 +139,7 @@
                 "${workspaceFolder}/.vscode/custom_build/build.py",
                 "${workspaceFolder}/src",
                 "${workspaceFolder}/.vscode/custom_build/debug",
-                "${workspaceFolder}/out-debug",
+                "${workspaceFolder}/win-debug.exe",
                 "True",
                 "C:/msys64/mingw64/bin/g++.exe",
                 "-std=c++2a", "-g", "-lglfw3", "-lglew32", "-lopengl32", "-D DEBUG"
@@ -165,7 +165,7 @@
                 "${workspaceFolder}/.vscode/custom_build/build.py",
                 "${workspaceFolder}/src",
                 "${workspaceFolder}/.vscode/custom_build/release",
-                "${workspaceFolder}/out-release",
+                "${workspaceFolder}/win-release.exe",
                 "False",
                 "C:/msys64/mingw64/bin/g++.exe",
                 "-std=c++2a", "-g", "-lglfw3", "-lglew32", "-lopengl32", "-D RELEASE", "-O3"
@@ -190,7 +190,7 @@
                 "${workspaceFolder}/.vscode/custom_build/build.py",
                 "${workspaceFolder}/src",
                 "${workspaceFolder}/.vscode/custom_build/release",
-                "${workspaceFolder}/out-release",
+                "${workspaceFolder}/win-release.exe",
                 "True",
                 "C:/msys64/mingw64/bin/g++.exe",
                 "-std=c++2a", "-g", "-lglfw3", "-lglew32", "-lopengl32", "-D RELEASE", "-O3"

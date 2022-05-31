@@ -39,7 +39,6 @@ namespace m4w {
             ProjectionUnion() { Size = { 1, 1 }; }
         } m_ProjectionVars;
 
-        glm::mat4 m_View;
         glm::vec3 m_Position, m_Offset;
         Angle m_Yaw, m_Pitch;
 
@@ -67,9 +66,9 @@ namespace m4w {
         void Move(const glm::vec3& vector);
         void Teleport(const glm::vec3& position);
 
-        const glm::vec3& GetPosition() { return m_Position; }
-        glm::vec2 GetRotation() { return { m_Yaw.GetRadians(), m_Pitch.GetRadians() }; }
-
+        const glm::mat4& GetMatrix () const { return m_VP; };
+        const glm::vec3& GetPosition() const { return m_Position; }
+        glm::vec2 GetRotation() const { return { m_Yaw.GetRadians(), m_Pitch.GetRadians() }; }
 
         void SetFrameBuffer (Pointer<FrameBuffer> frameBuffer);
         void SetShader (Pointer<Shader> shader);

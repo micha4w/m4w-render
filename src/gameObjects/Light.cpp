@@ -1,7 +1,5 @@
 #include "Light.h"
 
-
-
 m4w::Light::Light (m4w::Pointer<class Camera> camera,  LightSource&& lightSource)
     : m_Camera(camera), m_LightSource(lightSource)
 { }

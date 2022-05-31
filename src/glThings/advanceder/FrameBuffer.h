@@ -6,7 +6,6 @@
 #include "Pointer.h"
 
 #include "Texture.h"
-#include "DepthBuffer.h"
 
 namespace m4w {
 
@@ -21,7 +20,7 @@ namespace m4w {
         float m_ClearColor[4];
 
         m4w::Pointer<Texture> m_Texture;
-        m4w::Pointer<DepthBuffer> m_DepthBuffer;
+        m4w::Pointer<Texture> m_DepthBuffer;
 
         FrameBuffer(unsigned int width, unsigned int height, unsigned int id);
 
@@ -34,7 +33,7 @@ namespace m4w {
         bool HasTexture() const { return m_Texture; };
         bool HasDepthBuffer() const { return m_DepthBuffer; };
         m4w::Pointer<Texture> GetTexture() { return m_Texture; }
-        m4w::Pointer<DepthBuffer> GetDepthBuffer() { return m_DepthBuffer; }
+        m4w::Pointer<Texture> GetDepthBuffer() { return m_DepthBuffer; }
 
         void Bind();
         void Unbind();

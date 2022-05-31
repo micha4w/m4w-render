@@ -60,24 +60,20 @@ m4w::Mesh::Mesh (const char* gltfPath)
     m_VAO->SetVertexBuffer( CreateVertexBuffer(vbl.Size(), effectiveAccessors, buffers, bufferViews, vertexCount) );
 }
 
-void m4w::Mesh::AddTexture (unsigned int position, m4w::Pointer<Texture> texture) {
-    if ( position == 0 ) std::cout << "[WARNING] Overriding Texture Slot 0!\n";
-    m_Textures.emplace(position, texture);
+void m4w::Mesh::SetVertexArray(m4w::Pointer<class VertexArray> vao) {
+    m_VAO = vao;
 }
 
+void m4w::Mesh::SetTexture (m4w::Pointer<Texture> texture) {
+    m_Texture = texture;
+}
 
 void m4w::Mesh::Render (Camera& camera) {
     Shader& shader = *camera.GetShader();
     m_VAO->Bind();
 
-    for ( auto& [slot, texture] : m_Textures ) {
-        if ( !texture ) {
-            m_Textures.erase(slot);
-            continue;
-        }
-
-        texture->Use(shader, slot);
-    }
+    if ( m_Texture )
+        m_Texture->Use(shader, 1);
 
     glm::mat4 mvp = camera.m_VP * m_ModelMatrix;
     shader.SetUniformMat4("u_MVP", mvp);
@@ -88,8 +84,6 @@ void m4w::Mesh::Render (Camera& camera) {
     else
         glDrawArrays(m_VAO->m_IB->m_DrawMode, 0, m_VAO->m_IB->m_IndexCount);
 //    std::cout << "Rendering " << m_VAO->m_IB->GetIndexCount() << " indices of Type " << m_VAO->m_IB->m_DataType << "\n";
-
-//    m_Context.m_Window->Display();
-
-    g_Context.m_BlankTexture->Use(shader, 0);
+    if ( m_Texture )
+        m_Texture->Unbind();
 }

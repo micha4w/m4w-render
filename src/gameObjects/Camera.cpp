@@ -81,19 +81,18 @@ void m4w::Camera::SetShader (m4w::Pointer<Shader> shader) {
 }
 
 m4w::Pointer<m4w::FrameBuffer> m4w::Camera::GetFrameBuffer () { return m_FrameBuffer; }
-m4w::Pointer<m4w::Shader     > m4w::Camera::GetShader      () { return m_Shader;      }
+m4w::Pointer<m4w::Shader> m4w::Camera::GetShader () { return m_Shader; }
 
 void m4w::Camera::Use () {
     m_Shader->Bind();
     m_FrameBuffer->Bind();
 
     if ( m_Recalculate ) {
-        m_View = glm::lookAt(m_Position, m_Position + m_Offset, m_WorldUp);
         CalculateProjection();
-        m_VP = m_Projection * m_View;
+        m_VP = m_Projection * glm::lookAt(m_Position, m_Position + m_Offset, m_WorldUp);
 
         m_Recalculate = false;
-    }    
+    }
 }
 
 void m4w::Camera::CalculateProjection () {
@@ -112,7 +111,7 @@ void m4w::Camera::CalculatePerspective () {
 }
 
 void m4w::Camera::CalculateOrthographic () {
-    float width_d2 = m_ProjectionVars.Size.W / 2.f;
-    float height_d2 = m_ProjectionVars.Size.H / 2.f;
-    m_Projection = glm::ortho(-width_d2, width_d2, -height_d2, height_d2, m_NearPlane, m_FarPlane);
+    float w_d2 = m_ProjectionVars.Size.W / 2.f;
+    float h_d2 = m_ProjectionVars.Size.H / 2.f;
+    m_Projection = glm::ortho(-w_d2, w_d2, -h_d2, h_d2, m_NearPlane, m_FarPlane);
 }

@@ -7,7 +7,6 @@ layout( location = 3 ) in vec2 a_TexCoord;
 
 uniform mat4 u_Model;
 uniform mat4 u_MVP;
-uniform mat4 u_LightMVP;
 
 out vec4 v_Color;
 out vec2 v_TexCoord;

@@ -20,23 +20,18 @@ namespace m4w {
         friend class GameObject;
 
         glm::mat4 m_ModelMatrix;
-
         m4w::Pointer<VertexArray> m_VAO;
 
-        std::unordered_map<unsigned int, m4w::Pointer<Texture>> m_Textures;
+        Pointer<Texture> m_Texture;
     public:
         std::string Name;
 
         Mesh ();
         Mesh (const char* gltfPath);
 
-        void SetVertexArray(m4w::Pointer<class VertexArray> vao) {
-            m_VAO = vao;
-        }
-
-        void AddTexture(unsigned int position, m4w::Pointer<Texture> texture);
-
-        void Render(Camera& camera);
+        void SetVertexArray (m4w::Pointer<class VertexArray> vao);
+        void SetTexture (m4w::Pointer<Texture> texture);
+        
+        void Render (Camera& camera);
     };
-
 }

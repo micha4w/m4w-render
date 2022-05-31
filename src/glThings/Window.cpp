@@ -124,7 +124,7 @@ m4w::Window::Window (unsigned int width, unsigned int height, const char* name)
             return;
     }
     glfwMakeContextCurrent(m_Instance);
-    //glfwSwapInterval(0);
+//    glfwSwapInterval(0);
 
 #ifdef M4W_DESKTOP
     //X11 Stuff only on linux!
@@ -152,13 +152,13 @@ m4w::Window::Window (unsigned int width, unsigned int height, const char* name)
         return;
     }
     glEnable(GL_DEPTH_TEST);
-    // glEnable(GL_CULL_FACE);
+    glEnable(GL_CULL_FACE);
     // glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
 
 
     m_FrameBuffer = new FrameBuffer(width, height, 0);
 
-    g_Context.m_BlankTexture = new Texture(0, 0);
+    g_Context.m_BlankTexture = new Texture(0, 0, RGBA);
     g_Context.m_BlankTexture->Bind(0);
     
     m_GrabMouse = true;
@@ -201,7 +201,7 @@ bool m4w::Window::WasKeyPressed (int key) {
 }
 
 bool m4w::Window::WasKeyReleased (int key) {
-    return m_KeysPressed[key] && !m_LastKeysPressed[key];
+    return !m_KeysPressed[key] && m_LastKeysPressed[key];
 }
 
 m4w::Pointer<m4w::FrameBuffer> m4w::Window::GetFrameBuffer () {

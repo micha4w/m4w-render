@@ -22,13 +22,13 @@ m4w::FrameBuffer::~FrameBuffer () {
 
 void m4w::FrameBuffer::AddTexture () {
     this->Bind();
-    m_Texture = new Texture(m_Width, m_Height);
+    m_Texture = new Texture(m_Width, m_Height, RGBA);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_Texture->m_ID, 0);  
 }
 
 void m4w::FrameBuffer::AddDepthBuffer () {
     this->Bind();
-    m_DepthBuffer = new DepthBuffer(m_Width, m_Height);
+    m_DepthBuffer = new Texture(m_Width, m_Height, DEPTH);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, m_DepthBuffer->m_ID, 0);
 }
 

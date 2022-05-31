@@ -32,7 +32,7 @@ namespace m4w {
         Light* m_Light;
 
         int m_LightID, m_MeshID, m_CameraID;
-        // Light, Mesh, (collisionMesh), Camera
+        // Light, Mesh, (collisionMesh,) Camera
 
         std::vector<m4w::Pointer<Component>> m_Components;
     public:
@@ -64,7 +64,7 @@ namespace m4w {
 
 
         template <typename... Args>
-        Mesh& CreateMesh(Args&&... args){
+        Mesh& CreateMesh (Args&&... args) {
             if ( this->HasMesh() ) {
                 g_Context.m_Meshes.Remove(m_MeshID);
             }
@@ -76,7 +76,7 @@ namespace m4w {
         }
         
         template <typename... Args>
-        Light& CreateLight(Args&&... args){
+        Light& CreateLight (Args&&... args) {
             if ( this->HasLight() ) {
                 g_Context.m_Lights.Remove(m_LightID);
             }
@@ -88,7 +88,7 @@ namespace m4w {
         }
 
         template <typename... Args>
-        Camera& CreateCamera(Args&&... args){
+        Camera& CreateCamera (Args&&... args) {
             if ( this->HasCamera() ) {
                 g_Context.m_Cameras.Remove(m_CameraID);
             }
@@ -110,5 +110,4 @@ namespace m4w {
         bool HasLight();
         bool HasCamera();
     };
-
 }

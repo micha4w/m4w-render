@@ -12,21 +12,11 @@ m4w::Context::Context () {
     DefaultVertexLayout.AddElement(3, 2, GL_FLOAT); // TexCoord
 }
 
-
 void m4w::Context::Update (float seconds) {
     for ( auto [id, object] : m_Objects ) {
         object->Update(seconds);
     }
 }
-
-
-//void m4w::Context::Draw (FrameBuffer& frameBuffer) {
-//    frameBuffer.Bind();
-//
-//    for ( auto& [id, mesh] : m_Meshes ) {
-//        mesh.Render(Shader("PosColor"));
-//    }
-//}
 
 void m4w::Context::Draw (Camera& camera) {
     camera.Use();

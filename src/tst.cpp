@@ -30,11 +30,12 @@ int main() {
     m4w::Pointer<m4w::Window> window = new m4w::Window(800, 600, "Geem");
     m4w::g_Context.m_Window = window;
 
-    window->GetFrameBuffer()->SetClearColor(0, 0.043, 0.804);
+    window->GetFrameBuffer()->SetClearColor(37.f/256, 37.f/256, 38.f/256);
 //    window->GetFrameBuffer()->SetClearColor(0, 0, 0, 0);
     window->GetFrameBuffer()->Clear();
     window->Display();
     m4w::Pointer<m4w::Shader> shader = new m4w::Shader("PosColor");
+    m4w::Pointer<m4w::Shader> shaderCopy = new m4w::Shader("PosColor");
     m4w::Pointer<m4w::Shader> lightShader = new m4w::Shader("Depth");
 
     m4w::GameObject head;
@@ -55,10 +56,10 @@ int main() {
     lightCamera.SetRotation(m4w::Angle::Degrees(180.f), m4w::Angle());
     lightCamera.CreateCamera(
         window->GetWidth(), window->GetHeight(),
-        0.001f, 10000.f,
+        0.1f, 10.f,
         lightShader
     );
-    lightCamera.GetCamera()->SetOrthographicProjection(5, 5);
+    lightCamera.GetCamera()->SetOrthographicProjection(100, 100);
     //lightCamera.GetCamera()->GetFrameBuffer()->AddTexture();
     lightCamera.GetCamera()->GetFrameBuffer()->AddDepthBuffer();
     
@@ -70,13 +71,17 @@ int main() {
     m4w::Mesh& screen_mesh = screen.CreateMesh();
     screen_mesh.Name = "SCREEN";
     screen_mesh.SetVertexArray( m4w::VertexArray::Cube(-1.f, -1.f, 4.f, 1.f, 1.f, 5.f, 0.f, 0.f, 0.f, 0.f) );
-    screen_mesh.AddTexture(1, lightCamera.GetCamera()->GetFrameBuffer()->GetDepthBuffer());
+    screen_mesh.SetTexture(lightCamera.GetCamera()->GetFrameBuffer()->GetDepthBuffer());
+    // m4w::Pointer<m4w::Texture> test = new m4w::Texture("res/textures/world.png");
+    // screen_mesh.SetTexture(test);
 
 
     m4w::GameObject floor;
     m4w::Mesh& floor_mesh = floor.CreateMesh();
     floor_mesh.Name = "FLOOR";
     floor_mesh.SetVertexArray( m4w::VertexArray::Cube(-10.f, -10.f, -10.f, 10.f, -9.f, 10.f, 0.2f, 0.8f, 0.1f, 1.f) );
+    floor.Rotate(m4w::Angle(), m4w::Angle::Degrees(45));
+    floor.Move({0, 25, 0});
 
 
     m4w::GameObject sphere({ 8.f, 0.f, 0.f });
@@ -91,8 +96,9 @@ int main() {
 
     std::cout << "Looping..\n";
 
+
     //LOOOOOP
-    m4w::Timer timer(60.f);
+    m4w::Timer timer(60.f, false);
     while ( !window->ShouldClose() ) {
 
     // Update
@@ -100,8 +106,9 @@ int main() {
 
         m4w::g_Context.Update(timer.GetDeltaS());
 
-        //if ( window->GetKeyPressed(GLFW_KEY_C) ) std::cout << glm::to_string(lightCamera.GetPosition()) << " " << lightCamera.GetRotation().first.GetDegrees() << ", " << lightCamera.GetRotation().second.GetDegrees() << "\n";
-        if ( window->IsKeyPressed(GLFW_KEY_V) )
+        if ( window->WasKeyPressed(GLFW_KEY_C) )
+            std::cout << glm::to_string(lightCamera.GetPosition()) << " " << lightCamera.GetRotation().first.GetDegrees() << ", " << lightCamera.GetRotation().second.GetDegrees() << "\n";
+        if ( window->WasKeyPressed(GLFW_KEY_V) )
             std::cout << glm::to_string(player.GetPosition()) << " " << player.GetRotation().first.GetDegrees() << ", " << player.GetRotation().second.GetDegrees() << "\n";
         if ( window->WasKeyPressed(GLFW_KEY_F) ) {
             std::cout << "Reloading Sahder\n";
@@ -113,8 +120,13 @@ int main() {
             window->SetMouseGrabbed( !window->IsMouseGrabbed() );
         if ( window->WasKeyPressed(GLFW_KEY_LEFT_ALT) )
             player.GetCamera()->SetPerspectiveProjection(m4w::Angle::Degrees(30.f));
-        if ( window->WasKeyReleased(GLFW_KEY_LEFT_ALT) )
+        else if ( window->WasKeyReleased(GLFW_KEY_LEFT_ALT) )
             player.GetCamera()->SetPerspectiveProjection(m4w::Angle::Degrees(70.f));
+
+        if ( window->WasKeyPressed(GLFW_KEY_Q) )
+            glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+        else if ( window->WasKeyReleased(GLFW_KEY_Q) )
+            glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
 
         if ( window->IsMouseGrabbed() )
             window->SetMousePosition(window->GetWidth()/2, window->GetHeight()/2);
@@ -122,12 +134,14 @@ int main() {
     // Render
         //Context::Draw(*player.GetCamera());
         shader->SetUniformLights(lights);
+        lightCamera.GetCamera()->GetFrameBuffer()->GetDepthBuffer()->Use(*shader, 2, "u_Light");
+        shader->SetUniformMat4("u_LightVP", lightCamera.GetCamera()->GetMatrix());
 
         m4w::g_Context.ClearCameras();
-        m4w::g_Context.DrawCameras();
+        m4w::g_Context.DrawCamera();
 
         window->Display();
-        timer.Wait();
+        timer.Update();
     }
 
     std::cout << "Stopping..\n";
