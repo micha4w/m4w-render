@@ -138,7 +138,7 @@ int main() {
         shader->SetUniformMat4("u_LightVP", lightCamera.GetCamera()->GetMatrix());
 
         m4w::g_Context.ClearCameras();
-        m4w::g_Context.DrawCamera();
+        m4w::g_Context.DrawCameras();
 
         window->Display();
         timer.Update();
