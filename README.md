@@ -20,7 +20,7 @@ Where the arguments are:
 Source Folder: src
 Temp Folder: .vscode/custom_build/debug \
 Output File: unix-debug \
-Change only: True \
+Build all: True \
 Compiler Path: /usr/bin/g++ \
 Compiler args: -std=c++2a -g -lglfw -lGLEW -lGL -D M4W_DEBUG
 ```
