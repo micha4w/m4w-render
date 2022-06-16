@@ -13,14 +13,15 @@ namespace m4w {
     private:
         friend class Window;
         friend class Camera;
+        friend class Shader;
 
         unsigned int m_ID;
 
         unsigned int m_Width, m_Height;
         float m_ClearColor[4];
 
-        m4w::Pointer<Texture> m_Texture;
-        m4w::Pointer<Texture> m_DepthBuffer;
+        Pointer<Texture> m_Texture;
+        Pointer<Texture> m_DepthBuffer;
 
         FrameBuffer(unsigned int width, unsigned int height, unsigned int id);
 
@@ -30,10 +31,10 @@ namespace m4w {
 
         void AddTexture();
         void AddDepthBuffer();
-        bool HasTexture() const { return m_Texture; };
-        bool HasDepthBuffer() const { return m_DepthBuffer; };
-        m4w::Pointer<Texture> GetTexture() { return m_Texture; }
-        m4w::Pointer<Texture> GetDepthBuffer() { return m_DepthBuffer; }
+        bool HasTexture() const { return m_Texture; }
+        bool HasDepthBuffer() const { return m_DepthBuffer; }
+        Pointer<Texture> GetTexture() { return m_Texture; }
+        Pointer<Texture> GetDepthBuffer() { return m_DepthBuffer; }
 
         void Bind();
         void Unbind();

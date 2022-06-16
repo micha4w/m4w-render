@@ -12,14 +12,40 @@ m4w::Context::Context () {
     DefaultVertexLayout.AddElement(3, 2, GL_FLOAT); // TexCoord
 }
 
+m4w::Context::~Context() { }
+
 void m4w::Context::Update (float seconds) {
     for ( auto [id, object] : m_Objects ) {
         object->Update(seconds);
     }
 }
 
-void m4w::Context::Draw (Camera& camera) {
+void m4w::Context::DrawLight (Light& light) {
+    light.GetCamera().Use();
+    
+    int d = g_Context.m_LightHandler->GetDimensions();
+
+    for ( auto& [id, mesh] : m_Meshes ) {
+        mesh.Render(light.GetCamera());
+    }
+}
+
+void m4w::Context::ClearLights () {
+    m_LightHandler->GetFrameBuffer()->Clear();
+}
+
+void m4w::Context::RedrawLights () {
+    ClearLights();
+
+    for ( auto& [id, light] : m_Lights ) {
+        DrawLight(light);
+    }
+}
+
+void m4w::Context::DrawCamera (Camera& camera) {
     camera.Use();
+
+    camera.GetShader()->SetUniformLights();
 
     for ( auto& [id, mesh] : m_Meshes ) {        
         mesh.Render(camera);
@@ -32,9 +58,11 @@ void m4w::Context::ClearCameras () {
     }
 }
 
-void m4w::Context::DrawCameras () {
+void m4w::Context::RedrawCameras () {
+    ClearCameras();
+
     for ( auto& [id, camera] : m_Cameras ) {
-        Draw(camera);
+        DrawCamera(camera);
     }
 }
 
@@ -81,4 +109,6 @@ void m4w::Context::CheckGLError (const char* info) {
     }
     std::cerr << "\n";
 }
+
+    
 

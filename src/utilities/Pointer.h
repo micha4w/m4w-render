@@ -53,6 +53,10 @@ namespace m4w {
             *m_Owners += 1;
         }
 
+        static Pointer<T> Soft(T* pointer) {
+            return Pointer(pointer, new unsigned int(2));
+        }
+
         void Defuse() {
             m_Pointer = nullptr;
         }
@@ -92,10 +96,13 @@ namespace m4w {
         }
 
         template <typename... Args>
-        void Create(Args&&... args) {
-            if ( m_Pointer ) delete m_Pointer;
-
-            new (m_Pointer) T(std::forward<Args>(args)...);
+        Pointer<T>& Create(Args&&... args) {
+            if ( m_Pointer )
+                new (m_Pointer) T(std::forward<Args>(args)...);
+            else
+                m_Pointer = new T(std::forward<Args>(args)...);
+            
+            return *this;
         }
 
         // Different casts, yay

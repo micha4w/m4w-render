@@ -8,6 +8,7 @@
 #include "FrameBuffer.h"
 
 #include "Pointer.h"
+#include "Keys.h"
 
 #define m4w_KEY_COUNT 350
 
@@ -19,8 +20,8 @@ namespace m4w {
         GLFWwindow* m_Instance;
         m4w::Pointer<FrameBuffer> m_FrameBuffer;
         bool m_GrabMouse;
-        bool m_LastKeysPressed[m4w_KEY_COUNT];
-        bool m_KeysPressed[m4w_KEY_COUNT];
+        KeyState m_LastKeysPressed[m4w_KEY_COUNT];
+        KeyState m_KeysPressed[m4w_KEY_COUNT];
 
         static void KeyCallback (GLFWwindow* glWindow, int key, int scancode, int action, int mods);
 
@@ -37,9 +38,9 @@ namespace m4w {
         std::tuple<float, float> GetMousePosition ();
         void SetMousePosition (float x, float y);
 
-        bool IsKeyPressed (int key);
-        bool WasKeyPressed (int key);
-        bool WasKeyReleased (int key);
+        KeyState GetKeyState (m4w::Key key);
+        bool WasKeyPressed (m4w::Key key);
+        bool WasKeyReleased (m4w::Key key);
 
         m4w::Pointer<FrameBuffer> GetFrameBuffer ();
         unsigned int GetWidth ();

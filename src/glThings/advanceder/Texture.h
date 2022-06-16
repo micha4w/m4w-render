@@ -16,6 +16,7 @@ namespace m4w {
     class Texture {
     private:
         friend class FrameBuffer;
+        friend class Shader;
 
         unsigned int m_ID;
 

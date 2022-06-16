@@ -6,34 +6,45 @@
 #include "Shader.h"
 #include "FrameBuffer.h"
 
-m4w::Camera::Camera (unsigned int width, unsigned int height, float near, float far, m4w::Pointer<Shader> shader)
+m4w::Camera::Camera (float near, float far, Pointer<FrameBuffer> frameBuffer, m4w::Pointer<Shader> shader)
     : m_Shader(shader), m_NearPlane(near), m_FarPlane(far),
-      m_FrameBuffer(new FrameBuffer(width, height)), m_ProjectionType(Orthographic),
-      m_Position({0.f}), m_Yaw(m4w::Angle()), m_Pitch(m4w::Angle()), m_Recalculate(true)
+      m_FrameBuffer(frameBuffer), m_ProjectionType(Orthographic),
+      m_Position({0.f}), m_Yaw(m4w::Angle()), m_Pitch(m4w::Angle()), m_Recalculate(true),
+      m_DrawRect{{0.f, 0.f}, {frameBuffer->m_Width, frameBuffer->m_Height}}
+{ }
+
+m4w::Camera::Camera (unsigned int width, unsigned int height, float near, float far, m4w::Pointer<Shader> shader)
+    : Camera(near, far, new FrameBuffer(width, height), shader)
 { }
 
 m4w::Camera::~Camera () { }
 
 void m4w::Camera::SetPerspectiveProjection (m4w::Angle fov) {
-    m_Recalculate = m_ProjectionType != Perspective || m_ProjectionVars.FOV != fov;
-    m_ProjectionType = Perspective;
-    m_ProjectionVars.FOV = fov;
-    
-    m_Recalculate = true;
+    if ( m_ProjectionType != Perspective || m_ProjectionVars.FOV != fov ) {
+        m_ProjectionType = Perspective;
+        m_ProjectionVars.FOV = fov;
+        
+        m_Recalculate = true;
+    }
 }
 
 
 void m4w::Camera::SetOrthographicProjection (float width, float height) {
-    m_Recalculate = m_ProjectionType != Orthographic;
-    m_ProjectionType = Orthographic;
-    m_ProjectionVars.Size = { width, height };
+    if ( m_ProjectionType != Orthographic || m_ProjectionVars.Width != width ||m_ProjectionVars.Height == height ) {
+        m_ProjectionType = Orthographic;
+        m_ProjectionVars.Width = width;
+        m_ProjectionVars.Height = height;
 
-    m_Recalculate = true;
+        m_Recalculate = true;
+    }
 }
 
-void m4w::Camera::SetView (const glm::vec3& position, const m4w::Angle& yaw, const m4w::Angle& pitch)
-{
+void m4w::Camera::SetView (const glm::vec3& position, const m4w::Angle& yaw, const m4w::Angle& pitch) {
     SetRotation(yaw, pitch);
+}
+
+void m4w::Camera::SetDrawRect (Rect drawRect) {
+    m_DrawRect = drawRect;
 }
 
 void m4w::Camera::Rotate (const m4w::Angle& dYaw, const m4w::Angle& dPitch) {
@@ -80,12 +91,18 @@ void m4w::Camera::SetShader (m4w::Pointer<Shader> shader) {
     m_Shader = shader;
 }
 
-m4w::Pointer<m4w::FrameBuffer> m4w::Camera::GetFrameBuffer () { return m_FrameBuffer; }
-m4w::Pointer<m4w::Shader> m4w::Camera::GetShader () { return m_Shader; }
+m4w::Pointer<m4w::FrameBuffer> m4w::Camera::GetFrameBuffer () {
+    return m_FrameBuffer; 
+}
+
+m4w::Pointer<m4w::Shader> m4w::Camera::GetShader () {
+    return m_Shader;
+}
 
 void m4w::Camera::Use () {
     m_Shader->Bind();
     m_FrameBuffer->Bind();
+    glViewport(m_DrawRect.corner.x, m_DrawRect.corner.y, m_DrawRect.size.x, m_DrawRect.size.y);
 
     if ( m_Recalculate ) {
         CalculateProjection();
@@ -111,7 +128,7 @@ void m4w::Camera::CalculatePerspective () {
 }
 
 void m4w::Camera::CalculateOrthographic () {
-    float w_d2 = m_ProjectionVars.Size.W / 2.f;
-    float h_d2 = m_ProjectionVars.Size.H / 2.f;
+    float w_d2 = m_ProjectionVars.Width / 2.f;
+    float h_d2 = m_ProjectionVars.Height / 2.f;
     m_Projection = glm::ortho(-w_d2, w_d2, -h_d2, h_d2, m_NearPlane, m_FarPlane);
 }

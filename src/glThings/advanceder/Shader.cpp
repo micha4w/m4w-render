@@ -4,6 +4,7 @@
 
 #include "Light.h"
 #include "HeapArray.h"
+#include "Context.h"
 
 m4w::Shader::Shader (std::string vertexPath, std::string fragmentPath) 
     : m_FragmentFile(fragmentPath), m_VertexFile(vertexPath)
@@ -92,16 +93,43 @@ void m4w::Shader::SetUniformMat4 (const char* name, glm::mat4 matrix) {
     glUniformMatrix4fv(GetUniformLocation(name), 1, false, &matrix[0][0]);
 }
 
-void m4w::Shader::SetUniformLights (m4w::HeapArray<LightSource>& lights) {
+void m4w::Shader::SetUniformLights () {
 
-    this->SetUniform1i("u_LightCount", lights.GetSize());
+    this->SetUniform1i("u_LightCount", g_Context.m_Lights.GetSize());
+    int d = g_Context.m_LightHandler->GetDimensions();
+    this->SetUniform1f("u_LightFactor", 1.f / d);
+    this->SetUniform2f("u_LightSize", g_Context.m_LightHandler->GetFrameBuffer()->GetWidth() / d, g_Context.m_LightHandler->GetFrameBuffer()->GetHeight() / d);
+    g_Context.m_LightHandler->GetFrameBuffer()->GetDepthBuffer()->Use(*this, 1, "u_LightTexture");
 
-    for ( int i = 0 ; i < lights.GetSize() ; i++ ) {
-        LightSource& light = lights[i];
+    unsigned int i = 0;
+    for ( auto& [id, light] : g_Context.m_Lights ) {
 
-        this->SetUniform3f((std::string("u_Lights[") + std::to_string(i) + "].Pos").c_str(), light.Pos[0], light.Pos[1], light.Pos[2]);
-        this->SetUniform1f((std::string("u_Lights[") + std::to_string(i) + "].Strength").c_str(), light.Strength);
-        this->SetUniform3f((std::string("u_Lights[") + std::to_string(i) + "].Hue").c_str(), light.Hue[0], light.Hue[1], light.Hue[2]);
+
+        glm::vec3 posOrDir = light.m_Camera->GetProjectionType() == Perspective ? light.m_Camera->GetPosition() : light.m_Camera->GetOffset();
+        this->SetUniform3f((std::string("u_Lights[") + std::to_string(i) + "].PosOrDir").c_str(), posOrDir.x, posOrDir.y, posOrDir.z);
+        this->SetUniform1f((std::string("u_Lights[") + std::to_string(i) + "].Strength").c_str(), light.m_Strength);
+        this->SetUniform3f((std::string("u_Lights[") + std::to_string(i) + "].Hue").c_str(), light.m_Hue[0], light.m_Hue[1], light.m_Hue[2]);
+        
+        switch ( light.m_Camera->GetProjectionType() ) {
+        case Perspective:
+            this->SetUniform1f((std::string("u_Lights[") + std::to_string(i) + "].FOV").c_str(), light.m_Camera->GetFOV().GetRadians());
+            break;
+        
+        case Orthographic:
+            this->SetUniform1f((std::string("u_Lights[") + std::to_string(i) + "].FOV").c_str(), 0.f);
+            this->SetUniform2f((std::string("u_Lights[") + std::to_string(i) + "].Size").c_str(), light.m_Camera->GetWidth(), light.m_Camera->GetHeight());
+            break;
+
+        default:
+            this->SetUniform1f((std::string("u_Lights[") + std::to_string(i) + "].FOV").c_str(), -1.f);
+            break;
+        }
+        
+
+        this->SetUniformMat4((std::string("u_Lights[") + std::to_string(i) + "].VP").c_str(), light.m_Camera->GetMatrix());
+
+        this->SetUniform2f((std::string("u_Lights[") + std::to_string(i) + "].Offset").c_str(), light.GetTexturePos() / d / (float) d, light.GetTexturePos() % d / (float) d);
+
+        i++;
     }
 }
-

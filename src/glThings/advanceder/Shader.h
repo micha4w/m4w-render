@@ -49,7 +49,7 @@ namespace m4w {
             {
                 char infoLog[512];
                 glGetShaderInfoLog(shader, 512, NULL, infoLog);
-                std::cout << "[ERROR] Shader compilation failed: " << std::filesystem::current_path() << path << "\n" << code << "\n" << rawCode << "\n" << infoLog << std::endl;
+                std::cout << "[ERROR] Shader compilation failed: " << std::filesystem::current_path() << path << "\n" << infoLog << std::endl;
 
                 glDeleteShader(shader);
                 return;
@@ -113,7 +113,6 @@ namespace m4w {
         void SetUniform4f(const char* name, float f0, float f1, float f2, float f3);
 
         void SetUniformMat4(const char* name, glm::mat4 matrix);
-        void SetUniformLights(m4w::HeapArray<struct LightSource>& lights);
+        void SetUniformLights();
     };
-
 }

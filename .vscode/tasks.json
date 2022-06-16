@@ -117,7 +117,7 @@
                 "${workspaceFolder}/win-debug.exe",
                 "False",
                 "C:/msys64/mingw64/bin/g++.exe",
-                "-std=c++2a", "-g", "-lglfw3", "-lglew32", "-lopengl32", "-D DEBUG"
+                "-std=c++2a", "-g", "-lglfw3", "-lglew32", "-lopengl32", "-D M4W_DEBUG"
             ],
             "options": {
                 "cwd": "${workspaceFolder}"
@@ -142,7 +142,7 @@
                 "${workspaceFolder}/win-debug.exe",
                 "True",
                 "C:/msys64/mingw64/bin/g++.exe",
-                "-std=c++2a", "-g", "-lglfw3", "-lglew32", "-lopengl32", "-D DEBUG"
+                "-std=c++2a", "-g", "-lglfw3", "-lglew32", "-lopengl32", "-D M4W_DEBUG"
             ],
             "options": {
                 "cwd": "${workspaceFolder}"
@@ -168,7 +168,7 @@
                 "${workspaceFolder}/win-release.exe",
                 "False",
                 "C:/msys64/mingw64/bin/g++.exe",
-                "-std=c++2a", "-g", "-lglfw3", "-lglew32", "-lopengl32", "-D RELEASE", "-O3"
+                "-std=c++2a", "-g", "-lglfw3", "-lglew32", "-lopengl32", "-D M4W_RELEASE", "-O3"
             ],
             "options": {
                 "cwd": "${workspaceFolder}"
@@ -193,7 +193,7 @@
                 "${workspaceFolder}/win-release.exe",
                 "True",
                 "C:/msys64/mingw64/bin/g++.exe",
-                "-std=c++2a", "-g", "-lglfw3", "-lglew32", "-lopengl32", "-D RELEASE", "-O3"
+                "-std=c++2a", "-g", "-lglfw3", "-lglew32", "-lopengl32", "-D M4W_RELEASE", "-O3"
             ],
             "options": {
                 "cwd": "${workspaceFolder}"

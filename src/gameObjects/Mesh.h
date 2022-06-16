@@ -20,7 +20,9 @@ namespace m4w {
         friend class GameObject;
 
         glm::mat4 m_ModelMatrix;
-        m4w::Pointer<VertexArray> m_VAO;
+        glm::vec3 m_WorldPosition;
+
+        Pointer<VertexArray> m_VAO;
 
         Pointer<Texture> m_Texture;
     public:
@@ -29,8 +31,8 @@ namespace m4w {
         Mesh ();
         Mesh (const char* gltfPath);
 
-        void SetVertexArray (m4w::Pointer<class VertexArray> vao);
-        void SetTexture (m4w::Pointer<Texture> texture);
+        void SetVertexArray (Pointer<VertexArray> vao);
+        void SetTexture (Pointer<Texture> texture);
         
         void Render (Camera& camera);
     };

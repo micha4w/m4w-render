@@ -1,75 +1,103 @@
 #version 330 core
 
+#define PI_2 6.2831853076
+#define PI_7D4 5.49778714415
+#define PI_3D2 4.7123889807
+#define PI_5D4 3.92699081725
+#define PI 3.1415926538
+#define PI_3D4 2.35619449035
+#define PI_D2 1.5707963269
+#define PI_D4 0.78539816345
+
+
 struct LightSource {
-    vec3 Pos;
+    vec3 PosOrDir;
     float Strength;
     vec3 Hue;
+
+    float FOV; // As radians
+    vec2 Size;
+    mat4 VP;
+
+    vec2 Offset;
 };
 
+const int PERSPECTIVE = 0;
+const int ORTHOGRAPHIC = 1;
+const int NO_TEXTURE = 2;
+
+// Mesh stuff
 uniform sampler2D u_Texture;
-uniform int u_TextureID;
+uniform int u_Toggle;
+
+// Lighting stuff
 uniform int u_LightCount;
-uniform LightSource[100] u_Lights;
-uniform mat4 u_LightVP;
-uniform sampler2D u_Light;
+uniform LightSource[32] u_Lights;
+uniform sampler2D u_LightTexture;
+uniform vec2 u_LightSize;
+uniform float u_LightFactor;
 
 in vec4 v_Color;
 in vec2 v_TexCoord;
 in vec3 v_Normal;
 in vec4 v_WorldPos;
 
+out vec4 o_FragColor;
 
 const vec3 base_light = vec3( 0.2, 0.25, 0.3 );
 
-mat3 inverse (mat3 matrix);
+float clamp0to1 (float x) {
+    return x/1+x;
+}
+
 
 void main () {
-    vec4 base_color = v_Color + texture2D(u_Texture, v_TexCoord);
-    vec4 pos_from_light = u_LightVP * v_WorldPos;
-    float frag_distance = pos_from_light.z * 0.5 + 0.5;
-    float closest_distance = texture2D(u_Light, pos_from_light.xy * 0.5 + 0.5).r;
-    
-    vec3 lightDir = inverse(mat3(u_LightVP)) * vec3(0, 0, 1);
-    bool has_shadow = closest_distance > frag_distance - max(0.05 * (1.0 - dot(v_Normal, lightDir)), 0.005);
-
-    base_color = vec4(has_shadow, 0, 0, 1);
 
     vec3 ambient_darkness = vec3( 1.f );
+    
     for ( int i = 0 ; i < u_LightCount ; i++ ) {
-        vec3 vecToLight = u_Lights[i].Pos - v_WorldPos.xyz;
-        float intensity = ( dot( vecToLight, v_Normal ) / ( length(vecToLight) * length(v_Normal) ) );
+
+        vec4 uv_coord = u_Lights[i].VP * v_WorldPos * 0.5 + 0.5;
+        vec3 posToLight = mix( -u_Lights[i].PosOrDir, u_Lights[i].PosOrDir - v_WorldPos.xyz, vec3(u_Lights[i].FOV > 0) );
+        float angleToLight = acos(dot(v_Normal, posToLight));
+        float intensity;
+
+        if ( 0 < uv_coord.x && uv_coord.x < 1 && 0 < uv_coord.y && uv_coord.y < 1 && u_Lights[i].FOV >= 0 ) {
+            
+            float center = texture2D(u_LightTexture, (uv_coord.xy + vec2(0, 0)) * u_LightFactor + u_Lights[i].Offset).r;
+            float top =    texture2D(u_LightTexture, (uv_coord.xy + vec2(0,  1/u_LightSize.y)) * u_LightFactor + u_Lights[i].Offset).r;
+            float bottom = texture2D(u_LightTexture, (uv_coord.xy + vec2(0, -1/u_LightSize.y)) * u_LightFactor + u_Lights[i].Offset).r;
+            float left =   texture2D(u_LightTexture, (uv_coord.xy + vec2( 1/u_LightSize.x, 0)) * u_LightFactor + u_Lights[i].Offset).r;
+            float right =  texture2D(u_LightTexture, (uv_coord.xy + vec2(-1/u_LightSize.x, 0)) * u_LightFactor + u_Lights[i].Offset).r;
+
+            float closest_distance = min(center, min(top, min(bottom, min(left, right))));
+
+            intensity = 1-6*(uv_coord.z - closest_distance);
+        } else {
+            intensity = ( dot( posToLight, v_Normal ) / ( length(posToLight) * length(v_Normal) ) );
+        }
+
         ambient_darkness *= 1. - clamp((intensity  * 0.5 + 0.5) * u_Lights[i].Strength, 0., 1.) * u_Lights[i].Hue;
     }
 
-    gl_FragColor = vec4(base_color.rgb  * ( ( 1. - ambient_darkness ) * ( 1 - base_light ) + base_light ), base_color.a);
+    vec4 base_color = v_Color + texture2D(u_Texture, v_TexCoord);
+    o_FragColor = vec4(base_color.rgb  * ( ( 1. - ambient_darkness ) * ( 1 - base_light ) + base_light ), base_color.a);
 }
 
-float det(mat2 matrix) {
-    return matrix[0].x * matrix[1].y - matrix[0].y * matrix[1].x;
-}
 
-mat3 inverse (mat3 matrix) {
-    vec3 row0 = matrix[0];
-    vec3 row1 = matrix[1];
-    vec3 row2 = matrix[2];
 
-    vec3 minors0 = vec3(
-        det(mat2(row1.y, row1.z, row2.y, row2.z)),
-        det(mat2(row1.z, row1.x, row2.z, row2.x)),
-        det(mat2(row1.x, row1.y, row2.x, row2.y))
-    );
-    vec3 minors1 = vec3(
-        det(mat2(row2.y, row2.z, row0.y, row0.z)),
-        det(mat2(row2.z, row2.x, row0.z, row0.x)),
-        det(mat2(row2.x, row2.y, row0.x, row0.y))
-    );
-    vec3 minors2 = vec3(
-        det(mat2(row0.y, row0.z, row1.y, row1.z)),
-        det(mat2(row0.z, row0.x, row1.z, row1.x)),
-        det(mat2(row0.x, row0.y, row1.x, row1.y))
-    );
+        // // Finding pixelsize
+        // float pixelSize;
+        // if ( u_Lights[i].FOV > 0 ) {
+        //     // Pers
+        //     pixelSize = tan(angleToLight / 2.) * uv_coord.z * 2. / min(u_LightSize.x, u_LightSize.y);
 
-    mat3 adj = transpose(mat3(minors0, minors1, minors2));
+        // } else {
+        //     // Ortho
+        //     float pixelSizeX = u_Lights[i].Size.x / u_LightSize.x;
+        //     float pixelSizeY = u_Lights[i].Size.y / u_LightSize.y;
 
-    return (1.0 / dot(row0, minors0)) * adj;
-}
+        //     pixelSize = max(pixelSizeX, pixelSizeY);
+        // }
+
+        // float shadowPlay = tan(angleToLight) * pixelSize / 2;

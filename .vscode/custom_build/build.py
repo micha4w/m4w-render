@@ -3,11 +3,7 @@ import sys
 import subprocess
 from typing import List, Dict
 
-class CppFile:
-    def __changed__(self) -> bool:
-        return False
-
-class Header(CppFile):
+class Header:
     def __init__(self, location : str, file_name : str) -> None:
         self.path = location + "/" + file_name
         self.location : str = location
@@ -45,7 +41,7 @@ class Header(CppFile):
         return False
                     
 
-class Source(CppFile):
+class Source:
     def __init__(self, location : str, file_name : str) -> None:
         self.path = location + "/" + file_name
         self.location : str = location

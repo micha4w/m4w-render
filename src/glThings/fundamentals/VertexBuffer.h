@@ -11,7 +11,6 @@ namespace m4w {
         unsigned int m_ID;
 
         unsigned int m_Size;
-        //void* m_Data;
 
         void Bind ();
         static void Unbind ();

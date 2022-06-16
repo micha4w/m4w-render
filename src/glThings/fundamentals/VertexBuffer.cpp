@@ -4,9 +4,8 @@
 #include "VertexArray.h"
 
 m4w::VertexBuffer::VertexBuffer (unsigned int size, void* data)
-    : m_Size(size)//, m_Data(data)
+    : m_Size(size)
 {
-
     glGenBuffers(1, &m_ID);
     this->Bind();
     glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);

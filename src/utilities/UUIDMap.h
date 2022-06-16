@@ -52,6 +52,9 @@ namespace m4w {
             }
         }
 
+        unsigned int GetSize() {
+            return m_Items.size();
+        }
  
         T* operator[] (unsigned int id) {
             return this->Get(id);

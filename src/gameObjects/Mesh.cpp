@@ -73,17 +73,18 @@ void m4w::Mesh::Render (Camera& camera) {
     m_VAO->Bind();
 
     if ( m_Texture )
-        m_Texture->Use(shader, 1);
+        m_Texture->Use(shader, 2);
 
-    glm::mat4 mvp = camera.m_VP * m_ModelMatrix;
-    shader.SetUniformMat4("u_MVP", mvp);
+    shader.SetUniform3f("u_WorldPos", m_WorldPosition.x, m_WorldPosition.y, m_WorldPosition.z);
     shader.SetUniformMat4("u_Model", m_ModelMatrix);
+    shader.SetUniformMat4("u_MVP", camera.m_VP * m_ModelMatrix);
 
     if ( m_VAO->m_IB->m_ID )
         glDrawElements(GL_TRIANGLES, m_VAO->m_IB->m_IndexCount, m_VAO->m_IB->m_DataType, 0);
     else
         glDrawArrays(m_VAO->m_IB->m_DrawMode, 0, m_VAO->m_IB->m_IndexCount);
 //    std::cout << "Rendering " << m_VAO->m_IB->GetIndexCount() << " indices of Type " << m_VAO->m_IB->m_DataType << "\n";
+
     if ( m_Texture )
         m_Texture->Unbind();
 }

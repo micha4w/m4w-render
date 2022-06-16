@@ -11,7 +11,8 @@
 
 m4w::GameObject::GameObject (const glm::vec3& position)
     : m_Position(position), m_Velocity({ 0.f, 0.f, 0.f }),
-      m_MeshID(-1), m_CameraID(-1), m_LightID(-1), m_RecalculateView(false), m_Scale(1.f)
+      m_MeshID(-1), m_CameraID(-1), m_LightID(-1), m_RecalculateView(false), m_Scale(1.f),
+      m_Camera(0), m_Light(0), m_Mesh(0)
 {
     this->SetRotation(m4w::Angle(), m4w::Angle());
     m_ID = g_Context.m_Objects.Add(this);
@@ -44,6 +45,12 @@ void m4w::GameObject::Update (float seconds) {
             m_Camera->m_Recalculate = true;
         }
 
+        if ( this->HasLight() ) {
+            m_Light->m_Camera->m_Position = m_Position;
+            m_Light->m_Camera->m_Offset = m_Rotation;
+            m_Light->m_Camera->m_Recalculate = true;
+        }
+
         if ( this->HasMesh() ) {
             m_Mesh->m_ModelMatrix = glm::mat4(1.f);
             m_Mesh->m_ModelMatrix = glm::translate(m_Mesh->m_ModelMatrix, m_Position);
@@ -52,6 +59,7 @@ void m4w::GameObject::Update (float seconds) {
             m_Mesh->m_ModelMatrix = glm::rotate(m_Mesh->m_ModelMatrix, m_Yaw.GetRadians(), {0, 1, 0});
             //m_Mesh->m_ModelMatrix = glm::rotate(m_Mesh->m_ModelMatrix, m_Roll, {0, 0, 1});
 
+            m_Mesh->m_WorldPosition = m_Position;
         }
         m_RecalculateView = false;
     }
@@ -112,31 +120,31 @@ glm::vec3 m4w::GameObject::GetPosition() { return m_Position; }
 std::pair<m4w::Angle, m4w::Angle> m4w::GameObject::GetRotation() { return { m_Yaw, m_Pitch }; }
 float m4w::GameObject::GetScale () { return m_Scale; }
 
-void m4w::GameObject::SetMesh (Mesh* mesh) {
+void m4w::GameObject::SetMesh (Mesh&& mesh) {
     if ( this->HasMesh() ) {
         g_Context.m_Meshes.Remove(m_MeshID);
     }
 
-    m_MeshID = g_Context.m_Meshes.Add(std::forward<Mesh>(*mesh));
+    m_MeshID = g_Context.m_Meshes.Add(std::forward<Mesh>(mesh));
     m_Mesh = g_Context.m_Meshes.Get(m_MeshID);
 }
 
-void m4w::GameObject::SetLight (Light* light) {
+void m4w::GameObject::SetLight (Light&& light) {
     if ( this->HasLight() ) {
         g_Context.m_Lights.Remove(m_LightID);
     }
 
-    m_LightID = g_Context.m_Lights.Add(std::forward<Light>(*light));
+    m_LightID = g_Context.m_Lights.Add(std::forward<Light>(light));
     m_Light = g_Context.m_Lights.Get(m_LightID);
 }
 
-void m4w::GameObject::SetCamera (Camera* camera) {
+void m4w::GameObject::SetCamera (Camera&& camera) {
     if ( this->HasCamera() ) {
         g_Context.m_Cameras.Remove(m_CameraID);
     }
 
     m_RecalculateView = true;
-    m_CameraID = g_Context.m_Cameras.Add(std::forward<Camera>(*camera));
+    m_CameraID = g_Context.m_Cameras.Add(std::forward<Camera>(camera));
     m_Camera = g_Context.m_Cameras.Get(m_CameraID);
 }
 

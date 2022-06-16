@@ -100,7 +100,7 @@ static void XTest(GLFWwindow* window) {
 
 
 m4w::Window::Window (unsigned int width, unsigned int height, const char* name)
-    : m_KeysPressed({0}), m_LastKeysPressed({0})
+    : m_KeysPressed({ Released }), m_LastKeysPressed({ Released })
 {
     if (!glfwInit()) {
         std::cout << "[ERROR] Failed to initialize glfw..\n";
@@ -137,7 +137,6 @@ m4w::Window::Window (unsigned int width, unsigned int height, const char* name)
 
 //    glfwSetWindowPos(m_Instance, 0, 0);
 
-//    glViewport(0, 0, 800, 600);
 //    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
     glfwSetKeyCallback(m_Instance, Window::KeyCallback);
 
@@ -192,15 +191,15 @@ void m4w::Window::SetMousePosition (float x, float y) {
     glfwSetCursorPos(m_Instance, x, y);
 }
 
-bool m4w::Window::IsKeyPressed (int key) {
+m4w::KeyState m4w::Window::GetKeyState (m4w::Key key) {
     return m_KeysPressed[key];
 }
 
-bool m4w::Window::WasKeyPressed (int key) {
+bool m4w::Window::WasKeyPressed (m4w::Key key) {
     return m_KeysPressed[key] && !m_LastKeysPressed[key];
 }
 
-bool m4w::Window::WasKeyReleased (int key) {
+bool m4w::Window::WasKeyReleased (m4w::Key key) {
     return !m_KeysPressed[key] && m_LastKeysPressed[key];
 }
 
@@ -232,5 +231,6 @@ void m4w::Window::SetMouseGrabbed (bool grab) {
 }
 
 void m4w::Window::KeyCallback (GLFWwindow* glWindow, int key, int scancode, int action, int mods) {
-    g_Context.m_Window->m_KeysPressed[key] = action != GLFW_RELEASE;
+    // std::cout << "[INFO] Button " << key << " got " << (action != GLFW_RELEASE ? "pressed" : "released") << "\n";
+    g_Context.m_Window->m_KeysPressed[key] = (m4w::KeyState) action;
 }

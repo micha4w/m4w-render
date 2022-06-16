@@ -1,7 +1,6 @@
 #include <iostream>
 #include <chrono>
 
-
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
@@ -18,6 +17,7 @@
 #include "VertexLayout.h"
 
 #include "Shader.h"
+#include "Light.h"
 
 #include "GameObject.h"
 #include "PlayerControllerComponent.h"
@@ -29,20 +29,20 @@ int main() {
 
     m4w::Pointer<m4w::Window> window = new m4w::Window(800, 600, "Geem");
     m4w::g_Context.m_Window = window;
+    m4w::g_Context.m_LightHandler = m4w::Pointer<m4w::LightHandler>().Create(8, 1024);
 
     window->GetFrameBuffer()->SetClearColor(37.f/256, 37.f/256, 38.f/256);
 //    window->GetFrameBuffer()->SetClearColor(0, 0, 0, 0);
     window->GetFrameBuffer()->Clear();
     window->Display();
     m4w::Pointer<m4w::Shader> shader = new m4w::Shader("PosColor");
-    m4w::Pointer<m4w::Shader> shaderCopy = new m4w::Shader("PosColor");
-    m4w::Pointer<m4w::Shader> lightShader = new m4w::Shader("Depth");
+
 
     m4w::GameObject head;
     head.CreateMesh("res/models/hed.gltf");
 
     m4w::GameObject player;
-    player.AddComponent((m4w::Component*) new m4w::PlayerControllerComponent(10.f, .002f));
+    player.AddComponent((m4w::Component*) new m4w::PlayerControllerComponent(10.f, .002f, m4w::Key::W, m4w::Key::A, m4w::Key::S, m4w::Key::D, m4w::Key::Space, m4w::Key::CapsLock));
     
     player.CreateCamera(
         window->GetWidth(), window->GetHeight(),
@@ -54,24 +54,18 @@ int main() {
 
     m4w::GameObject lightCamera({0.f, 0.f, -5.f});
     lightCamera.SetRotation(m4w::Angle::Degrees(180.f), m4w::Angle());
-    lightCamera.CreateCamera(
-        window->GetWidth(), window->GetHeight(),
-        0.1f, 10.f,
-        lightShader
-    );
-    lightCamera.GetCamera()->SetOrthographicProjection(100, 100);
-    //lightCamera.GetCamera()->GetFrameBuffer()->AddTexture();
-    lightCamera.GetCamera()->GetFrameBuffer()->AddDepthBuffer();
-    
+    lightCamera.CreateLight(0.f, 0.f, -5.f, .5f, 1.f, 1.f, 1.f);
     lightCamera.CreateMesh("res/models/icosphere.gltf");
-    lightCamera.AddComponent((m4w::Component*) new m4w::PlayerControllerComponent(10.f, 0.f, GLFW_KEY_UP, GLFW_KEY_LEFT, GLFW_KEY_DOWN, GLFW_KEY_RIGHT, GLFW_KEY_PAGE_UP, GLFW_KEY_PAGE_DOWN));
+    lightCamera.AddComponent((m4w::Component*) new m4w::PlayerControllerComponent(10.f, 0.f, m4w::Key::Up, m4w::Key::Left, m4w::Key::Down, m4w::Key::Right, m4w::Key::PageUp, m4w::Key::PageDown));
 
 
     m4w::GameObject screen;
     m4w::Mesh& screen_mesh = screen.CreateMesh();
     screen_mesh.Name = "SCREEN";
-    screen_mesh.SetVertexArray( m4w::VertexArray::Cube(-1.f, -1.f, 4.f, 1.f, 1.f, 5.f, 0.f, 0.f, 0.f, 0.f) );
-    screen_mesh.SetTexture(lightCamera.GetCamera()->GetFrameBuffer()->GetDepthBuffer());
+    screen_mesh.SetVertexArray( m4w::VertexArray::Cube(-1.f, -1.f, 4.f, 1.f, 1.f, 4.1f, 0.f, 0.f, 0.f, 0.f) );
+    screen_mesh.SetTexture(
+        lightCamera.GetLight()->GetCamera().GetFrameBuffer()->GetDepthBuffer()
+    );
     // m4w::Pointer<m4w::Texture> test = new m4w::Texture("res/textures/world.png");
     // screen_mesh.SetTexture(test);
 
@@ -80,19 +74,14 @@ int main() {
     m4w::Mesh& floor_mesh = floor.CreateMesh();
     floor_mesh.Name = "FLOOR";
     floor_mesh.SetVertexArray( m4w::VertexArray::Cube(-10.f, -10.f, -10.f, 10.f, -9.f, 10.f, 0.2f, 0.8f, 0.1f, 1.f) );
-    floor.Rotate(m4w::Angle(), m4w::Angle::Degrees(45));
-    floor.Move({0, 25, 0});
+    floor.Rotate(m4w::Angle(), m4w::Angle::Degrees(90));
+    floor.Move({ 0, 0, 20 });
 
 
     m4w::GameObject sphere({ 8.f, 0.f, 0.f });
     m4w::Mesh& sphere_mesh = sphere.CreateMesh();
     sphere_mesh.Name = "BALLZ";
-    sphere_mesh.SetVertexArray( m4w::VertexArray::Sphere(3, 5.f, 0.f, 0.f, 3.f, 0.8f, 0.2f, 0.4f, 1.f, false) );
-
-
-    m4w::HeapArray<m4w::LightSource> lights(2);
-    lights[0] = { 0.f, 100.f, 0.f, 1.f, 1.f, 1.f, 0.f };
-    lights[1] = { 0.f, 100.f, 100.f, 1.f, 0.f, 0.f, 1.f };
+    sphere_mesh.SetVertexArray( m4w::VertexArray::Sphere(3, 3.f, 0.8f, 0.2f, 0.4f, 1.f, false) );
 
     std::cout << "Looping..\n";
 
@@ -106,42 +95,42 @@ int main() {
 
         m4w::g_Context.Update(timer.GetDeltaS());
 
-        if ( window->WasKeyPressed(GLFW_KEY_C) )
+        if ( window->WasKeyPressed(m4w::Key::C) )
             std::cout << glm::to_string(lightCamera.GetPosition()) << " " << lightCamera.GetRotation().first.GetDegrees() << ", " << lightCamera.GetRotation().second.GetDegrees() << "\n";
-        if ( window->WasKeyPressed(GLFW_KEY_V) )
+        if ( window->WasKeyPressed(m4w::Key::V) )
             std::cout << glm::to_string(player.GetPosition()) << " " << player.GetRotation().first.GetDegrees() << ", " << player.GetRotation().second.GetDegrees() << "\n";
-        if ( window->WasKeyPressed(GLFW_KEY_F) ) {
+        if ( window->WasKeyPressed(m4w::Key::F) ) {
             std::cout << "Reloading Sahder\n";
             shader->Recompile();
-            lightShader->Recompile();
+            m4w::g_Context.m_LightHandler->m_LightShader->Recompile();
         }
 
-        if ( window->WasKeyPressed(GLFW_KEY_ESCAPE) )
+        if ( window->WasKeyPressed(m4w::Key::F2) )
+            const char* x = "Breakpoint location";
+        if ( window->WasKeyPressed(m4w::Key::Escape) )
             window->SetMouseGrabbed( !window->IsMouseGrabbed() );
-        if ( window->WasKeyPressed(GLFW_KEY_LEFT_ALT) )
+        if ( window->WasKeyPressed(m4w::Key::LeftAlt) )
             player.GetCamera()->SetPerspectiveProjection(m4w::Angle::Degrees(30.f));
-        else if ( window->WasKeyReleased(GLFW_KEY_LEFT_ALT) )
+        else if ( window->WasKeyReleased(m4w::Key::LeftAlt) )
             player.GetCamera()->SetPerspectiveProjection(m4w::Angle::Degrees(70.f));
 
-        if ( window->WasKeyPressed(GLFW_KEY_Q) )
+        if ( window->WasKeyPressed(m4w::Key::Q) )
             glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
-        else if ( window->WasKeyReleased(GLFW_KEY_Q) )
+        else if ( window->WasKeyReleased(m4w::Key::Q) )
             glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
 
         if ( window->IsMouseGrabbed() )
             window->SetMousePosition(window->GetWidth()/2, window->GetHeight()/2);
 
     // Render
-        //Context::Draw(*player.GetCamera());
-        shader->SetUniformLights(lights);
-        lightCamera.GetCamera()->GetFrameBuffer()->GetDepthBuffer()->Use(*shader, 2, "u_Light");
-        shader->SetUniformMat4("u_LightVP", lightCamera.GetCamera()->GetMatrix());
+        shader->SetUniform1i("u_Toggle", window->GetKeyState(m4w::Key::Z)); // This is Y key for QWERTZ
 
-        m4w::g_Context.ClearCameras();
-        m4w::g_Context.DrawCameras();
+        m4w::g_Context.RedrawLights();
+        m4w::g_Context.RedrawCameras();
 
         window->Display();
         timer.Update();
+        // std::cout << timer.GetAverageFPS() << "\n";
     }
 
     std::cout << "Stopping..\n";

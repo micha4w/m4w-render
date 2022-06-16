@@ -13,8 +13,8 @@ m4w::Texture::Texture (unsigned int width, unsigned int height, TextureFormat fo
     this->Bind();
     if ( format == RGBA ) {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_Width, m_Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
@@ -62,12 +62,10 @@ void m4w::Texture::Unbind () {
 void m4w::Texture::Use (Shader& shader, unsigned short slot, const char* name) {
     shader.Bind();
     shader.SetUniform1i(name, slot);
-    shader.SetUniform1i("u_TextureID", slot);
     Bind(slot);
 }
 
 void m4w::Texture::UseEmpty (Shader& shader, const char* name) {
     shader.Bind();
     shader.SetUniform1i(name, 0);
-    shader.SetUniform1i("u_TextureID", 0);
 }

@@ -1,31 +1,28 @@
 #pragma once
 
 #include "Pointer.h"
-
 #include "Camera.h"
 
 namespace m4w {
 
-    struct LightSource {
-        float Pos[3];
-        float Strength;
-        float Hue[3];
-    };
-
     class Light {
     private:
-        class GameObject* m_Owner;
-        LightSource m_LightSource;
-
+        friend class Shader;
+        friend class GameObject;
+        
         m4w::Pointer<Camera> m_Camera;
+
+        float m_Strength;
+        float m_Hue[3];
+        int m_TexturePos;
     public:
-        Light (m4w::Pointer<class Camera> camera, LightSource&& lightSource);
-        Light (m4w::Pointer<class Camera> camera, float x, float y, float z, float strength, float r, float g, float b);
+        Light (float x, float y, float z, float strength, float r, float g, float b);
+        Light (float pos[3], float strength, float hue[3]);
+        ~Light ();
 
-        void Render ();
-
-        void SetCamera (m4w::Pointer<class Camera> camera);
-        m4w::Pointer<Camera> GetCamera ();
+        void SetCamera (m4w::Pointer<Camera> camera);
+        Camera& GetCamera ();
+        int GetTexturePos ();
     };
 
 }

@@ -58,9 +58,9 @@ namespace m4w {
         std::pair<m4w::Angle, m4w::Angle> GetRotation();
         float GetScale();
 
-        void SetMesh(Mesh* mesh);
-        void SetLight(Light* light);
-        void SetCamera(Camera* camera);
+        void SetMesh(Mesh&& mesh);
+        void SetLight(Light&& light);
+        void SetCamera(Camera&& camera);
 
 
         template <typename... Args>
