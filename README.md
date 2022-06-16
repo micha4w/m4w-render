@@ -6,6 +6,6 @@ The goal of this project is to be an OpenGL Game Library. Including light, shado
 ## Compilation
 To compile you need stb, glm, glfw3 and glew, then run:
 ```bash
-g++-10 $(find src -name *.cpp -type f) $(find src -type d | awk '{print "-I"$1}') -lglfw -lGLEW -lGL -DM4W_RELEASE -std=c++2a -o out
+g++ $(find src -name *.cpp -type f) $(find src -type d | awk '{print "-I"$1}') -lglfw -lGLEW -lGL -DM4W_RELEASE -std=c++2a -o out
 ```
 This will create an executable called out file.
