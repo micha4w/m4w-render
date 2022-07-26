@@ -10,7 +10,7 @@ m4w::PlayerControllerComponent::PlayerControllerComponent (float speed, float se
 
 void m4w::PlayerControllerComponent::Update (float seconds) {
     m4w::Pointer<Window>& window = g_Context.m_Window;
-    if ( !window->IsFocused() || !window->IsMouseGrabbed() )
+    if ( !window->IsFocused() )
         return;
 
     auto [newX, newY] = window->GetMousePosition();
@@ -18,7 +18,11 @@ void m4w::PlayerControllerComponent::Update (float seconds) {
     newX = window->GetWidth()/2 - newX;
     newY = window->GetHeight()/2 - newY;
 
-    m_Owner->Rotate(m4w::Angle::Radians(newX * m_Sensitivity), m4w::Angle::Radians(newY * m_Sensitivity));
+    auto [yaw, pitch] = m_Owner->GetRotation();
+    pitch += m4w::Angle::Radians(newY * m_Sensitivity);
+    pitch.ClampDegrees(-89.9f, 89.9f);
+    std::cout << yaw.GetDegrees() << " " << pitch.GetDegrees() << "\n";
+    m_Owner->SetRotation(yaw + m4w::Angle::Radians(newX * m_Sensitivity), pitch);
 
     glm::vec3 move(0.f, 0.f, 0.f);
     move.z = window->GetKeyState(m_MoveForward) - window->GetKeyState(m_MoveBack);

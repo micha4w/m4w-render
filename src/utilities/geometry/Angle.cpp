@@ -2,6 +2,7 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 
+
 m4w::Angle::Angle()
     : m_Degrees(0), m_Radians(0)
 { }
@@ -9,27 +10,18 @@ m4w::Angle::Angle()
 
 m4w::Angle m4w::Angle::Radians(float value) {
     m4w::Angle angle;
-    
-    float pi = glm::pi<float>();
-    value = std::fmod(value, 2*pi);
-    // if ( value < 0 )
-    //     value = 2*pi - value;
 
-    angle.m_Radians = value;
-    angle.m_Degrees = glm::degrees<float>(value);
+    angle.m_Radians = std::fmod(value, 2*m4w::m_PI);
+    angle.m_Degrees = glm::degrees<float>(angle.m_Radians);
 
     return angle;
 }
 
 m4w::Angle m4w::Angle::Degrees(float value) {
     m4w::Angle angle;
-    
-    value = std::fmod(value, 360.f);
-    // if ( value < 0 )
-    //     value = 360.f - value;
 
-    angle.m_Degrees = value;
-    angle.m_Radians = glm::radians<float>(value);
+    angle.m_Degrees = std::fmod(value, 360.f);
+    angle.m_Radians = glm::radians<float>(angle.m_Degrees);
 
     return angle;
 }
@@ -51,17 +43,39 @@ void m4w::Angle::ClampDegrees(float lower, float upper) {
 }
 
 m4w::Angle m4w::Angle::operator+ (const Angle& other) const {
-    return Angle::Radians(this->m_Radians + other.m_Radians);
+    return Angle::Radians(m_Radians + other.m_Radians);
+}
+
+void m4w::Angle::operator+= (const Angle& other) {
+    m_Radians = std::fmod(m_Radians + other.m_Radians, 2*m4w::m_PI);
+    m_Degrees = glm::degrees<float>(m_Radians);
+}
+
+m4w::Angle m4w::Angle::operator- (const Angle& other) const {
+    return Angle::Radians(m_Radians - other.m_Radians);
+}
+
+void m4w::Angle::operator-= (const Angle& other) {
+    m_Radians = std::fmod(m_Radians - other.m_Radians, 2*m4w::m_PI);
+    m_Degrees = glm::degrees<float>(m_Radians);
 }
 
 m4w::Angle m4w::Angle::operator* (const float& factor) const {
-    return Angle::Radians(this->m_Radians * factor);
+    return Angle::Radians(m_Radians * factor);
+}
+
+void m4w::Angle::operator*= (const float& factor) {
+    m_Radians = std::fmod(m_Radians * factor, 2*m4w::m_PI);
+    m_Degrees = glm::degrees<float>(m_Radians);
 }
 
 bool m4w::Angle::operator== (const m4w::Angle& other) const {
-    return this->m_Radians == other.m_Radians;
+    return m_Radians == other.m_Radians;
 }
 
 bool m4w::Angle::operator!= (const m4w::Angle& other) const {
-    return this->m_Radians != other.m_Radians;
+    return m_Radians != other.m_Radians;
+}
+m4w::Angle::operator bool() const {
+    return m_Radians;
 }

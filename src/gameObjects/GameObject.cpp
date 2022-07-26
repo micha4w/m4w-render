@@ -66,14 +66,15 @@ void m4w::GameObject::Update (float seconds) {
 }
 
 void m4w::GameObject::Rotate (const m4w::Angle& dYaw, const m4w::Angle& dPitch) {
-    if ( dYaw.GetRadians() || dPitch.GetRadians() ) SetRotation(m_Yaw + dYaw, m_Pitch + dPitch);
+    SetRotation(m_Yaw + dYaw, m_Pitch + dPitch);
 }
 
-void m4w::GameObject::SetRotation (const m4w::Angle& yaw, const m4w::Angle& pitch) {    
+void m4w::GameObject::SetRotation (const m4w::Angle& yaw, const m4w::Angle& pitch) {
+    if ( yaw != m_Yaw && pitch != m_Pitch )
+        return;
+
     m_Yaw = yaw;
     m_Pitch = pitch;
-
-    m_Pitch.ClampDegrees( -89.9, 89.9 );
 
     float y = m_Pitch.Sin();
 

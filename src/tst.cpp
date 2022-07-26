@@ -21,6 +21,7 @@
 
 #include "GameObject.h"
 #include "PlayerControllerComponent.h"
+#include "RotateComponent.h"
 
 
 int main() {
@@ -36,6 +37,7 @@ int main() {
     window->GetFrameBuffer()->Clear();
     window->Display();
     m4w::Pointer<m4w::Shader> shader = new m4w::Shader("PosColor");
+    // m4w::Pointer<m4w::Shader> shader = new m4w::Shader("res/shaders/PosColor.vert", "res/shaders/Mandelbrot.frag");
 
 
     m4w::GameObject head;
@@ -75,6 +77,7 @@ int main() {
     floor_mesh.Name = "FLOOR";
     floor_mesh.SetVertexArray( m4w::VertexArray::Cube(-10.f, -10.f, -10.f, 10.f, -9.f, 10.f, 0.2f, 0.8f, 0.1f, 1.f) );
     floor.Rotate(m4w::Angle(), m4w::Angle::Degrees(90));
+    floor.AddComponent((m4w::Component*) new m4w::RotateComponent(m4w::Angle(), m4w::Angle::Degrees(10.f)));
     floor.Move({ 0, 0, 20 });
 
 
@@ -88,12 +91,14 @@ int main() {
 
     //LOOOOOP
     m4w::Timer timer(60.f, false);
+    bool paused = false;
     while ( !window->ShouldClose() ) {
 
     // Update
         window->PollEvents();
 
-        m4w::g_Context.Update(timer.GetDeltaS());
+        if ( !paused )
+            m4w::g_Context.Update(timer.GetDeltaS());
 
         if ( window->WasKeyPressed(m4w::Key::C) )
             std::cout << glm::to_string(lightCamera.GetPosition()) << " " << lightCamera.GetRotation().first.GetDegrees() << ", " << lightCamera.GetRotation().second.GetDegrees() << "\n";
@@ -107,8 +112,10 @@ int main() {
 
         if ( window->WasKeyPressed(m4w::Key::F2) )
             const char* x = "Breakpoint location";
-        if ( window->WasKeyPressed(m4w::Key::Escape) )
-            window->SetMouseGrabbed( !window->IsMouseGrabbed() );
+        if ( window->WasKeyPressed(m4w::Key::Escape) ) {
+            paused = !paused;
+            window->SetMouseGrabbed(!paused);
+        }
         if ( window->WasKeyPressed(m4w::Key::LeftAlt) )
             player.GetCamera()->SetPerspectiveProjection(m4w::Angle::Degrees(30.f));
         else if ( window->WasKeyReleased(m4w::Key::LeftAlt) )
